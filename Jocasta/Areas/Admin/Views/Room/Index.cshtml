@@ -1,0 +1,363 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+        <h2>Room</h2>
+    </div>
+    <div class="d-block d-lg-flex align-items-center justify-content-between mb-5">
+        <div class="coin-tabs input-group search-area2 w-25">
+            <input id="keyword" type="text" class="form-control" placeholder="Search here" onkeypress="searchKeyPress(event);">
+            <span class="input-group-text">
+                <a href=""><i class="fas fa-search"></i></a>
+            </span>
+        </div>
+        <div class="form-head d-inline-block d-sm-flex align-items-center mt-2 mt-lg-0">
+            <select class="form-control default-select style-1 border w-auto" name="Enable" onchange="Enable_onChange();">
+                <option value="">Trạng thái</option>
+                <option value="true">Kích hoạt</option>
+                <option value="false">Đã khóa</option>
+            </select>
+            <select class="form-control default-select style-1 border w-auto" name="RoomCategory" onchange="RoomCategory_onChange();">
+                <option value="">Loại phòng</option>
+            </select>
+            <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="AddRoom_onClick();">Add New Room</button>
+        </div>
+    </div>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="list" aria-labelledby="list-tab">
+            <div class="tab-content" id="ListViewTabLinkContent">
+                <div class="tab-pane fade active show" id="all-status" aria-labelledby="boxed-all-status-tab">
+                    <div class="table-responsive card">
+                        <div class="table-responsive">
+                            <table class="table table-hover border-0 display mb-4 dataTablesCard booking-table table-responsive-lg " id="guestTable-all6">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên phòng</th>
+                                        <th>Tên loại phòng</th>
+                                        <th class="text-center">Tầng</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Trạng thái</th>
+                                        <th class="bg-none"></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="list-data">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="d-lg-flex justify-content-between" style="padding: 0 1.875rem 3rem 1.875rem;">
+    <div class="form-inline" id="dynamic-table_length">
+        <div class="d-lg-flex align-items-center">
+            <div style="width: 50px;">Hiển thị </div>
+            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchRoomCategory();">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <div style="width: 100px;"> bản ghi </div>
+        </div>
+    </div>
+
+    <div class="">
+        <ul class="pagination pagination-circle mb-0" id="pagination">
+        </ul>
+    </div>
+</div>
+
+<div class="modal" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Cập nhật phòng</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CloseModal_onClick();">
+                </button>
+            </div>
+            <div class="modal-body">
+                <input id="RoomId" value="" type="hidden" />
+                <div class="form-group" id="">
+                    <label class="font-weight-semibold fs-16" for="name">Tên phòng</label>
+                    <input type="text" class="form-control" id="Name" placeholder="Nhập tên phòng" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-semibold fs-16" for="floor">Tầng</label>
+                    <input type="text" class="form-control" id="Floor" placeholder="Nhập tầng" onkeyup="ValidateInputOnlyNumber(event,this)" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-semibold fs-16"> Tên loại phòng</label>
+                    <select class="form-control" id="RoomCategoryId" name="RoomCategoryId">
+                        <option value="">Chọn loại phòng</option>
+                    </select>
+                </div>
+
+               @* <div class="form-group">
+                    <label class="font-weight-semibold fs-16" for="description">Mô tả</label>
+                    <textarea class="form-control" aria-label="With textarea" style="resize:none;" placeholder="Nhập nội dung" rows="5" id="Description"></textarea>
+                </div>*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal" onclick="CloseModal_onClick();">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveRoom_onClick();">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <style>
+    </style>
+}
+@section scripts{
+    <script>
+        var _isUpdate = false;
+        const searchModel = {
+            CurrentPage: 1,
+            RowPerPage: $('[name=dynamic-table_length]').val(),
+            Keyword: $('#keyword').val(),
+            Enable: $('[name=Enable]').val(),
+            RoomCategory: $('[name=RoomCategory]').val()
+        };
+
+        const searchRoom = function () {
+            searchModel.CurrentPage = 1;
+            searchModel.PageSize = $('[name=dynamic-table_length]').val();
+            searchModel.Keyword = $('#keyword').val();
+            searchModel.Enable = $('select[name=Enable]').val();
+            searchModel.RoomCategory = $('select[name=RoomCategory]').val();
+
+            getdataListRoom(searchModel);
+        }
+
+        const getdataListRoom = async function (searchModel) {
+            let rq = await fetch('/api/AdminRoom/GetListRoom?keyword=' + searchModel.Keyword + '&roomCategory=' + searchModel.RoomCategory + '&enable=' + searchModel.Enable + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.PageSize, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            $('#list-data').html('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '';
+                for (let i = 0; i < rs.data.List.length; i++) {
+                    html += '<tr>';
+                    html += '<td class="text-center"><span class="fs-15 font-w500 text-nowrap">' + (i + 1) + '</span></td>';
+                    html += `<td><div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].Name}</h4></div></td>`;
+                    html += `<td><div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].RoomCategoryName}</div></td>`;
+                    html += `<td class="text-center"><div><span class="fs-15 font-w500">${rs.data.List[i].Floor}</span></div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</span></div></td>`;
+                    if (rs.data.List[i].Enable === true) {
+                        html += '<td><div><span class="badge light badge-success">Kích hoạt</span></div></td>';
+                    } else {
+                        html += '<td><div><span class="badge light badge-danger">Đã khóa</span></div></td>';
+                    }
+                    html += `<td><div class="dropdown dropstart"><a href="" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>`;
+                    html += `<div class="dropdown-menu">
+                                    <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomId}" onclick="Update_onClick(this);">Edit</button>
+                                    <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomId}" onclick="Delete_onClick(this);">Delete</button>
+                                    <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomId}" onclick="TrangThai_onClick(this);">Trạng thái</button>
+                                </div></div></td>`;
+                    html += `</tr>`;
+                }
+
+                $('#list-data').append(html);
+                Pagination(searchModel, rs.data.TotalPage, null, getdataListRoom);
+            }
+        }
+
+        const listRoomCategory = async function () {
+            let rq = await fetch('/api/AdminRoomCategory/GetRoomCategories?keyword=', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            $('[name=RoomCategory]').html('');
+            $('[name=RoomCategoryId]').html('');
+            let html = '<option value="">Loại phòng</option>';
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<option value="${rs.data[i].RoomCategoryId}">${rs.data[i].Name}</option>`;
+                }
+            }
+            console.log(html);
+            $('[name=RoomCategory]').append(html);
+            $('[name=RoomCategoryId]').append(html);
+        }
+
+        const Enable_onChange = function () {
+            searchModel.Enable = $('[name=Enable]').val();
+            searchRoom();
+        }
+
+        const RoomCategory_onChange = function () {
+            searchModel.RoomCategory = $('[name=RoomCategory]').val();
+            searchRoom();
+        }
+
+        const AddRoom_onClick = function () {
+            _isUpdate = false;
+            $('#exampleModalCenter').css('display', 'block');
+        }
+
+        const Update_onClick = async function (el) {
+            _isUpdate = true;
+            $('#exampleModalCenter').css('display', 'block');
+            const id = $(el).data('id');
+            let rq = await fetch('/api/AdminRoom/GetRoomById?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            console.log(rs);
+            if (AdminCheckErrorResponse(rs) == false) return;
+            $('#RoomId').val(rs.data.RoomId);
+            $('#Name').val(rs.data.Name);
+            $('#Floor').val(NumberFormat(rs.data.Floor));
+            $('#RoomCategoryId').val(rs.data.RoomCategoryId);
+            $('#Description').val(rs.data.Description);
+        }
+
+        const Delete_onClick = async function (el) {
+            if (confirm('Bạn có chắc muốn xóa phòng này không?') === false) return;
+            const id = $(el).data('id');
+            let rq = await fetch('/api/AdminRoom/DeleteRoom?roomId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Xóa phòng thành công.');
+                searchRoom();
+            }
+        }
+
+        const TrangThai_onClick = async function (el) {
+            if (confirm('Bạn có chắc muốn thay đổi trạng thái phòng này không?') === false) return;
+            const id = $(el).data('id');
+            let rq = await fetch('/api/AdminRoom/ChangeEnableRoom?roomId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Thay đổi trạng thái phòng thành công.');
+                searchRoom();
+            }
+        }
+
+        const SaveRoom_onClick = function () {
+            if (_isUpdate === true) {
+                UpdateRoom();
+            } else {
+                InsertRoom();
+            }
+            window.location.href = '/Admin/Room/';
+        }
+
+        const InsertRoom = async function () {
+            let model = {
+                Name: $('#Name').val(),
+                Floor: $('#Floor').val(),
+                RoomCategoryId: $('#RoomCategoryId').val()
+            };
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên phòng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Floor') === '') { alert('Tầng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'RoomCategoryId') === '') { alert('Loại phòng không được để trống.'); return; }
+
+            const rp = await fetch('/api/AdminRoom/InsertRoom', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                alert('Thêm phòng thành công');
+                CloseModal_onClick();
+            }
+        }
+
+        const UpdateRoom = async function () {
+            if (confirm('Bạn có chắc muốn cập nhật phòng này?') === false) return;
+            let model = {
+                RoomId: $('#RoomId').val(),
+                Name: $('#Name').val(),
+                Floor: $('#Floor').val(),
+                RoomCategoryId: $('#RoomCategoryId').val(),
+                Description: $('#Description').val()
+            }
+            console.log(model);
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên phòng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Floor') === '') { alert('Tầng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'RoomCategoryId') === '') { alert('Loại phòng không được để trống.'); return; }
+
+            let url = '/api/AdminRoom/UpdateRoom';
+            if (GetObjectProperty(model, 'RoomId') === '') url = '/api/AdminRoom/InsertRoom';
+
+            const rp = await fetch(url, {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật phòng thành công.');
+                CloseModal_onClick();
+            }
+        }
+
+        const CloseModal_onClick = function () {
+            $('#exampleModalCenter').css('display', 'none');
+            ResetModal();
+        }
+
+        const ResetModal = function () {
+            $('#RoomId').val('');
+            $('#Name').val('');
+            $('#Floor').val('');
+            $('#RoomCategoryId').val('');
+            $('#Description').val('');
+        }
+        const searchKeyPress = function (event) {
+            if (event.keyCode == 13) {
+                searchRoom();
+            }
+        }
+
+        const initPage = async function () {
+            await listRoomCategory();
+            await searchRoom();
+        }
+        initPage();
+    </script>
+}
+
+

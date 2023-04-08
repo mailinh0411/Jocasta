@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Quản lý dịch vụ</h2>
+    </div>
+    <div class=" d-block d-lg-flex align-items-center justify-content-between mb-5">
+        <div class="coin-tabs input-group search-area2 w-50">
+            <input id="keyword" type="text" class="form-control" placeholder="Search here" onkeypress="searchKeyPress(event);">
+            <span class="input-group-text">
+                <a href=""> <i class="fas fa-search"></i> </a>
+            </span>
+        </div>
+        <div class="form-head d-sm-flex align-items-center mt-2 mt-lg-0">
+            @*<select class="form-control default-select style-1 border w-auto ml-0">
+                    <option>Sort by Newest</option>
+                    <option>Oldest</option>
+                    <option>Newest</option>
+                </select>*@
+            <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="AddService_onClick();">Add Service</button>
+        </div>
+    </div>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="list" aria-labelledby="list-tab">
+            <div class="tab-content" id="ListViewTabLinkContent">
+                <div class="tab-pane fade active show" id="all-status" aria-labelledby="boxed-all-status-tab">
+                    <div class="table-responsive card">
+                        <div class="table-responsive">
+                            <table class="table table-hover border-0 display mb-4 dataTablesCard booking-table table-responsive-lg " id="guestTable-all6">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên dịch vụ</th>
+                                        <th>Giá</th>
+                                        <th>Mô tả</th>
+                                        <th class="bg-none"></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="list-data">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-lg-flex justify-content-between" style="padding: 0 1.875rem 3rem 1.875rem;">
+    <div class="form-inline" id="dynamic-table_length">
+        <div class="d-lg-flex align-items-center">
+            <div style="width: 50px;">Hiển thị </div>
+            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchRoomCategory();">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <div style="width: 100px;"> bản ghi </div>
+        </div>
+    </div>
+
+    <div class="">
+        <ul class="pagination pagination-circle mb-0" id="pagination">
+        </ul>
+    </div>
+</div>
+
+
+@section styles{
+    <style>
+    </style>
+}
+@section scripts{
+    <script>
+        const searchModel = {
+            CurrentPage: 1,
+            RowPerPage: $('[name=dynamic-table_length]').val(),
+            Keyword: $('#keyword').val(),
+        };
+
+        const searchService = function () {
+            searchModel.CurrentPage = 1;
+            searchModel.PageSize = $('[name=dynamic-table_length]').val();
+            searchModel.Keyword = $('#keyword').val();
+
+            getdataListService(searchModel);
+        }
+
+        const getdataListService = async function (searchModel) {
+            let rq = await fetch('/api/AdminService/GetListService?keyword=' + searchModel.Keyword + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.PageSize, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            $('#list-data').html('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '';
+                for (let i = 0; i < rs.data.List.length; i++) {
+                    let description = (rs.data.List[i].Description === null) ? '' : rs.data.List[i].Description.slice(0, 200);
+                    html += '<tr>';
+                    html += '<td class="text-center"><span class="fs-15 font-w500 text-nowrap">' + (i + 1) + '</span></td>';
+                    html += '<td> <div class="guest-bx">';
+                    html += `<img class="me-4" src="${rs.data.List[i].Image}" alt="">`;
+                    html += `<div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].Name}</h4></div> </div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${NumberFormat(rs.data.List[i].Price)} VNĐ</span></div></td>`;
+                    html += `<td class="w-50"><div><h4 class="mb-0 mt-1 fs-16 font-w500">${description} ...</h4></div></td>`;
+                    html += `<td><div class="dropdown dropstart"><a href="" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>`;
+                    html += `<div class="dropdown-menu">
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].ServiceId}" onclick="Update_onClick(this);">Edit</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].ServiceId}" onclick="Delete_onClick(this);">Delete</button>
+                        </div></div></td>`;
+                    html += `</tr>`;
+                }
+
+                $('#list-data').append(html);
+                Pagination(searchModel, rs.data.TotalPage, null, getdataListService);
+            }
+        }
+
+        const AddService_onClick = function () {
+            window.location.href = ('/admin/Service/AddService/');
+        }
+
+        const Update_onClick = function (el) {
+            let id = $(el).data('id');
+            console.log(id);
+            window.location.href = ('/admin/Service/UpdateService?id=' + id);
+        }
+
+        const Delete_onClick = async function (el) {
+            if (confirm('Bạn có chắc muốn xóa dịch vụ này?')) {
+                let id = $(el).data('id');
+                let rp = await fetch('/api/AdminService/DeleteService?id=' + id, {
+                    method: 'get',
+                    headers: Enum.OptionAdminHeaderDefault
+                });
+                let rs = await rp.json();
+
+                if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert('Xoá dịch vụ này thành công');
+                    window.location.reload();
+                }
+            }
+        }
+
+        const searchKeyPress = function (event) {
+            if (event.keyCode == 13) {
+                searchService();
+            }
+        }
+
+        const initPage = function () {
+            searchService();
+        }
+        initPage();
+    </script>
+}
+

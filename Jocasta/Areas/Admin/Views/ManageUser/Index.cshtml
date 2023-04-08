@@ -1,0 +1,254 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Quản lý người dùng</h2>
+    </div>
+    <div class=" d-block d-lg-flex align-items-center justify-content-between mb-5">
+        <div class="coin-tabs input-group search-area2 w-50">
+            <input id="keyword" type="text" class="form-control" placeholder="Search here" onkeypress="searchKeyPress(event);">
+            <span class="input-group-text">
+                <a href=""> <i class="fas fa-search"></i> </a>
+            </span>
+        </div>
+        <div class="form-head d-sm-flex align-items-center mt-2 mt-lg-0">
+            <select class="form-control default-select style-1 border w-auto ml-0" name="EnableSelect" onchange="Enable_onChange();">
+                <option value="">Tất cả</option>
+                <option value="true">Kích hoạt</option>
+                <option value="false">Đã khóa</option>
+            </select>
+            @*<button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="AddUser_onClick();">Add User</button>*@
+        </div>
+    </div>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="list" aria-labelledby="list-tab">
+            <div class="tab-content" id="ListViewTabLinkContent">
+                <div class="tab-pane fade active show" id="all-status" aria-labelledby="boxed-all-status-tab">
+                    <div class="table-responsive card">
+                        <div class="table-responsive">
+                            <table class="table table-hover border-0 display mb-4 dataTablesCard booking-table table-responsive-lg " id="guestTable-all6">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên người dùng</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Trạng thái</th>
+                                        <th class="bg-none"></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="list-data">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-lg-flex justify-content-between" style="padding: 0 1.875rem 3rem 1.875rem;">
+    <div class="form-inline" id="dynamic-table_length">
+        <div class="d-lg-flex align-items-center">
+            <div style="width: 50px;">Hiển thị </div>
+            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchRoomCategory();">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <div style="width: 100px;"> bản ghi </div>
+        </div>
+    </div>
+
+    <div class="">
+        <ul class="pagination pagination-circle mb-0" id="pagination">
+        </ul>
+    </div>
+</div>
+
+<div class="modal" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Cập nhật người dùng</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CloseModal_onClick();">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex;flex-direction:row;gap:20px;">
+                    <div class="form-group">
+                        <div class="preview" style=" width: 100px; height: 100px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url('/Content/img/pick-image.png');" onclick="ChooseImage(this);"></div>
+                        <input type="file" style="display:none;" onchange="ChooseImage_OnChange(this);" required />
+                        <input type="hidden" id="Image" />
+                    </div>
+                    <div class="form-input">
+                        <input id="UserId" value="" type="hidden" />
+                        <div class="form-group">
+                            <label class="font-weight-semibold fs-16" for="name">Tên người dùng</label>
+                            <input type="text" class="form-control" id="Name" placeholder="Nhập tên tên người" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold fs-16" for="name">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="Name" placeholder="Nhập tên đăng nhập" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold fs-16" for="name">Số điện thoại</label>
+                            <input type="text" class="form-control" id="Name" placeholder="Nhập số điện thoại" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold fs-16" for="name">Email</label>
+                            <input type="text" class="form-control" id="Name" placeholder="Nhập email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold fs-16" for="name">Mật khẩu</label>
+                            <input type="text" class="form-control" id="Name" placeholder="Nhập email" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal" onclick="CloseModal_onClick();">Close</button>
+                <button type="button" class="btn btn-primary" onclick="SaveRoom_onClick();">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <style>
+        .avatar img {
+            width: 6rem;
+            height: 6rem;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        const searchModel = {
+            CurrentPage: 1,
+            RowPerPage: $('[name=dynamic-table_length]').val(),
+            Keyword: $('#keyword').val(),
+            Enable: $('[name=EnableSelect]').val()
+        }
+
+        const searchUser = function () {
+            searchModel.CurrentPage = 1;
+            searchModel.RowPerPage = $('[name=dynamic-table_length]').val();
+            searchModel.Keyword = $('#keyword').val();
+            searchModel.Enable = $('[name=EnableSelect]').val();
+
+            getdataListUser(searchModel);
+        }
+
+        const getdataListUser = async function () {
+            let rq = await fetch('/api/ManageUser/GetListUser?keyword=' + searchModel.Keyword + '&enable=' + searchModel.Enable + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.RowPerPage, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            $('#list-data').html('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '';
+                for (let i = 0; i < rs.data.List.length; i++) {
+                    html += '<tr>';
+                    html += '<td class="text-center"><span class="fs-15 font-w500 text-nowrap">' + (i + 1) + '</span></td>';
+                    html += '<td> <div class="avatar d-flex">';
+                    html += `<img class="me-4" src="${rs.data.List[i].Avatar}" alt="">`;
+                    html += `<div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].Name}</h4>`
+                    html += `<span class="text-primary fs-15 font-w400 text-nowrap">${rs.data.List[i].Account}</span></div> </div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${GetObjectProperty(rs.data.List[i], 'Email')} </span></div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${GetObjectProperty(rs.data.List[i], 'Phone')} </span></div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</span></div></td>`;
+                    if (rs.data.List[i].Enable === true) {
+                        html += '<td><div><span class="badge light badge-success">Kích hoạt</span></div></td>';
+                    } else {
+                        html += '<td><div><span class="badge light badge-danger">Đã khóa</span></div></td>';
+                    }
+                    html += `<td><div class="dropdown dropstart"><a href="" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>`;
+                    html += `<div class="dropdown-menu">
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].UserId}" onclick="Update_onClick(this);">Edit</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].UserId}" onclick="Delete_onClick(this);">Delete</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].UserId}" onclick="ChangeEnable_onClick(this);">Trạng thái</button>
+                        </div></div></td>`;
+                    html += `</tr>`;
+                }
+
+                $('#list-data').append(html);
+                Pagination(searchModel, rs.data.TotalPage, null, getdataListUser);
+            }
+        }
+
+        const Update_onClick = function (el) {
+            let id = $(el).data('id');
+            window.location.href = ('/admin/ManageUser/UpdateManageUser?id=' + id);
+        }
+
+        const Delete_onClick = async function (el) {
+            if (confirm('Bạn có chắc muốn xóa người dùng này không?') === false) return;
+            const id = $(el).data('id');
+            console.log(id);
+
+            let rq = await fetch('/api/ManageUser/DeleteUser?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Xóa người dùng thành công.')
+                getdataListUser();
+            }
+        }
+
+        const ChangeEnable_onClick = async function (el) {
+            if (confirm('Bạn có chắc muốn thay đổi trạng thái người dùng này không?') === false) return;
+            const id = $(el).data('id');
+            console.log(id);
+
+            let rq = await fetch('/api/ManageUser/ChangeUserEnable?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Thay đổi trạng thái người dùng thành công.')
+                getdataListUser();
+            }
+        }
+
+        const Enable_onChange = function () {
+            searchModel.Enable = $('[name=EnableSelect]').val();
+            searchUser();
+        }
+
+        const searchKeyPress = function (event) {
+            if (event.keyCode == 13) {
+                searchUser();
+            }
+        }
+
+        const initPage = async function () {
+            await getdataListUser();
+        }
+        initPage();
+    </script>
+}
+

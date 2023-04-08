@@ -1,0 +1,250 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý loại phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid" id="Update">
+    <div class="row">
+        <h2>Update Room Category</h2>
+    </div>
+
+    <div class="body d-flex flex-wrap">
+        <input id="RoomCategoryId" value="@ViewBag.Id" type="hidden" />
+        <div style="flex: 1; display: flex; flex-direction: column; padding: 20px; min-width: 350px; ">
+            <div class="form-group">
+                <label class="font-weight-semibold fs-16" for="name">Ảnh loại phòng</label>
+                <div class="preview" style=" width: 100px; height: 100px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url('/Content/img/pick-image.png');" onclick="ChooseImage(this);"></div>
+                <input type="file" style="display:none;" onchange="ChooseImage_OnChange(this);" required />
+                <input type="hidden" id="Image" />
+            </div>
+
+            <div class="form-group" id="">
+                <label class="font-weight-semibold fs-16" for="name">Tên loại phòng</label>
+                <input type="text" class="form-control" id="Name" placeholder="Nhập tên loại phòng" required>
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold fs-16"> View</label>
+                <select class="form-control" id="View" name="View">
+                    <option value="">Chọn view</option>
+                </select>
+            </div>
+
+
+            <div class="form-group row" id="">
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="Acreage">Diện tích</label>
+                    <input type="text" class="form-control" id="Acreage" placeholder="Diện tích phòng" onkeyup="ValidateInputOnlyNumber(event, this);">
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="NumberOfPeople">Số người</label>
+                    <input type="text" class="form-control" id="NumberOfPeople" placeholder="Nhập số lượng người" onkeyup="ValidateInputOnlyNumber(event, this);">
+                </div>
+            </div>
+
+            <div class="form-group" id="">
+                <label class="font-weight-semibold fs-16" for="Price">Giá loại phòng</label>
+                <input type="text" class="form-control" id="Price" placeholder="Giá của loại phòng" onkeyup="ValidateInputOnlyNumber(event, this);" required>
+            </div>
+
+            <div class="form-group row" id="">
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="SingleBed">Số giường đơn</label>
+                    <input type="text" class="form-control" id="SingleBed" placeholder="Nhập số giường đơn" onkeyup="ValidateInputOnlyNumber(event, this);">
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="DoubleBed">Số giường đôi</label>
+                    <input type="text" class="form-control" id="DoubleBed" placeholder="Nhập số giường đôi" onkeyup="ValidateInputOnlyNumber(event, this);">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label fs-16">Ảnh sản phẩm</div>
+                <div class="content" id="ListImage" style="overflow-y: auto; height: 200px; border: .5px solid #979797; padding: 10px; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-items: flex-start; ">
+                    <div class="add-image">
+                        <a onclick="AddMoreImage(this);"><i class="fa-solid fa-camera" style="font-size:30px;margin-right:10px"></i></a>
+                        <input type="file" style="display:none;" onchange="AddMoreImage_OnChange(event,this);" multiple />
+                    </div>
+
+                </div>
+            </div>
+
+            <button type="button" onclick="UpdateRoomCategory();" class="create-button btn btn-primary">Sửa loại phòng</button>
+        </div>
+        <div style="flex: 2; display: flex; flex-direction: column; padding: 20px;">
+            <div class="form-group product-property">
+                <label class="font-weight-semibold fs-16">Mô tả</label>
+                <textarea style="resize:none;" placeholder="Nhập mô tả cho loại phòng" rows="30" class="form-control" aria-label="With textarea" id="Description"></textarea>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section styles{
+    <style>
+        .room-image {
+            padding: 0 10px 10px 0;
+        }
+
+            .room-image > .image {
+                width: 100px;
+                height: 100px;
+                border-radius: 10px;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+            }
+
+                .room-image > .image > .remove {
+                    display: flex;
+                    width: 20px;
+                    height: 20px;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 20px;
+                    color: #f15050;
+                    top: -5px;
+                    right: -5px;
+                    position: absolute;
+                }
+    </style>
+}
+@section scripts{
+    <script src="~/Content/ckeditor/ckeditor.js"></script>
+    <script>
+        var editorDescription = CKEDITOR.replace('Description', {
+            height: 600,
+        });
+        let _lsImage = [];
+        let _lsDeleteImage = [];
+        var AddMoreImage = function (el) { $(el).siblings('input[type=file]').click(); }
+        var AddMoreImage_OnChange = function (e, el) {
+            var files = e.currentTarget.files;
+            console.log(files);
+            for (let i = 0; i < files.length; i++) {
+                let currFile = files[i];
+
+                let reader = new FileReader();
+                reader.onloadend = function (e1) {
+                    const addImage = $(el).closest('.add-image');
+                    $(`<div class="room-image">
+                        <div class="image" style="background-image: url(${e1.currentTarget.result});"><a class="remove" data-id="" onclick="RemoveRoomImage(this);"><i class="fa-solid fa-trash-can"></i></a></div>
+                        <input type="hidden" value="${e1.currentTarget.result.substring(e1.currentTarget.result.indexOf(',') + 1, e1.currentTarget.result.length)}"/>
+                        </div>`).insertAfter(addImage);
+                    _lsImage.push(e1.currentTarget.result.substring(e1.currentTarget.result.indexOf(',') + 1, e1.currentTarget.result.length))
+                }
+
+                reader.readAsDataURL(currFile)
+            }
+
+        }
+        var RemoveRoomImage = function (el) {
+            const id = $(el).data('id');
+            if (id !== '') {
+                _lsDeleteImage.push(id);
+            }
+            $(el).closest('.room-image').remove();
+        }
+
+        var ChooseImage = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseImage_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+
+        var ListViewRoomCategory = function () {
+            var listKey = Object.keys(ENUM_VIEW_ROOM);
+            var html = '';
+            for (var i = 0; i < listKey.length; i++) {
+                html += '<option value="' + listKey[i] + '">' + ENUM_VIEW_ROOM[listKey[i]] + '</option>';
+            };
+            $('select[name=View]').html('<option value="">Chọn view</option>' + html);
+        }
+
+        const GetRoomCategoryDetail = async function () {
+            const id = $('#RoomCategoryId').val();
+            if (id === '' || id === null || typeof id === 'undefined') return;
+            let rp = await fetch('/api/AdminRoomCategory/GetRoomCategoryDetail?roomCategoryId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            let item = rs.data.roomCategory;
+            $('#Name').val(item.Name);
+            $('.preview').css('background-image', `url(${item.Image})`)
+            $('#View').val(item.View).change();
+            editorDescription.setData(item.Description)
+            $('#Price').val(NumberFormat(item.Price));
+            $('#Acreage').val(NumberFormat(item.Acreage));
+            $('#NumberOfPeople').val(NumberFormat(item.NumberOfPeople));
+            $('#SingleBed').val(NumberFormat(item.SingleBed));
+            $('#DoubleBed').val(NumberFormat(item.DoubleBed));
+            for (let indexImage = 0; indexImage < rs.data.roomImages.length; indexImage++) {
+                $('#ListImage').append(`<div class="room-image">
+                    <div class="image" style="background-image: url(${rs.data.roomImages[indexImage].LinkImage});"><a class="remove" data-id="${rs.data.roomImages[indexImage].ImageRoomId}" onclick="RemoveRoomImage(this);"><i class="fa-solid fa-trash-can"></i></a></div>
+                    <input type="hidden" value="${rs.data.roomImages[indexImage].LinkImage}"/>
+                    </div>`);
+            }
+        }
+
+        const UpdateRoomCategory = async function () {
+            if (confirm('Bạn có chắc muốn cập nhật loại phòng này này?') === false) return;
+            let model = {
+                RoomCategoryId: $('#RoomCategoryId').val(),
+                Name: $('#Name').val(),
+                View: $('#View').val(),
+                Acreage: $('#Acreage').val(),
+                NumberOfPeople: $('#NumberOfPeople').val(),
+                SingleBed: $('#SingleBed').val(),
+                DoubleBed: $('#DoubleBed').val(),
+                Price: $('#Price').val(),
+                Description: editorDescription.getData(),
+                Image: $('#Image').val(),
+                ListImage: _lsImage,
+                ListImageDelete: [],
+            };
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên loại phòng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Acreage') === '') { alert('Diện tích phòng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'NumberOfPeople') === '') { alert('Số lượng người không được để trống.'); return; }
+            if (GetObjectProperty(model, 'SingleBed') === '') { alert('Số giường đơn không được để trống.'); return; }
+            if (GetObjectProperty(model, 'DoubleBed') === '') { alert('Số giường đôi không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Price') === '') { alert('Giá phòng không được để trống.'); return; }
+
+            let url = '/api/AdminRoomCategory/UpdateRoomCategory';
+            if (GetObjectProperty(model, 'RoomCategoryId') === '') url = '/api/AdminRoomCategory/InsertRoomCategory';
+
+            const rp = await fetch(url, {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật sản phẩm thành công')
+                window.location.href = '/Admin/RoomCategory/';
+            }
+        }
+
+        const initPage = async function () {
+            await ListViewRoomCategory();
+            await GetRoomCategoryDetail();
+        }
+        initPage();
+    </script>
+}
+

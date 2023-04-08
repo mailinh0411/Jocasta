@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "UpdateService";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Update Service</h2>
+    </div>
+
+    <div class="body">
+        <input id="ServiceId" value="@ViewBag.Id" type="hidden" />
+        <div class="form-group">
+            <label class="font-weight-semibold fs-16" for="name">Ảnh dịch vụ</label>
+            <div class="preview" style=" width: 250px; height: 150px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url('/Content/img/pick-image.png');" onclick="ChooseImage(this);"></div>
+            <input type="file" style="display:none;" onchange="ChooseImage_OnChange(this);" required />
+            <input type="hidden" id="Image" />
+        </div>
+        <div class="form-group" id="">
+            <label class="font-weight-semibold fs-16" for="name">Tên dịch vụ</label>
+            <input type="text" class="form-control" id="Name" placeholder="Nhập tên dịch vụ" required>
+        </div>
+
+        <div class="form-group" id="">
+            <label class="font-weight-semibold fs-16" for="Price">Giá dịch vụ</label>
+            <input type="text" class="form-control" id="Price" placeholder="Giá của dịch vụ" onkeyup="ValidateInputOnlyNumber(event, this);" required>
+        </div>
+
+        <div class="form-group product-property">
+            <label class="font-weight-semibold fs-16">Mô tả</label>
+            <textarea style="resize:none;" placeholder="Nhập mô tả cho dịch vụ" rows="15" class="form-control" aria-label="With textarea" id="Description"></textarea>
+        </div>
+
+        <div class="d-flex flex-row-reverse">
+            <button type="button" onclick="UpdateService();" class="create-button btn btn-primary" style="margin-left:10px;">Sửa dịch vụ</button>
+            <button type="button" onclick="CancelService();" class="create-button btn btn-danger">Hủy</button>
+        </div>
+
+    </div>
+
+</div>
+
+@section styles{
+}
+@section scripts{
+    <script src="~/Content/ckeditor/ckeditor.js"></script>
+    <script>
+        var editorDescription = CKEDITOR.replace('Description', {
+            height: 600,
+        });
+        var ChooseImage = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseImage_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+
+        const GetSeriviceDetail = async function () {
+            const id = $('#ServiceId').val();
+            if (id === '' || id === null || typeof id === 'undefined') return;
+            let rp = await fetch('/api/AdminService/GetServiceById?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            console.log(rs);
+            let item = rs.data;
+            $('#Name').val(item.Name);
+            $('.preview').css('background-image', `url(${item.Image})`)
+            editorDescription.setData(item.Description)
+            $('#Price').val(NumberFormat(item.Price));
+        }
+
+        const UpdateService = async function () {
+            if (confirm('Bạn có chắc muốn cập nhật dịch vụ này này?') === false) return;
+            let model = {
+                ServiceId: $('#ServiceId').val(),
+                Name: $('#Name').val(),
+                Price: $('#Price').val(),
+                Description: editorDescription.getData(),
+                Image: $('#Image').val()
+            };
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên loại phòng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Price') === '') { alert('Giá phòng không được để trống.'); return; }
+
+            let url = '/api/AdminService/UpdateService';
+            if (GetObjectProperty(model, 'ServiceId') === '') url = '/api/AdminService/InsertService';
+
+            const rp = await fetch(url, {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật dịch vụ thành công')
+                window.location.href = '/Admin/Service/';
+            }
+        }
+
+        const CancelService = function () {
+            window.location.href = '/admin/Service/';
+        }
+
+        const initPage = function () {
+            GetSeriviceDetail();
+        }
+
+        initPage();
+    </script>
+}

@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "UpdateManageUser";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    @* <div class="row">
+            <h2>Quản lý dịch vụ</h2>
+        </div>*@
+    <div class="custom-tab-1">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#profile1"><i class="la la-user me-2"></i> Thông tin cá nhân</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#contact1"><i class="la la-phone me-2"></i>Lịch sử đặt phòng</a>
+            </li>
+        </ul>
+        <div class="tab-content w-75" style="margin-top: 30px;">
+            <div class="tab-pane fade show active d-flex">
+                <div style="margin: 30px 50px 0 0;" class="tab-avatar">
+
+                </div>
+
+                <div style="flex:1;">
+                    <input id="UserId" value="@ViewBag.Id" type="hidden" />
+                    <div class="form-group" id="">
+                        <label class="font-weight-semibold fs-16" for="name">Tên người dùng:</label>
+                        <input type="text" class="form-control" id="Name" placeholder="Nhập tên người dùng" required>
+                    </div>
+
+                    <div class="form-group" id="">
+                        <label class="font-weight-semibold fs-16">Tên đăng nhập:</label>
+                        <input type="text" class="form-control" id="Account" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+
+                    <div class="form-group" id="">
+                        <label class="font-weight-semibold fs-16">Email:</label>
+                        <input type="text" class="form-control" id="Email" placeholder="Email" required>
+                    </div>
+
+                    <div class="form-group" id="">
+                        <label class="font-weight-semibold fs-16">Số điện thoại:</label>
+                        <input type="text" class="form-control" id="Phone" placeholder="Số điện thoại" required>
+                    </div>
+
+                    <div class="form-group" id="">
+                        <label class="font-weight-semibold fs-16">Mật khẩu:</label>
+                        <input type="text" class="form-control" id="Password" placeholder="Mật khẩu" required>
+                    </div>
+
+                    <button type="button" onclick="Save_onClick();" class="create-button btn btn-success">Lưu</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section styles{
+}
+@section scripts{
+    <script>
+        var ChooseImage = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseImage_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+
+        const getUserDetail = async function () {
+            const id = $('#UserId').val();
+            if (id === '' || id === null || typeof id === 'undefined') return;
+            let rp = await fetch('/api/ManageUser/GetUserById?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            console.log(rs);
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '<div class="form-group">';
+                html += '<div class="preview" style=" width: 200px; height: 200px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url(' + rs.data.Avatar +');" onclick="ChooseImage(this);"></div>';
+                html += '<input type="file" style="display:none;" onchange="ChooseImage_OnChange(this);" required />';
+                html += '<input type="hidden" id="Image" /></div>'
+
+                $('.tab-avatar').append(html);
+
+                $('#Name').val(rs.data.Name);
+                $('#Account').val(rs.data.Account);
+                $('#Email').val(rs.data.Email);
+                /*$('#Phone').val(rs.data.Phone);*/
+                $('#Phone').val('******' + rs.data.Phone.substr(rs.data.Phone.length - 4, 4));
+            }
+
+        }
+        function validateEmail($email) {
+            var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+            return emailReg.test($email);
+        }
+
+        const Save_onClick = async function () {
+            if (confirm('Bạn có chắc muốn cập nhật người dùng này?') === false) return;
+            console.log($('#Image').val());
+            let model = {
+                UserId: $('#UserId').val(),
+                Name: $('#Name').val(),
+                Avatar: $('#Image').val(),
+                Account: $('#Account').val(),
+                Email: $('#Email').val(),
+                Phone: $('#Phone').val(),
+                Password: $('#Password').val()
+            }
+
+            console.log(model);
+
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên người dùng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Account') === '') { alert('Tên đăng nhập không được để trống.'); return; }
+
+            if (!validateEmail(model.Email)) { alert('Email không đúng định dạng.'); return; }
+
+            let url = '/api/ManageUser/UpdateUserInfo';
+
+            let rp = await fetch(url, {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật người dùng thành công.')
+                window.location.href = '/Admin/ManageUser/';
+            }
+        }
+
+        const initPage = function () {
+            getUserDetail();
+        }
+        initPage();
+    </script>
+}
+
