@@ -1,0 +1,9 @@
+**bin
+**obj
+**.vs
+Jocasta/Jocasta.csproj.user
+Jocasta/Web.Debug.config
+Jocasta/Web.Release.config
+**/files
+**/file
+**/publish
