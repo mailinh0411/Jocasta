@@ -1,0 +1,204 @@
+﻿
+@using Jocasta.Models;
+@using Jocasta.Providers;
+@{
+    ListRoomCategoryView lsRoomCategory = (ListRoomCategoryView)ViewBag.ListRoomCategory;
+    ViewBag.Title = "Danh sách loại phòng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Header Banner -->
+<div class="banner-header section-padding valign bg-img bg-fixed" data-overlay-dark="4" data-background="img/slider/1.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 caption mt-90">
+                <h5>The Jocasta Mai Linh Hotel</h5>
+                <h1>Rooms & Suites</h1>
+            </div>
+        </div>
+        <div class="row sub-banner">
+            <ul>
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a class="select" href="room.html">Rooms</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Rooms -->
+<section class="section-padding">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <!-- Search Room -->
+                <div class="search-room">
+                    <div class="input-search"><input class="" type="text" placeholder="Nhập tên loại phòng" /></div>
+                    <div>
+                        <button class="butn-dark"><a href="#0"><span>SEARCH</span></a></button>
+                    </div>
+                </div>
+                @for (int indexRoomCategory = 0; indexRoomCategory < lsRoomCategory.List.Count; indexRoomCategory++)
+                {
+                    <div class="rooms2 mb-90 animate-box" data-animate-effect="fadeInUp">
+                        <figure><img src="@lsRoomCategory.List[indexRoomCategory].Image" alt="" class="img-fluid"></figure>
+                        <div class="caption">
+                            <h3>@lsRoomCategory.List[indexRoomCategory].Price VNĐ<span>/ Night</span></h3>
+                            <h4><a href="room-detail.html">@lsRoomCategory.List[indexRoomCategory].Name</a></h4>
+                            <p>Đây là kiểu phòng Suite có độ VIP cơ bản, chất lượng dịch vụ phòng cao hơn so với hạng phòng Deluxe. Junior Suite thường có 1 phòng ngủ + 1 phòng khách - thích hợp phục vụ cho cặp đôi mới cưới hoặc gia đình nhỏ.</p>
+                            <div class="row room-facilities">
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li><i class="flaticon-group"></i> @lsRoomCategory.List[indexRoomCategory].NumberOfPeople</li>
+                                        <li><i class="flaticon-wifi"></i> Free Wifi</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li><i class="flaticon-bed"></i>@lsRoomCategory.List[indexRoomCategory].DoubleBed Twin Bed</li>
+                                        <li><i class="flaticon-breakfast"></i> @lsRoomCategory.List[indexRoomCategory].SingleBed Single Bed</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li><i class="flaticon-clock-1"></i> @lsRoomCategory.List[indexRoomCategory].Acreage</li>
+                                        <li><i class="flaticon-swimming"></i> Swimming Pool</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <hr class="border-2">
+                            <div class="info-wrapper">
+                                <div class="more"><a href="room-detail.html" class="link-btn" tabindex="0">Details <i class="ti-arrow-right"></i></a></div>
+                                <div class="butn-dark"> <a href="booknow.html" data-scroll-nav="1"><span>Book Now</span></a> </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+@*
+                <div class="rooms2 mb-90 left animate-box" data-animate-effect="fadeInUp">
+                    <figure><img src="img/slider/3.jpg" alt="" class="img-fluid"></figure>
+                    <div class="caption">
+                        <h3>420.000 VNĐ <span>/ Night</span></h3>
+                        <h4><a href="room-detail.html">Family Room</a></h4>
+                        <p>Diện tích khá rộng, không gian thoải mái - vì có đến 2 giường ngủ lớn nên rất thích hợp cho gia đình 4 người hoặc nhóm bạn thân đi nghỉ cùng nhau.</p>
+                        <div class="row room-facilities">
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-group"></i> 1-2 Persons</li>
+                                    <li><i class="flaticon-wifi"></i> Free Wifi</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-bed"></i> Twin Bed</li>
+                                    <li><i class="flaticon-breakfast"></i> Breakfast</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-clock-1"></i> 80 m2</li>
+                                    <li><i class="flaticon-swimming"></i> Swimming Pool</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr class="border-2">
+                        <div class="info-wrapper">
+                            <div class="more"><a href="room-detail.html" class="link-btn" tabindex="0">Details <i class="ti-arrow-right"></i></a></div>
+                            <div class="butn-dark"> <a href="booknow.html" data-scroll-nav="1"><span>Book Now</span></a> </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rooms2 mb-90 animate-box" data-animate-effect="fadeInUp">
+                    <figure><img src="img/slider/3.jpg" alt="" class="img-fluid"></figure>
+                    <div class="caption">
+                        <h3>520.000 VNĐ <span>/ Night</span></h3>
+                        <h4><a href="room-detail.html">Superior Room</a></h4>
+                        <p>Phòng Superior (SUP) là một loại phòng cơ bản trong khách sạn. Với tầm nhìn và không gian khá thoải mái, SUP có mức giá trung bình, phù hợp với nhiều đối tượng khách hàng.</p>
+                        <div class="row room-facilities">
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-group"></i> 2-3 Persons</li>
+                                    <li><i class="flaticon-wifi"></i> Free Wifi</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-bed"></i> Twin Bed</li>
+                                    <li><i class="flaticon-breakfast"></i> Breakfast</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-clock-1"></i> 100 m2</li>
+                                    <li><i class="flaticon-swimming"></i> Swimming Pool</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr class="border-2">
+                        <div class="info-wrapper">
+                            <div class="more"><a href="room-detail.html" class="link-btn" tabindex="0">Details <i class="ti-arrow-right"></i></a></div>
+                            <div class="butn-dark"> <a href="booknow.html" data-scroll-nav="1"><span>Book Now</span></a> </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rooms2 left animate-box" data-animate-effect="fadeInUp">
+                    <figure><img src="img/slider/2.jpg" alt="" class="img-fluid"></figure>
+                    <div class="caption">
+                        <h3>450.000 VNĐ <span>/ Night</span></h3>
+                        <h4><a href="room-detail.html">Deluxe Room</a></h4>
+                        <p>Phòng Deluxe (DLX) là loại phòng cao cấp, có chất lượng tốt hơn phòng Superior. Những phòng DLX thường được thiết kế với diện tích rộng, ở tầng cao, có hướng nhìn đẹp và được trang bị những vật dụng, trang thiết bị cao cấp.</p>
+                        <div class="row room-facilities">
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-group"></i> 2-4 Persons</li>
+                                    <li><i class="flaticon-wifi"></i> Free Wifi</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-bed"></i> Twin Bed</li>
+                                    <li><i class="flaticon-breakfast"></i> Breakfast</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul>
+                                    <li><i class="flaticon-clock-1"></i> 120 m2</li>
+                                    <li><i class="flaticon-swimming"></i> Swimming Pool</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr class="border-2">
+                        <div class="info-wrapper">
+                            <div class="more"><a href="room-detail.html" class="link-btn" tabindex="0">Details <i class="ti-arrow-right"></i></a></div>
+                            <div class="butn-dark"> <a href="booknow.html" data-scroll-nav="1"><span>Book Now</span></a> </div>
+                        </div>
+                    </div>
+                </div>
+*@
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Pagination -->
+<div class="row">
+    <div class="col-md-12">
+        <!-- Pagination -->
+        <ul class="news-pagination-wrap align-center mb-30 mt-30">
+            <li><a href=""><i class="ti-angle-left"></i></a></li>
+            <li><a href="" class="active">1</a></li>
+            <li><a href="">2</a></li>
+            <li><a href="">3</a></li>
+            <li><a href=""><i class="ti-angle-right"></i></a></li>
+        </ul>
+    </div>
+</div>
