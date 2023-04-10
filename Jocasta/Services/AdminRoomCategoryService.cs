@@ -59,15 +59,15 @@ namespace Jocasta.Services
 
         public bool InsertRoomCategory(RoomCategory model, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[room_category] ([RoomCategoryId],[Name],[View],[Acreage],[NumberOfPeople],[SingleBed],[DoubleBed],[Price],[Description],[Enable],[CreateTime],[Image],[SearchName]) " +
-                "VALUES(@RoomCategoryId, @Name, @View, @Acreage, @NumberOfPeople, @SingleBed, @DoubleBed, @Price, @Description, @Enable, @CreateTime, @Image, @SearchName)";
+            string query = "INSERT INTO [dbo].[room_category] ([RoomCategoryId],[Name],[View],[Square],[NumberOfPeople],[SingleBed],[DoubleBed],[Price],[Description],[Enable],[CreateTime],[Image],[SearchName]) " +
+                "VALUES(@RoomCategoryId, @Name, @View, @Square, @NumberOfPeople, @SingleBed, @DoubleBed, @Price, @Description, @Enable, @CreateTime, @Image, @SearchName)";
             int status = this._connection.Execute(query, model, transaction);
             return status > 0;
         }
 
         public bool UpdateRoomCategory(RoomCategory model, IDbTransaction transaction = null)
         {
-            string query = "UPDATE [dbo].[room_category] SET [Name] = @Name,[View] = @View,[Acreage] = @Acreage,[NumberOfPeople] = @NumberOfPeople,[SingleBed] = @SingleBed,[DoubleBed] = @DoubleBed,[Price] = @Price,[Description] = @Description,[Image]=@Image, [SearchName]=@SearchName WHERE [RoomCategoryId] = @RoomCategoryId";
+            string query = "UPDATE [dbo].[room_category] SET [Name] = @Name,[View] = @View,[Square] = @Square,[NumberOfPeople] = @NumberOfPeople,[SingleBed] = @SingleBed,[DoubleBed] = @DoubleBed,[Price] = @Price,[Description] = @Description,[Image]=@Image, [SearchName]=@SearchName WHERE [RoomCategoryId] = @RoomCategoryId";
             int status = this._connection.Execute(query, model, transaction);
             return status > 0;
         }

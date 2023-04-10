@@ -35,8 +35,8 @@
 
             <div class="form-group row" id="">
                 <div class="col-md-6">
-                    <label class="font-weight-semibold fs-16" for="Acreage">Diện tích</label>
-                    <input type="text" class="form-control" id="Acreage" placeholder="Diện tích phòng" onkeyup="ValidateInputOnlyNumber(event, this);">
+                    <label class="font-weight-semibold fs-16" for="Square">Diện tích</label>
+                    <input type="text" class="form-control" id="Square" placeholder="Diện tích phòng" onkeyup="ValidateInputOnlyNumber(event, this);">
                 </div>
                 <div class="col-md-6">
                     <label class="font-weight-semibold fs-16" for="NumberOfPeople">Số người</label>
@@ -187,7 +187,7 @@
             $('#View').val(item.View).change();
             editorDescription.setData(item.Description)
             $('#Price').val(NumberFormat(item.Price));
-            $('#Acreage').val(NumberFormat(item.Acreage));
+            $('#Square').val(NumberFormat(item.Square));
             $('#NumberOfPeople').val(NumberFormat(item.NumberOfPeople));
             $('#SingleBed').val(NumberFormat(item.SingleBed));
             $('#DoubleBed').val(NumberFormat(item.DoubleBed));
@@ -205,7 +205,7 @@
                 RoomCategoryId: $('#RoomCategoryId').val(),
                 Name: $('#Name').val(),
                 View: $('#View').val(),
-                Acreage: $('#Acreage').val(),
+                Square: $('#Square').val(),
                 NumberOfPeople: $('#NumberOfPeople').val(),
                 SingleBed: $('#SingleBed').val(),
                 DoubleBed: $('#DoubleBed').val(),
@@ -216,7 +216,7 @@
                 ListImageDelete: [],
             };
             if (GetObjectProperty(model, 'Name') === '') { alert('Tên loại phòng không được để trống.'); return; }
-            if (GetObjectProperty(model, 'Acreage') === '') { alert('Diện tích phòng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Square') === '') { alert('Diện tích phòng không được để trống.'); return; }
             if (GetObjectProperty(model, 'NumberOfPeople') === '') { alert('Số lượng người không được để trống.'); return; }
             if (GetObjectProperty(model, 'SingleBed') === '') { alert('Số giường đơn không được để trống.'); return; }
             if (GetObjectProperty(model, 'DoubleBed') === '') { alert('Số giường đôi không được để trống.'); return; }

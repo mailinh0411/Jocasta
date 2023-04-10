@@ -78,7 +78,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         roomCategory.RoomCategoryId = Guid.NewGuid().ToString();
                         roomCategory.Name = model.Name;
                         roomCategory.View = model.View;
-                        roomCategory.Acreage = model.Acreage;
+                        roomCategory.Square = model.Square;
                         roomCategory.NumberOfPeople = model.NumberOfPeople;
                         roomCategory.SingleBed = model.SingleBed;
                         roomCategory.DoubleBed = model.DoubleBed;
@@ -139,7 +139,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
 
                         roomCategory.Name = model.Name;
                         roomCategory.View = model.View;
-                        roomCategory.Acreage = model.Acreage;
+                        roomCategory.Square = model.Square;
                         roomCategory.NumberOfPeople = model.NumberOfPeople;
                         roomCategory.SingleBed = model.SingleBed;
                         roomCategory.DoubleBed = model.DoubleBed;

@@ -10,7 +10,7 @@ namespace Jocasta.Models
         public string RoomCategoryId { get; set; }
         public string Name { get; set; }
         public string View { get; set; }
-        public decimal Acreage { get; set; }
+        public decimal Square { get; set; }
         public int NumberOfPeople { get; set; }
         public int SingleBed { get; set; }
         public int DoubleBed { get; set; }
