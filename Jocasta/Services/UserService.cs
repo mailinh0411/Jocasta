@@ -28,7 +28,7 @@ namespace Jocasta.Services
         public User GetUserByUserName(string userName, IDbTransaction transaction = null)
         {
             string query = "select * from [user] where Account = @userName or Phone = @userName";
-            return this._connection.Query<User>(query, new { userName }).FirstOrDefault();
+            return this._connection.Query<User>(query, new { userName }, transaction).FirstOrDefault();
         }
 
         public bool InsertNewUser(User user, IDbTransaction transaction = null)
@@ -43,6 +43,19 @@ namespace Jocasta.Services
         {
             string query = "select * from [user] where Phone = @keyword or Email = @keyword or Account = @keyword";
             return this._connection.Query<string>(query, new { keyword }, transaction).FirstOrDefault();
+        }
+
+        public User GetUserByToken(string Token, IDbTransaction transaction = null)
+        {
+            string query = "select u.* from [user] u join [user_token] ut on u.UserId = ut.UserId where ut.Token = @Token";
+            return this._connection.Query<User>(query, new { Token }, transaction).FirstOrDefault();
+        }
+
+        public bool UpdateUserToken(string userId, string token, IDbTransaction transaction = null)
+        {
+            string query = "update [user] set Token=@token where UserId=@userId";
+            int status = this._connection.Execute(query, new {userId, token}, transaction);
+            return status > 0;
         }
     }
 }

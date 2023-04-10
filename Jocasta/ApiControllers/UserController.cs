@@ -23,19 +23,39 @@ namespace Jocasta.ApiControllers
         [HttpPost]
         public JsonResult Login(User model)
         {
-            UserService userService = new UserService();
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        UserService userService = new UserService();
 
-            if (string.IsNullOrEmpty(model.Account) || string.IsNullOrEmpty(model.Password)) throw new Exception("Email/Tên đăng nhập/Mật khẩu không được để trống.");
+                        if (string.IsNullOrEmpty(model.Account) || string.IsNullOrEmpty(model.Password)) throw new Exception("Email/Tên đăng nhập/Mật khẩu không được để trống.");
 
-            User userLogin = userService.GetUserByUserName(model.Account);
-            if (userLogin == null) throw new Exception("Người dùng này không tồn tại");
+                        User userLogin = userService.GetUserByUserName(model.Account);
+                        if (userLogin == null) throw new Exception("Người dùng này không tồn tại");
 
-            if (userLogin.Enable == false) return Error("Tài khoản này đã bị khóa.");
+                        if (userLogin.Enable == false) return Error("Tài khoản này đã bị khóa.");
 
-            string password = SecurityProvider.EncodePassword(userLogin.UserId, model.Password);
-            if (!userLogin.Password.Equals(password)) throw new Exception("Email/Tên đăng nhập/Mật khẩu không được để trống.");
+                        string password = SecurityProvider.EncodePassword(userLogin.UserId, model.Password);
+                        if (!userLogin.Password.Equals(password)) throw new Exception("Email/Tên đăng nhập/Mật khẩu không được để trống.");
 
-            return Success();
+                        string deviceId = Guid.NewGuid().ToString().ToLower();
+                        string token = SecurityProvider.CreateToken(userLogin.UserId, userLogin.Password, deviceId);
+
+                        if (!userService.UpdateUserToken(userLogin.UserId, token, transaction)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+                        
+                        transaction.Commit();
+                        return Success(new { token, deviceId });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
 
         }
 
