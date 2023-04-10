@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Jocasta.Models;
+using Jocasta.Services;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -66,7 +68,7 @@ namespace Jocasta.Providers
                     token = Base64Encode(token);
                 }
 
-                token = "Utao " + token;
+                token = "MLB " + token;
                 return token;
             }
             catch (Exception ex)
@@ -75,7 +77,7 @@ namespace Jocasta.Providers
             }
         }
 
-        /*public static User DecodeToken(string token)
+        public static User DecodeToken(string token)
         {
             try
             {
@@ -109,7 +111,7 @@ namespace Jocasta.Providers
             {
                 return null;
             }
-        }*/
+        }
 
         public static string Base64Encode(string plainText)
         {
@@ -131,7 +133,7 @@ namespace Jocasta.Providers
             string token = requestMessage.Headers.Authorization.ToString();
             UserAdminService userService = new UserAdminService(connection);
             return userService.GetUserAdminByToken(token, transaction);
-        }
+        }*/
 
         public static User GetUserByToken(HttpRequestMessage requestMessage, IDbConnection connection = null, IDbTransaction transaction = null)
         {
@@ -141,6 +143,6 @@ namespace Jocasta.Providers
             string token = requestMessage.Headers.Authorization.ToString();
             UserService userService = new UserService(connection);
             return userService.GetUserByToken(token, transaction);
-        }*/
+        }
     }
 }
