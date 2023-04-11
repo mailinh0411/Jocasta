@@ -33,8 +33,8 @@ namespace Jocasta.Services
 
         public bool InsertNewUser(User user, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[user] ([UserId],[Name],[Account],[Password],[Email],[Phone],[IdentificationCard],[Enable],[CreateTime]) " +
-                "VALUES(@UserId, @Name, @Account, @Password, @Email, @Phone, @IdentificationCard, @Enable, @CreateTime)";
+            string query = "INSERT INTO [dbo].[user] ([UserId],[Name],[Account],[Password],[Email],[Phone],[Enable],[CreateTime]) " +
+                "VALUES (@UserId, @Name, @Account, @Password, @Email, @Phone, @Enable, @CreateTime)";
             int status = this._connection.Execute(query, user, transaction);
             return status > 0;
         }
@@ -51,10 +51,17 @@ namespace Jocasta.Services
             return this._connection.Query<User>(query, new { Token }, transaction).FirstOrDefault();
         }
 
+        public bool InsertUserToken(UserToken userToken, IDbTransaction transaction = null)
+        {
+            string query = "INSERT INTO [dbo].[user_token] ([UserTokenId],[UserId],[Token],[CreateTime]) VALUES (@UserTokenId,@UserId,@Token,@CreateTime)";
+            int status = this._connection.Execute(query, userToken, transaction);
+            return status > 0;
+        }
+
         public bool UpdateUserToken(string userId, string token, IDbTransaction transaction = null)
         {
-            string query = "update [user] set Token=@token where UserId=@userId";
-            int status = this._connection.Execute(query, new {userId, token}, transaction);
+            string query = "UPDATE [dbo].[user_token] SET [Token] = @token WHERE [UserId] = @userId";
+            int status = this._connection.Execute(query, new { userId, token }, transaction);
             return status > 0;
         }
     }
