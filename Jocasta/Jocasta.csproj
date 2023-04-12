@@ -153,6 +153,11 @@
     <Compile Include="Areas\Admin\Controllers\RoomCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
     <Compile Include="Areas\Admin\Controllers\ServiceController.cs" />
+    <Compile Include="Areas\Admin\Services\AdminDayRoomService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminNewService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminRoomCategoryService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminRoomService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminServiceRoomService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RoomCategoryController.cs" />
     <Compile Include="Global.asax.cs">

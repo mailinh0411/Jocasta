@@ -37,6 +37,10 @@ namespace Jocasta.Services
             {
                 list.TotalPage = (int)Math.Ceiling((decimal)totalRow / (decimal)Constant.PAGE_SIZE);
             }
+            if (searchModel.CurrentPage == 0)
+            {
+                searchModel.CurrentPage = 1;
+            }
             int skip = (searchModel.CurrentPage - 1) * Constant.PAGE_SIZE;
 
             query += " order by CreateTime desc OFFSET " + skip + " ROWS FETCH NEXT " + Constant.PAGE_SIZE + " ROWS ONLY";

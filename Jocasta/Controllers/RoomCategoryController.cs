@@ -16,7 +16,6 @@ namespace Jocasta.Controllers
         {
             RoomCategorySearchModel roomCategorySearch = new RoomCategorySearchModel();
             roomCategorySearch.CurrentPage = searchModel.CurrentPage;
-            roomCategorySearch.CurrentPage =1;
             roomCategorySearch.Keyword = searchModel.Keyword;
             
             RoomCategoryService roomCategoryService = new RoomCategoryService();
