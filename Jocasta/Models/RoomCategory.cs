@@ -37,4 +37,17 @@ namespace Jocasta.Models
     {
         public string Keyword { get; set; }
     }
+
+    public class CategoryCountRoom
+    {
+        public RoomCategory Category { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class RoomCategoryCheckNow
+    {
+        public string RoomCategory { get; set; }
+        public string CheckIn { get; set; }
+        public string CheckOut { get; set; }
+    }
 }

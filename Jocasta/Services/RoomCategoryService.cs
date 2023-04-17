@@ -48,5 +48,21 @@ namespace Jocasta.Services
             list.List = this._connection.Query<RoomCategory>(querySelect + query, searchModel, transaction).ToList();
             return list;
         }
+
+        public List<RoomCategory> GetAllByKeyword(string id, IDbTransaction transaction = null)
+        {
+            string query = "select * from [room_category] where 1=1";
+            if (!string.IsNullOrEmpty(id))
+            {
+                query += " and RoomCategoryId = @id";
+            }
+            return this._connection.Query<RoomCategory>(query, new {id }, transaction).ToList();    
+        }
+
+        public List<RoomCategory> GetListRoomCategory(IDbTransaction transaction = null)
+        {
+            string query = "select * from [room_category]";
+            return this._connection.Query<RoomCategory>(query, transaction).ToList();
+        }
     }
 }

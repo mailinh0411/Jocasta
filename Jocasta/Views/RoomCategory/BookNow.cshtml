@@ -1,0 +1,344 @@
+﻿
+@{
+    ViewBag.Title = "BookNow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section slider{
+    <!-- Header Banner -->
+    <div class="banner-header section-padding valign bg-img bg-fixed" data-overlay-dark="4" data-background="/Content/img/slider/1.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 caption mt-90">
+                    <h5>The Jocasta Mai Linh Hotel</h5>
+                    <h1>Book Now</h1>
+                </div>
+            </div>
+            <div class="row sub-banner">
+                <ul>
+                    <li>
+                        <a href="index.html">Home</a>
+                    </li>
+                    <li>
+                        <a class="select" href="booknow.html">Book Now</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+<!-- Booking Search -->
+<section class="section-padding" data-scroll-index="1">
+    <div class="container">
+        <div class="section-subtitle">Availabilitiy</div>
+        <div class="section-title">Đặt Phòng</div>
+        <div class="booking-inner clearfix">
+            <div class="form1 clearfix">
+                <div class="col1 c1">
+                    <div class="input1_wrapper">
+                        <label>Check in</label>
+                        <div class="input1_inner">
+                            <input type="text" class="form-control input datepicker" id="check-in" value="@ViewBag.CheckIn" placeholder="Check in">
+                        </div>
+                    </div>
+                </div>
+                <div class="col1 c2">
+                    <div class="input1_wrapper">
+                        <label>Check out</label>
+                        <div class="input1_inner">
+                            <input type="text" class="form-control input datepicker" id="check-out" value="@ViewBag.CheckOut" placeholder="Check out">
+                        </div>
+                    </div>
+                </div>
+                <div class="col2 c3">
+                    <div class="input1_wrapper">
+                        <label>Adults</label>
+                        <div class="input_inner">
+                            <input type="text" class="input" placeholder="Adults">
+                        </div>
+                    </div>
+                </div>
+                <div class="col2 c4">
+                    <div class="input1_wrapper">
+                        <label>Children(age <= 12)</label>
+                        <div class="input_inner">
+                            <input type="text" class="input" placeholder="Children(age <= 12)">
+                        </div>
+                    </div>
+                </div>
+                <div class="col2 c5">
+                    <input type="text" id="txtRoomCategoryId" value="@ViewBag.RoomCategory" hidden />
+                    <div class="select1_wrapper">
+                        <label>Room Category</label>
+                        <div class="select1_inner">
+                            <select class="select2 select" id="select-room-category" style="width: 100%">
+                                <option value="">Room Category</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col3 c6">
+                    <button type="submit" class="btn-form1-submit" onclick="CheckNow();">Check Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Book Now -->
+<section class="book-now">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Loại phòng</th>
+                            <th>Phù hợp cho</th>
+                            <th style="width: 15%;">Giá Phòng</th>
+                            <th style="width: 20%;">Số lượng phòng trống</th>
+                            <th>Số Phòng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="list-count-roomcategory">
+                        <tr>
+                            <td>
+                                <div class="room-name">
+                                    Junior Room
+                                </div>
+                                <div class="img-room">
+                                    <img style="width: 140px; height: 100px;" src="img/rooms/1.jpg" alt="">
+                                </div>
+                                <a href=""></a>
+                            </td>
+                            <td><i class="ti-user"></i> x 5</td>
+                            <td>
+                                <div class="price-room">
+                                    <span>1.040.000</span>
+                                    <br> VNĐ/đêm
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-number">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled">
+                                            <i class="ti-minus"></i>
+                                        </button>
+                                    </span>
+
+                                    <input type="text" class="form-control input-number" value="0" min="0" max="20">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-plus btn-number" data-type="plus">
+                                            <i class="ti-plus"></i>
+                                        </button>
+                                    </span>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="room-name">
+                                    Junior Room
+                                </div>
+                                <div class="img-room">
+                                    <img style="width: 140px; height: 100px;" src="img/rooms/1.jpg" alt="">
+                                </div>
+                                <a href=""></a>
+                            </td>
+                            <td><i class="ti-user"></i> x 5</td>
+                            <td>
+                                <div class="price-room">
+                                    <span>1.040.000</span>
+                                    <br> VNĐ/đêm
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-number">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled">
+                                            <i class="ti-minus"></i>
+                                        </button>
+                                    </span>
+
+                                    <input type="text" class="form-control input-number" value="0" min="0" max="20">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-plus btn-number" data-type="plus">
+                                            <i class="ti-plus"></i>
+                                        </button>
+                                    </span>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="room-name">
+                                    Junior Room
+                                </div>
+                                <div class="img-room">
+                                    <img style="width: 140px; height: 100px;" src="img/rooms/1.jpg" alt="">
+                                </div>
+                                <a href=""></a>
+                            </td>
+                            <td><i class="ti-user"></i> x 5</td>
+                            <td>
+                                <div class="price-room">
+                                    <span>1.040.000</span>
+                                    <br> VNĐ/đêm
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-number">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled">
+                                            <i class="ti-minus"></i>
+                                        </button>
+                                    </span>
+
+                                    <input type="text" class="form-control input-number" value="0" min="0" max="20">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-plus btn-number" data-type="plus">
+                                            <i class="ti-plus"></i>
+                                        </button>
+                                    </span>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <div class="booking-box">
+                    <div class="title-list-room"><span>DANH SÁCH PHÒNG ĐẶT</span></div>
+                    <div class="list-room">
+                        <ul>
+                            <li>
+                                <div>
+                                    <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
+                                    <span>Standard Room</span>
+                                </div>
+                                <div><span>x 1</span></div>
+                            </li>
+                            <li>
+                                <div>
+                                    <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
+                                    <span>Junior Room</span>
+                                </div>
+                                <div><span>x 1</span></div>
+                            </li>
+                            <li>
+                                <div>
+                                    <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
+                                    <span>Deluxe Room</span>
+                                </div>
+                                <div><span>x 1</span></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-form1-submit "><a href="yourroom.html">Đặt phòng</a> </button>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+@section styles{
+    <style>
+        .input_inner input {
+            display: block;
+            width: 100%;
+            font-size: 15px;
+            color: #222;
+            padding: 20px 40px 20px 20px;
+            background: #fff;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .select2 {
+            height: 62.5px !important;
+        }
+
+        .section-padding {
+            padding: 40px 0;
+        }
+    </style>
+}
+
+@section scripts{
+    <script>
+        const getListRoomCategory = async function () {
+            let rq = await fetch('/api/RoomCategory/GetListRoomCategory', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+
+            $('#select-room-category').html('');
+
+            let html = '';
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                html += '<option value="">Room Category</option>'
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<option value="${rs.data[i].RoomCategoryId}">${rs.data[i].Name}</option>`
+                }
+                $('#select-room-category').append(html);
+            }
+        }
+
+        const CheckNow = async function () {
+            let model = {
+                CheckIn: $('#check-in').val(),
+                CheckOut: $('#check-out').val(),
+                RoomCategory: $('#txtRoomCategoryId').val()
+            }
+            let rq = await fetch('/api/Order/GetListRoom?checkIn=' + model.CheckIn + '&checkOut=' + model.CheckOut + '&keyword=' + model.RoomCategory, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+
+            $('#list-count-roomcategory').html('');
+
+            let html = '';
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<tr>`;
+                    html += `<tr><td><div class="room-name">${rs.data[i].Category.Name}</div>`;
+                    html += `<div class="img-room"><img style="width: 140px; height: 100px;" src="${rs.data[i].Category.Image}" alt=""></div></td>`;
+                    html += `<td><i class="ti-user"></i> x ${rs.data[i].Category.NumberOfPeople}</td>`;
+                    html += `<td><div class="price-room"><span>${rs.data[i].Category.Price}</span><br> VNĐ/đêm</div></td>`;
+                    html += `<td><div class="price-room"><span>${rs.data[i].Count}</span></div></td>`;
+                    html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
+                    html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
+                    html += `<input type="text" class="form-control input-number" value="0" min="0" max="20">`;
+                    html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus"><i class="ti-plus"></i></button></span></div></td>`;
+                    html += `</tr>`;
+                }
+                $('#list-count-roomcategory').append(html);
+            }
+        }
+
+        const initPage = function () {
+            getListRoomCategory();
+            var roomCategoryId = $('#txtRoomCategoryId').val();
+            $('#select-room-category').val(roomCategoryId);
+            console.log(roomCategoryId);
+
+            CheckNow();
+        }
+        initPage();
+
+    </script>
+}

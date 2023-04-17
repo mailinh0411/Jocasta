@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\ApiBaseController.cs" />
+    <Compile Include="ApiControllers\OrderController.cs" />
     <Compile Include="ApiControllers\RoomCategoryController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Areas\Admin\Services\AdminRoomService.cs" />
     <Compile Include="Areas\Admin\Services\AdminServiceRoomService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RoomCategoryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -186,8 +188,11 @@
     <Compile Include="Services\AdminRoomCategoryService.cs" />
     <Compile Include="Services\AdminRoomService.cs" />
     <Compile Include="Services\AdminServiceRoomService.cs" />
+    <Compile Include="Services\DayRoomService.cs" />
     <Compile Include="Services\ManageUserService.cs" />
+    <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\RoomCategoryService.cs" />
+    <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\ServiceRoomService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
@@ -2784,10 +2789,12 @@
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\RoomCategory\Index.cshtml" />
+    <Content Include="Views\RoomCategory\BookNow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Views\Order\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>

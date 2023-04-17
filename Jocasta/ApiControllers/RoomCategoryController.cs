@@ -17,7 +17,9 @@ namespace Jocasta.ApiControllers
         {
             try
             {
-                return Success();
+                RoomCategoryService roomCategoryService = new RoomCategoryService();
+                List<RoomCategory> list = roomCategoryService.GetListRoomCategory();
+                return Success(list);
             }catch (Exception ex)
             {
                 return Error(ex.Message);
