@@ -23,5 +23,19 @@ namespace Jocasta.Controllers
             ViewBag.ListRoomCategory = roomCategory;
             return View();
         }
+
+        [Route("check-now/{checkin?}/{checkout?}/{room?}")]
+        public ActionResult BookNow(RoomCategoryCheckNow model)
+        {
+            ViewBag.CheckIn = model.CheckIn;
+            ViewBag.CheckOut = model.CheckOut;  
+            ViewBag.RoomCategory = model.RoomCategory;
+            return View();
+        }
+
+        /*public ActionResult BookNow()
+        {
+            return View();
+        }*/
     }
 }
