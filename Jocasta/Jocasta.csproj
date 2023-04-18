@@ -182,12 +182,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\HelperProvider.cs" />
     <Compile Include="Providers\SecurityProvider.cs" />
-    <Compile Include="Services\AdminNewService.cs" />
     <Compile Include="Services\BaseService.cs" />
-    <Compile Include="Services\AdminDayRoomService.cs" />
-    <Compile Include="Services\AdminRoomCategoryService.cs" />
-    <Compile Include="Services\AdminRoomService.cs" />
-    <Compile Include="Services\AdminServiceRoomService.cs" />
     <Compile Include="Services\DayRoomService.cs" />
     <Compile Include="Services\ManageUserService.cs" />
     <Compile Include="Services\OrderService.cs" />

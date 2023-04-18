@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Razor.Tokenizer.Symbols;
 using System.Web.UI.WebControls;
 using System.Web.UI;
+using Jocasta.Areas.Admin.Services;
 
 namespace Jocasta.Areas.Admin.ApiControllers
 {
