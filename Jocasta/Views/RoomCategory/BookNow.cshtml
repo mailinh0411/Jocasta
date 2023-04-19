@@ -68,14 +68,15 @@
                 </div>
                 <div class="col2 c5">
                     <input type="text" id="txtRoomCategoryId" value="@ViewBag.RoomCategory" hidden />
-                    <div class="select1_wrapper">
+                    <div class="select_wrapper">
                         <label>Room Category</label>
-                        <div class="select1_inner">
+                        <div class="select_inner">
                             <select class="select2 select" id="select-room-category" style="width: 100%">
                                 <option value="">Room Category</option>
                             </select>
                         </div>
                     </div>
+                    
                 </div>
                 <div class="col3 c6">
                     <button type="submit" class="btn-form1-submit" onclick="CheckNow();">Check Now</button>
@@ -213,14 +214,35 @@
                 <div class="booking-box">
                     <div class="title-list-room"><span>DANH SÁCH PHÒNG ĐẶT</span></div>
                     <div class="list-room">
-                        <ul>
-                            <li>
-                                <div>
-                                    <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
-                                    <span>Standard Room</span>
-                                </div>
-                                <div><span>x 1</span></div>
-                            </li>
+                        <table>
+                            <tbody id="list-room-book">
+                                <tr>
+                                    <td>
+                                        <input id="roomCategoryBookId" value="1" hidden />
+                                        <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
+                                    </td>
+                                    <td>Standard Room</td>
+                                    <td>x1</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="roomCategoryBookId" value="2" hidden />
+                                        <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
+                                    </td>
+                                    <td>Standard Room</td>
+                                    <td>x1</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input id="roomCategoryBookId" value="4" hidden />
+                                        <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
+                                    </td>
+                                    <td>Standard Room</td>
+                                    <td>x1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        @*<ul>
                             <li>
                                 <div>
                                     <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
@@ -235,7 +257,7 @@
                                 </div>
                                 <div><span>x 1</span></div>
                             </li>
-                        </ul>
+                        </ul>*@
                     </div>
                     <button class="btn btn-form1-submit "><a href="yourroom.html">Đặt phòng</a> </button>
                 </div>
@@ -265,11 +287,22 @@
         .section-padding {
             padding: 40px 0;
         }
+
+        .image-room-book {
+            width: 50px;
+            height: 30px;
+            margin-right: 20px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
     </style>
 }
 
 @section scripts{
     <script>
+        let ListRoomBook = [];
+
         const getListRoomCategory = async function () {
             let rq = await fetch('/api/RoomCategory/GetListRoomCategory', {
                 method: 'get',
@@ -285,9 +318,9 @@
             let html = '';
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                html += '<option value="">Room Category</option>'
+                html += '<option class="option-room" value="">Room Category</option>'
                 for (let i = 0; i < rs.data.length; i++) {
-                    html += `<option value="${rs.data[i].RoomCategoryId}">${rs.data[i].Name}</option>`
+                    html += `<option class="option-room" value="${rs.data[i].RoomCategoryId}">${rs.data[i].Name}</option>`
                 }
                 $('#select-room-category').append(html);
             }
@@ -297,7 +330,7 @@
             let model = {
                 CheckIn: $('#check-in').val(),
                 CheckOut: $('#check-out').val(),
-                RoomCategory: $('#txtRoomCategoryId').val()
+                RoomCategory: $('#select-room-category').val()
             }
             let rq = await fetch('/api/Order/GetListRoom?checkIn=' + model.CheckIn + '&checkOut=' + model.CheckOut + '&keyword=' + model.RoomCategory, {
                 method: 'get',
@@ -322,7 +355,7 @@
                     html += `<td><div class="price-room"><span>${rs.data[i].Count}</span></div></td>`;
                     html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
                     html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
-                    html += `<input type="text" class="form-control input-number" value="0" min="0" max="20">`;
+                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].Category.RoomCategoryId}" data-name="${rs.data[i].Category.Name}" data-image="${rs.data[i].Category.Image}" value="0" min="0" max="${rs.data[i].Count}" onchange="countRoom_onChange(this);">`;
                     html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus"><i class="ti-plus"></i></button></span></div></td>`;
                     html += `</tr>`;
                 }
@@ -330,12 +363,46 @@
             }
         }
 
-        const initPage = function () {
-            getListRoomCategory();
-            var roomCategoryId = $('#txtRoomCategoryId').val();
-            $('#select-room-category').val(roomCategoryId);
-            console.log(roomCategoryId);
+        const getListRoomBook = function () {
+            let ListRoomBook = []
+            const tableRow = $('#list-room-book tr');
+            for (let i = 0; i < tableRow.length; i++) {
+                const row = $(tableRow[i]);
+                const id = $(row).find('td#roomCategoryBookId').val();
+                
+                ListRoomBook.push(id);
+            }
+        }
 
+        const countRoom_onChange = async function (el) {
+            var id = $(el).data('id');
+            var name = $(el).data('name');
+            var image = $(el).data('image');
+
+            let html = '';
+            
+            html += `<tr><td>`;
+            html += `<input id="roomCategoryBookId" value="${id}" hidden />`;
+            html += `<div class="image-room-book" style="background-image: url(${image})"></div></td>`;
+            html += `<td>${name}</td>`;
+            html += `<td>x1</td>`;
+
+            $('#list-room-book').append(html);
+        }
+
+        const initPage = async function () {
+            await getListRoomCategory();
+            var roomCategoryId = $('#txtRoomCategoryId').val();
+            //$('#select-room-category').val($('#txtRoomCategoryId').val()).change();
+            //$("#select-room-category option[value=" + roomCategoryId +"]").attr('selected', 'selected');
+            //$('#select2-select-room-category-container').title(roomCategoryId);
+            await $('#select-room-category').val(roomCategoryId);
+            console.log(roomCategoryId);
+            var id = $('#select-room-category').val();
+            var nameRoom = $('#select-room-category').text();
+            $('#select2-select-room-category-container').text(nameRoom)
+            console.log(id);
+            console.log(nameRoom);
             CheckNow();
         }
         initPage();
