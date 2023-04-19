@@ -4081,15 +4081,15 @@
                 color: #222 !important;
             }
             
-            .select1_wrapper {
+            .select_wrapper {
                 margin-bottom: 0;
             }
             
-            .select1_inner {
+            .select_inner {
                 position: relative;
             }
             
-            .select1_inner:after {
+            .select_inner:after {
                 content: '';
                 display: block;
                 position: absolute;
