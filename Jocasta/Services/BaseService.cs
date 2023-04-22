@@ -21,7 +21,7 @@ namespace Jocasta.Services
         {
             if (_connection == null)
             {
-                string constr = ConfigurationManager.ConnectionStrings["JocastaConnection"].ToString();
+                string constr = ConfigurationManager.ConnectionStrings["JocastaConnect"].ToString();
                 this._connection = new SqlConnection(constr);
             }
             else

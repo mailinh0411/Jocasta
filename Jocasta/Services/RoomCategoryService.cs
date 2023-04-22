@@ -13,6 +13,11 @@ namespace Jocasta.Services
         public RoomCategoryService() : base() { }
         public RoomCategoryService(IDbConnection db) : base(db) { }
 
+        public RoomCategory GetRoomCategoryById(string id, IDbTransaction transaction = null)
+        {
+            string query = "select * from [room_category] where RoomCategoryId = @id";
+            return this._connection.Query<RoomCategory>(query, new {id}, transaction).FirstOrDefault();
+        }
         public List<RoomCategory> GetListRoomCategoryForHomePage(IDbTransaction transaction = null)
         {
             string query = "select Top(6) * from [room_category] where Enable=1 ORDER BY CreateTime DESC";

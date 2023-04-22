@@ -1,4 +1,5 @@
-﻿using Jocasta.Models;
+﻿using Jocasta.Filters;
+using Jocasta.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Web.Http;
 
 namespace Jocasta.ApiControllers
 {
+    [ApiTokenRequire]
     public class ApiBaseController : ApiController
     {
         public JsonResult Success(object data = null, string message = null)

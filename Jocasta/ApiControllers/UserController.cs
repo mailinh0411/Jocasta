@@ -20,7 +20,27 @@ namespace Jocasta.ApiControllers
             return Success(list);
         }
 
+        [HttpGet]
+        public JsonResult GetInforUser()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+                user.Password = "";
+                return Success(user);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+
         [HttpPost]
+        [AllowAnonymous]
         public JsonResult Login(User model)
         {
             try
@@ -45,7 +65,13 @@ namespace Jocasta.ApiControllers
                         string deviceId = Guid.NewGuid().ToString().ToLower();
                         string token = SecurityProvider.CreateToken(userLogin.UserId, userLogin.Password, deviceId);
 
-                        if (!userService.UpdateUserToken(userLogin.UserId, token, transaction)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+                        DateTime now = DateTime.Now;
+                        UserToken userToken = userService.GetUserTokenByUserId(userLogin.UserId, transaction);
+                        userToken.Token = token;
+                        userToken.CreateTime = HelperProvider.GetSeconds(now);
+                        userToken.ExpireTime = HelperProvider.GetSeconds(now.AddDays(2));
+
+                        if (!userService.UpdateUserToken(userToken, transaction)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
                         
                         transaction.Commit();
                         return Success(new { token, deviceId });
@@ -93,6 +119,7 @@ namespace Jocasta.ApiControllers
                         userToken.UserTokenId = Guid.NewGuid().ToString();
                         userToken.UserId = user.UserId;
                         userToken.CreateTime = HelperProvider.GetSeconds(now);
+                        userToken.ExpireTime = HelperProvider.GetSeconds(now.AddDays(2));
                         if (!userService.InsertUserToken(userToken, transaction)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
 
                         transaction.Commit();
@@ -100,6 +127,22 @@ namespace Jocasta.ApiControllers
                     }
                 }
             }catch(Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult Logout()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                userService.RemoveUserToken(token);
+                return Success();
+            }
+            catch (Exception ex)
             {
                 return Error(ex.Message);
             }

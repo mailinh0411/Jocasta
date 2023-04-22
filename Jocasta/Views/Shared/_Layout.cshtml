@@ -12,6 +12,17 @@
     <link rel="stylesheet" href="/Content/css/style.css" />
     <link rel="stylesheet" href="/Content/fontawesome/css/all.css">
 
+    <style>
+        .nav-link .user-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            text-transform: initial;
+            letter-spacing: 0px;
+            margin-left: 7px;
+        }
+    </style>
+
     @RenderSection("styles", false)
 </head>
 
@@ -51,14 +62,53 @@
 
                     <li class="nav-item"><a class="nav-link" href="new.html">New</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                    <li class="nav-item dropdown">
-                        <span class="nav-link"><img class="avatar-user" src="" alt=""></span>
+                    @*<li class="nav-item dropdown">
+                        <div class="nav-link d-flex">
+                            <div class="user-img">
+                                <img class="avatar-user" id="avatar-user" src="" alt="">
+                            </div>
+
+                            <div class="user-name">
+                                <h6 class="mb-0" id="user-name"></h6>
+                                <p class="mb-0" id="user-account" style="font-size:13px;"></p>
+                            </div>
+                        </div>
+
+
                         <ul class="dropdown-menu last">
                             <li class="dropdown-item">
-                                <a href="/dang-nhap">Login</a>
+                                <a href="/dang-nhap">Thông tin cá nhân</a>
                             </li>
                             <li class="dropdown-item">
-                                <a href="/dang-ky">Register</a>
+                                <a href="" onclick="LogOut();">Đăng xuất</a>
+                            </li>
+                        </ul>
+                    </li>*@
+                </ul>
+            </div>
+
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">                   
+                    <li class="nav-item dropdown">
+                        <div class="nav-link d-flex">
+                            <div class="user-img">
+                                <img class="avatar-user" id="avatar-user" src="" alt="">
+                            </div>
+
+                            <div class="user-name">
+                                <h6 class="mb-0" id="user-name"></h6>
+                                <p class="mb-0" id="user-account" style="font-size:13px;"></p>
+                            </div>
+                        </div>
+
+
+                        <ul class="dropdown-menu last">
+                            <li class="dropdown-item">
+                                <a href="/dang-nhap">Thông tin cá nhân</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="" onclick="LogOut();">Đăng xuất</a>
                             </li>
                         </ul>
                     </li>
@@ -139,7 +189,40 @@
     <script src="/Content/js/custom.js"></script>
     <script src="/Content/js/helper.js"></script>
 
+    <script>
+        const GetUserLayoutInfo = async function () {
+            let rq = await fetch('/api/user/GetInforUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            console.log(rs)
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#avatar-user').attr('src', GetObjectProperty(rs.data, 'Avatar'));
+                $('#user-name').text(GetObjectProperty(rs.data, 'Name'));
+                $('#user-account').text(GetObjectProperty(rs.data, 'Account'));
+            }
+        }
+        GetUserLayoutInfo();
+
+        const LogOut = async () => {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất tài khoản khỏi hệ thống?')){
+                let rq = await fetch('/api/user/logout', {
+                        method: 'get',
+                        headers: Enum.OptionHeaderDefault
+                    });
+                    let rs = await rq.json();
+                    if (CheckErrorResponse(rs) === false) return;
+                    EraseCookie('UserToken');
+                    EraseCookie('ExpiryTime');
+                    EraseCookie('Email');
+                    window.location.href = '/dang-nhap';
+            }
+        }
+    </script>
+
     @RenderSection("scripts", false)
+
 </body>
 
 </html>

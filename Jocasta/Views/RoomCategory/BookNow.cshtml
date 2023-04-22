@@ -216,7 +216,7 @@
                     <div class="list-room">
                         <table>
                             <tbody id="list-room-book">
-                                <tr>
+                                @*<tr>
                                     <td>
                                         <input id="roomCategoryBookId" value="1" hidden />
                                         <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
@@ -239,7 +239,7 @@
                                     </td>
                                     <td>Standard Room</td>
                                     <td>x1</td>
-                                </tr>
+                                </tr>*@
                             </tbody>
                         </table>
                         @*<ul>
@@ -259,7 +259,7 @@
                             </li>
                         </ul>*@
                     </div>
-                    <button class="btn btn-form1-submit "><a href="yourroom.html">Đặt phòng</a> </button>
+                    <button class="btn btn-form1-submit " onclick="bookNow_onClick();">Đặt phòng</button>
                 </div>
             </div>
         </div>
@@ -354,53 +354,127 @@
                     html += `<td><div class="price-room"><span>${rs.data[i].Category.Price}</span><br> VNĐ/đêm</div></td>`;
                     html += `<td><div class="price-room"><span>${rs.data[i].Count}</span></div></td>`;
                     html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
-                    html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
+                   // html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
                     html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].Category.RoomCategoryId}" data-name="${rs.data[i].Category.Name}" data-image="${rs.data[i].Category.Image}" value="0" min="0" max="${rs.data[i].Count}" onchange="countRoom_onChange(this);">`;
-                    html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus"><i class="ti-plus"></i></button></span></div></td>`;
+                   // html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus" onclick="PlusCountRoom_onClick();"><i class="ti-plus"></i></button></span></div></td>`; onkeyup="ValidateInputOnlyNumber(event,this);"
                     html += `</tr>`;
                 }
                 $('#list-count-roomcategory').append(html);
             }
         }
 
-        const getListRoomBook = function () {
-            let ListRoomBook = []
-            const tableRow = $('#list-room-book tr');
-            for (let i = 0; i < tableRow.length; i++) {
-                const row = $(tableRow[i]);
-                const id = $(row).find('td#roomCategoryBookId').val();
-                
-                ListRoomBook.push(id);
+        const getListRoomBooked = async function () {
+            let rq = await fetch('/api/Cart/GetListRoomBookedByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#list-room-book').append('');
+                let html = '';
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<tr><td>`;
+                    html += `<input id="roomCategoryBookId" value="${GetObjectProperty(rs.data[i], 'RoomCategoryId')}" hidden />`;
+                    html += `<div class="image-room-book" style="background-image: url(${GetObjectProperty(rs.data[i], 'Image') })"></div></td>`;
+                    html += `<td>${GetObjectProperty(rs.data[i], 'Name') }</td>`;
+                    html += `<td>x${GetObjectProperty(rs.data[i], 'Quantity') }</td>`;
+                }
+                $('#list-room-book').append(html);
+
+                ListRoomBook = [];
+                const tableRow = $('#list-room-book tr');
+                for (let i = 0; i < tableRow.length; i++) {
+                    const row = $(tableRow[i]);
+                    const id = $(row).find('input#roomCategoryBookId').val();
+
+                    ListRoomBook.push(id);
+
+                }
+                console.log(ListRoomBook);
             }
         }
 
+        const insertRoomBook = async function (id, count) {
+            let model = {
+                RoomCategoryId: id,
+                Quantity: count
+            }
+            const rp = await fetch('/api/cart/InsertCartDetail', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                getListRoomBooked();
+            }
+        }
+
+
         const countRoom_onChange = async function (el) {
             var id = $(el).data('id');
-            var name = $(el).data('name');
-            var image = $(el).data('image');
+            /*var name = $(el).data('name');
+            var image = $(el).data('image');*/
+            var maxCount = $(el).attr("max");
+            //var maxCount = $(el).data('max');
 
-            let html = '';
+            var count = $(el).val();
+            if (count > maxCount) {
+                alert('Số phòng không được lớn hơn số phòng trống.');
+                $(el).val(0);
+                return;
+            }
+            console.log(id);
+            console.log(count);
+            //insertRoomBook(id, count);
+            let model = {
+                RoomCategoryId: id,
+                Quantity: count,
+                CheckIn: $('#check-in').val(),
+                CheckOut: $('#check-out').val(),
+            }
             
-            html += `<tr><td>`;
-            html += `<input id="roomCategoryBookId" value="${id}" hidden />`;
-            html += `<div class="image-room-book" style="background-image: url(${image})"></div></td>`;
-            html += `<td>${name}</td>`;
-            html += `<td>x1</td>`;
+            const rp = await fetch('/api/cart/InsertCartDetail', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
 
-            $('#list-room-book').append(html);
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                getListRoomBooked();
+            }
+        }
+
+        const bookNow_onClick = async function () {
+            if (ListRoomBook.length <= 0) {
+                alert("Bạn phải chọn phòng.");
+                return;
+            }
+
+            window.location.href = '/book-now';
+            
         }
 
         const initPage = async function () {
             await getListRoomCategory();
+            await getListRoomBooked();
             var roomCategoryId = $('#txtRoomCategoryId').val();
-            //$('#select-room-category').val($('#txtRoomCategoryId').val()).change();
-            //$("#select-room-category option[value=" + roomCategoryId +"]").attr('selected', 'selected');
-            //$('#select2-select-room-category-container').title(roomCategoryId);
             await $('#select-room-category').val(roomCategoryId);
             console.log(roomCategoryId);
             var id = $('#select-room-category').val();
             var nameRoom = $('#select-room-category').text();
-            $('#select2-select-room-category-container').text(nameRoom)
+            //$('.select2-results__option[aria-selected="true"]').text()
+            //$('#select2-select-room-category-container').text(nameRoom)
             console.log(id);
             console.log(nameRoom);
             CheckNow();
