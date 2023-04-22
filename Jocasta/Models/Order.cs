@@ -21,5 +21,9 @@ namespace Jocasta.Models
         }
     }
 
+    public class CreateOrder
+    {
+
+    }
     
 }

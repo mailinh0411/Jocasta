@@ -33,9 +33,22 @@ namespace Jocasta.Controllers
             return View();
         }
 
-        /*public ActionResult BookNow()
+        [Route("book-now")]
+        public ActionResult CheckNow()
         {
             return View();
-        }*/
+        }
+
+        [Route("information-user-book")]
+        public ActionResult InfoUserBook()
+        {
+            return View();
+        }
+
+        [Route("success-order")]
+        public ActionResult SuccessOrder()
+        {
+            return View();
+        }
     }
 }

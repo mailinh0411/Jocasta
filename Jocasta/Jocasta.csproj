@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\ApiBaseController.cs" />
+    <Compile Include="ApiControllers\CartController.cs" />
     <Compile Include="ApiControllers\OrderController.cs" />
     <Compile Include="ApiControllers\RoomCategoryController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
@@ -162,10 +163,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RoomCategoryController.cs" />
+    <Compile Include="Filters\ApiAdminTokenRequireAttribute.cs" />
+    <Compile Include="Filters\ApiTokenRequireAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\Cart.cs" />
+    <Compile Include="Models\CartDetail.cs" />
     <Compile Include="Models\UserAdmin.cs" />
     <Compile Include="Models\DayRoom.cs" />
     <Compile Include="Models\ImageRoom.cs" />
@@ -182,13 +187,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\HelperProvider.cs" />
     <Compile Include="Providers\SecurityProvider.cs" />
+    <Compile Include="Providers\UserProvider.cs" />
     <Compile Include="Services\BaseService.cs" />
+    <Compile Include="Services\CartService.cs" />
     <Compile Include="Services\DayRoomService.cs" />
     <Compile Include="Services\ManageUserService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\RoomCategoryService.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\ServiceRoomService.cs" />
+    <Compile Include="Services\UserAdminService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2785,10 +2793,14 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\RoomCategory\Index.cshtml" />
     <Content Include="Views\RoomCategory\BookNow.cshtml" />
+    <Content Include="Views\RoomCategory\CheckNow.cshtml" />
+    <Content Include="Views\RoomCategory\InfoUserBook.cshtml" />
+    <Content Include="Views\RoomCategory\SuccessOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Views\Cart\" />
     <Folder Include="Views\Order\" />
     <Folder Include="Views\User\" />
   </ItemGroup>

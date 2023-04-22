@@ -53,16 +53,35 @@ namespace Jocasta.Services
 
         public bool InsertUserToken(UserToken userToken, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[user_token] ([UserTokenId],[UserId],[Token],[CreateTime]) VALUES (@UserTokenId,@UserId,@Token,@CreateTime)";
+            string query = "INSERT INTO [dbo].[user_token] ([UserTokenId],[UserId],[Token],[CreateTime],[ExpireTime]) VALUES (@UserTokenId,@UserId,@Token,@CreateTime,@ExpireTime)";
             int status = this._connection.Execute(query, userToken, transaction);
             return status > 0;
         }
 
-        public bool UpdateUserToken(string userId, string token, IDbTransaction transaction = null)
+        public UserToken GetUserTokenByUserId(string userId, IDbTransaction transaction = null)
         {
-            string query = "UPDATE [dbo].[user_token] SET [Token] = @token WHERE [UserId] = @userId";
-            int status = this._connection.Execute(query, new { userId, token }, transaction);
+            string query = "select * from [user_token] where [UserId] = @userId";
+            return this._connection.Query<UserToken>(query, new { userId }, transaction).FirstOrDefault();
+        }
+
+        public bool UpdateUserToken(UserToken userToken, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[user_token] SET [Token] = @Token, [CreateTime] = @CreateTime, [ExpireTime] = @ExpireTime WHERE [UserId] = @UserId";
+            int status = this._connection.Execute(query, userToken, transaction);
             return status > 0;
+        }
+
+        public UserToken GetUserToken(string token, IDbTransaction transaction = null)
+        {
+            string query = "select top 1 * from [user_token] where Token=@token";
+            return this._connection.Query<UserToken>(query, new { token }, transaction).FirstOrDefault();
+        }
+
+        public void RemoveUserToken(string token, IDbTransaction transaction = null)
+        {
+            string query = "update [user_token] set Token=NULL where Token=@token";
+            int status = this._connection.Execute(query, new { token = token }, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
     }
 }

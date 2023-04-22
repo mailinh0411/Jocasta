@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewBag.Title = "CheckNow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section slider{
+    <!-- Header Banner -->
+    <div class="banner-header section-padding valign bg-img bg-fixed" data-overlay-dark="4" data-background="/Content/img/slider/1.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 caption mt-90">
+                    <h5>The Jocasta Mai Linh Hotel</h5>
+                    <h1>Selected Room</h1>
+                </div>
+            </div>
+            <div class="row sub-banner">
+                <ul>
+                    <li>
+                        <a href="index.html">Home</a>
+                    </li>
+                    <li>
+                        <a class="select" href="yourroom.html">Selected Room</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Your room -->
+<section class="section-padding">
+    <div class="container">
+        <div class="bread-crumb">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="bread-crumb-sec">
+                        <a class="selected">
+                            <span class="number" style="text-align: center;">1</span>
+                            <div class="clear"></div>
+                            <span class="text">Your Room</span>
+                        </a>
+                    </div>
+
+                    <div class="bread-crumb-sec">
+                        <a>
+                            <span class="number">2</span>
+                            <div class="clear"></div>
+                            <span class="text">Place Your Reservation</span>
+                        </a>
+                    </div>
+
+                    <div class="bread-crumb-sec">
+                        <a>
+                            <span class="number">3</span>
+                            <div class="clear"></div>
+                            <span class="text">Confirmation</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-sections">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="booking-box reservation">
+                        <div style="text-align: center;"><span class="title">Đặt phòng</span></div>
+
+                        <ul>
+                            <li><span><strong>Check In:</strong><span id="check-in"></span></span></li>
+                            <li><span><strong>Check Out:</strong><span id="check-out"></span></span></li>
+                           @* <li><span><strong>Guests:</strong>2 Adult, 1 Child</span></li>*@
+                            <li><span><strong>Rooms:</strong><span id="total-count-room"></span>Room</span></li>
+                        </ul>
+                        <button type="submit" class="btn-form1-submit mt-15"><a href="booknow.html">Edit reservation</a></button>
+                    </div>
+
+                </div>
+                <div class="col-md-8">
+
+                    <div class="your-room">
+                        <h4>Các phòng bạn chọn:</h4>
+
+                        <div class="detail">
+                            <ul id="list-room-booked">
+                                
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                    <div class="total-price">
+                        <h6>Tổng tiền: <span id="total-price">8.048.000</span></h6>
+                    </div>
+                    <div class="btn-reservation">
+                        <button type="submit" class="btn-form1-submit mt-15" onclick="seeInfoUser_onClick();">Chi tiết về bạn</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+
+@section styles{
+    <style>
+    </style>
+}
+
+@section scripts{
+    <script>
+        const getCartByUser = async function () {
+            let rq = await fetch('/api/cart/GetCartByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            
+
+            $('#check-in').text(rs.data.CheckIn);
+            $('#check-out').text(rs.data.CheckOut);
+            $('#total-count-room').text(rs.data.TotalQuantity);
+            $('#total-price').text(rs.data.TotalPrice);
+        }
+
+        const getListRoomBooked = async function () {
+            let rq = await fetch('/api/cart/GetListRoomBookedByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+            $('#list-room-booked').html('');
+            let html = '';
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let i = 0; i < rs.data.length; i++) {
+                    
+                    html += `<li><img src="${rs.data[i].Image}" alt="">`;
+                    html += `<div><h6>${GetObjectProperty(rs.data[i], 'Name')}</h6><p>Số lượng: ${GetObjectProperty(rs.data[i], 'Quantity')}</p>`;
+                    html += `<div class="room-price"><span class="current">${(GetObjectProperty(rs.data[i], 'Price'))}</span><span class="per-night">VNĐ/Night</span></div>`;
+                    html += `</div></li>`;
+                }
+                $('#list-room-booked').append(html);
+            }
+        }
+
+        const seeInfoUser_onClick = function () {
+            window.location.href = '/information-user-book';
+        }
+
+        const initPage = async function () {
+            await getCartByUser();
+            await getListRoomBooked();
+        }
+
+        initPage();
+
+    </script>
+}

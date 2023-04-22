@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewBag.Title = "InfoUserBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section slider{
+    <!-- Header Banner -->
+    <div class="banner-header section-padding valign bg-img bg-fixed" data-overlay-dark="4" data-background="/Content/img/slider/1.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 caption mt-90">
+                    <h5>The Jocasta Mai Linh Hotel</h5>
+                    <h1>Reservation</h1>
+                </div>
+            </div>
+            <div class="row sub-banner">
+                <ul>
+                    <li>
+                        <a href="index.html">Home</a>
+                    </li>
+                    <li>
+                        <a class="select" href="reservation.html">Reservation</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Reservation -->
+<section class="section-padding">
+    <div class="container">
+        <div class="bread-crumb">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="bread-crumb-sec">
+                        <a class="">
+                            <span class="number" style="text-align: center;">1</span>
+                            <div class="clear"></div>
+                            <span class="text">Your Room</span>
+                        </a>
+                    </div>
+
+                    <div class="bread-crumb-sec">
+                        <a class="selected">
+                            <span class="number">2</span>
+                            <div class="clear"></div>
+                            <span class="text">Place Your Reservation</span>
+                        </a>
+                    </div>
+
+                    <div class="bread-crumb-sec">
+                        <a>
+                            <span class="number">3</span>
+                            <div class="clear"></div>
+                            <span class="text">Confirmation</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-sections">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="booking-box reservation">
+                        <div style="text-align: center;"><span class="title">Your Reservation</span></div>
+
+                        <ul>
+                            <li><span><strong>Check In:</strong><span id="check-in"></span></span></li>
+                            <li><span><strong>Check Out:</strong><span id="check-out"></span></span></li>
+                            @* <li><span><strong>Guests:</strong>2 Adult, 1 Child</span></li>*@
+                            <li><span><strong>Rooms:</strong><span id="total-count-room"></span>Room</span></li>
+                        </ul>
+
+                        <div class="total-price">
+                            <span class="sub-title">Total Price</span>
+                            <span class="price" id="total-price">8.048.000</span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-md-8">
+
+                    <div class="client-detail">
+                        <h4>Thông tin khách hàng:</h4>
+
+                        <div class="form row">
+                            <div class="col-md-12">
+                                <div class="field">
+                                    <label>Họ và tên <span class="required">*</span></label>
+                                    <input type="text" id="name">
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="field">
+                                    <label>Email <span class="required">*</span></label>
+                                    <input type="text" id="email">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="field">
+                                    <label>Số điện thoại <span class="required">*</span></label>
+                                    <input type="text" id="phone">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="field">
+                                    <label>Nội dung yêu cầu </label>
+                                    <textarea id="request-content"></textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 btn-complete">
+                                <button type="submit" class="btn-form1-submit mt-15" onclick="orderBookRoom_onClick();">Hoàn thành đặt phòng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section styles{
+    <style>
+        .required{
+            color: red;
+        }
+    </style>
+}
+
+@section scripts{
+    <script>
+        const getCartByUser = async function () {
+            let rq = await fetch('/api/cart/GetCartByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            $('#check-in').text(rs.data.CheckIn);
+            $('#check-out').text(rs.data.CheckOut);
+            $('#total-count-room').text(rs.data.TotalQuantity);
+            $('#total-price').text(rs.data.TotalPrice);
+        }
+
+        const getUserInfo = async function () {
+            let rq = await fetch('/api/user/GetInforUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#name').val(rs.data.Name);
+                $('#email').val(rs.data.Email);
+                $('#phone').val(rs.data.Phone);
+            }
+        }
+
+        const orderBookRoom_onClick = async function () {
+            //window.location.href = '/information-user-book';
+
+            /*let model = {
+                TotalPrice: $('#total-price').text(rs.data.TotalPrice)
+            }*/
+
+            let rq = await fetch('/api/order/CreateOrder', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.href = '/success-order';
+            }
+        }
+
+        const initPage = async function () {
+            await getCartByUser();
+            await getUserInfo();
+        }
+
+        initPage();
+
+    </script>
+}

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 
+
 namespace Jocasta.ApiControllers
 {
     public class OrderController : ApiBaseController
@@ -66,6 +67,66 @@ namespace Jocasta.ApiControllers
                         }
 
                         return Success(listCategoryCountRoom);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+
+        // Tao order dat phong
+        [HttpPost]
+        public JsonResult CreateOrder()
+        {
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        string token = Request.Headers.Authorization.ToString();
+                        UserService userService = new UserService(connect);
+                        CartService cartService = new CartService(connect);
+                        OrderService orderService = new OrderService(connect);
+
+                        User user = userService.GetUserByToken(token,transaction);
+                        if (user == null) return Unauthorized();
+
+                        Cart cart = cartService.GetCartByUserId(user.UserId, transaction);
+
+                        if (cart == null) throw new Exception("Người dùng này chưa chọn phòng để đặt");
+
+                        List<CartDetailModel> cartDetail = cartService.GetListRoomBookedByCart(cart.CartId, transaction);
+                        if (cartDetail.Count == 0) throw new Exception("Người dùng này chưa chọn phòng để đặt");
+
+
+                        Order order = new Order();
+                        order.OrderId = Guid.NewGuid().ToString();
+                        order.UserId = user.UserId;
+                        order.TotalPrice = cart.TotalPrice;
+                        order.Status = Order.EnumStatus.PENDING;
+                        order.CreateTime = HelperProvider.GetSeconds();
+                        orderService.InsertOrder(order, transaction);
+
+                        foreach (var item in cartDetail)
+                        {
+                            OrderDetail orderDetail = new OrderDetail();
+                            orderDetail.OrderDetailId = Guid.NewGuid().ToString();
+                            orderDetail.OrderId = order.OrderId;
+                            orderDetail.RoomCategoryId = item.RoomCategoryId;
+                            orderDetail.NumberOfRoom = item.Quantity;
+                            orderDetail.CheckIn = item.CheckIn;
+                            orderDetail.CheckOut = item.CheckOut;
+
+                            orderService.InsertOrderDetail(orderDetail, transaction);
+                        }
+
+                        transaction.Commit();
+                        return Success();
                     }
                 }
             }
