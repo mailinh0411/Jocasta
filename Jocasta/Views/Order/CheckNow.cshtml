@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "BookNow";
+    ViewBag.Title = "Đặt phòng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -76,7 +76,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="col3 c6">
                     <button type="submit" class="btn-form1-submit" onclick="CheckNow();">Check Now</button>
@@ -217,47 +217,47 @@
                         <table>
                             <tbody id="list-room-book">
                                 @*<tr>
-                                    <td>
-                                        <input id="roomCategoryBookId" value="1" hidden />
-                                        <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
-                                    </td>
-                                    <td>Standard Room</td>
-                                    <td>x1</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="roomCategoryBookId" value="2" hidden />
-                                        <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
-                                    </td>
-                                    <td>Standard Room</td>
-                                    <td>x1</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="roomCategoryBookId" value="4" hidden />
-                                        <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
-                                    </td>
-                                    <td>Standard Room</td>
-                                    <td>x1</td>
-                                </tr>*@
+                                        <td>
+                                            <input id="roomCategoryBookId" value="1" hidden />
+                                            <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
+                                        </td>
+                                        <td>Standard Room</td>
+                                        <td>x1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input id="roomCategoryBookId" value="2" hidden />
+                                            <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
+                                        </td>
+                                        <td>Standard Room</td>
+                                        <td>x1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input id="roomCategoryBookId" value="4" hidden />
+                                            <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
+                                        </td>
+                                        <td>Standard Room</td>
+                                        <td>x1</td>
+                                    </tr>*@
                             </tbody>
                         </table>
                         @*<ul>
-                            <li>
-                                <div>
-                                    <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
-                                    <span>Junior Room</span>
-                                </div>
-                                <div><span>x 1</span></div>
-                            </li>
-                            <li>
-                                <div>
-                                    <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
-                                    <span>Deluxe Room</span>
-                                </div>
-                                <div><span>x 1</span></div>
-                            </li>
-                        </ul>*@
+                                <li>
+                                    <div>
+                                        <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
+                                        <span>Junior Room</span>
+                                    </div>
+                                    <div><span>x 1</span></div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
+                                        <span>Deluxe Room</span>
+                                    </div>
+                                    <div><span>x 1</span></div>
+                                </li>
+                            </ul>*@
                     </div>
                     <button class="btn btn-form1-submit " onclick="bookNow_onClick();">Đặt phòng</button>
                 </div>
@@ -440,7 +440,7 @@
                 CheckIn: $('#check-in').val(),
                 CheckOut: $('#check-out').val(),
             }
-            
+
             const rp = await fetch('/api/cart/InsertCartDetail', {
                 method: 'post',
                 headers: Enum.OptionHeaderDefault,
@@ -462,7 +462,7 @@
             }
 
             window.location.href = '/book-now';
-            
+
         }
 
         const initPage = async function () {
@@ -483,3 +483,4 @@
 
     </script>
 }
+

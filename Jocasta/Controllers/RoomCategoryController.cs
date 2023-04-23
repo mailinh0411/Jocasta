@@ -24,31 +24,6 @@ namespace Jocasta.Controllers
             return View();
         }
 
-        [Route("check-now/{checkin?}/{checkout?}/{room?}")]
-        public ActionResult BookNow(RoomCategoryCheckNow model)
-        {
-            ViewBag.CheckIn = model.CheckIn;
-            ViewBag.CheckOut = model.CheckOut;  
-            ViewBag.RoomCategory = model.RoomCategory;
-            return View();
-        }
-
-        [Route("book-now")]
-        public ActionResult CheckNow()
-        {
-            return View();
-        }
-
-        [Route("information-user-book")]
-        public ActionResult InfoUserBook()
-        {
-            return View();
-        }
-
-        [Route("success-order")]
-        public ActionResult SuccessOrder()
-        {
-            return View();
-        }
+        
     }
 }
