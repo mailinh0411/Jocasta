@@ -96,9 +96,6 @@
         let rq = await fetch('/api/user/Register', {
             method: 'post',
             headers: Enum.OptionHeaderDefault,
-            @*headers: {
-                'Content-Type': 'application/json'
-            },*@
             body: JSON.stringify(model)
         })
         let rs = await rq.json();

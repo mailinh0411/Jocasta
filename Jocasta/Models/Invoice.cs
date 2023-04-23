@@ -12,6 +12,15 @@ namespace Jocasta.Models
         public string OrderId { get; set; }
         public decimal TotalPrice { get; set; }
         public string Status { get; set; }
+        public string Type { get; set; }
         public long CreateTime { get; set; }
+        public class EnumType
+        {
+            public const string DEPOSIT_INVOICE = "DEPOSIT_INVOICE";
+            public const string SERVICE_INVOICE = "SERVICE_INVOICE";
+            public const string BOOKING_INVOICE = "BOOKING_INVOICE";
+        }
     }
+
+    
 }

@@ -109,6 +109,8 @@ namespace Jocasta.ApiControllers
                         order.UserId = user.UserId;
                         order.TotalPrice = cart.TotalPrice;
                         order.Status = Order.EnumStatus.PENDING;
+                        order.CheckIn = cart.CheckIn;
+                        order.CheckOut = cart.CheckOut;
                         order.CreateTime = HelperProvider.GetSeconds();
                         orderService.InsertOrder(order, transaction);
 
@@ -119,8 +121,6 @@ namespace Jocasta.ApiControllers
                             orderDetail.OrderId = order.OrderId;
                             orderDetail.RoomCategoryId = item.RoomCategoryId;
                             orderDetail.NumberOfRoom = item.Quantity;
-                            orderDetail.CheckIn = item.CheckIn;
-                            orderDetail.CheckOut = item.CheckOut;
 
                             orderService.InsertOrderDetail(orderDetail, transaction);
                         }
