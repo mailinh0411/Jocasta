@@ -149,14 +149,17 @@
     <Compile Include="Areas\Admin\ApiControllers\ApiAdminBaseController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRoomCategoryController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\ManageUserController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\DayRoomController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoomCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
     <Compile Include="Areas\Admin\Controllers\ServiceController.cs" />
     <Compile Include="Areas\Admin\Services\AdminDayRoomService.cs" />
     <Compile Include="Areas\Admin\Services\AdminNewService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminOrderService.cs" />
     <Compile Include="Areas\Admin\Services\AdminRoomCategoryService.cs" />
     <Compile Include="Areas\Admin\Services\AdminRoomService.cs" />
     <Compile Include="Areas\Admin\Services\AdminServiceRoomService.cs" />
@@ -2771,6 +2774,7 @@
     <Content Include="Areas\Admin\Views\Service\UpdateService.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUser\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUser\UpdateManageUser.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

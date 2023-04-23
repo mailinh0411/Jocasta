@@ -11,8 +11,6 @@ namespace Jocasta.Models
         public string CartId { get; set; }
         public string RoomCategoryId { get; set; }
         public int Quantity { get; set; }
-        public long CheckIn { get; set; }
-        public long CheckOut { get; set; }
     }
 
     public class CartDetailModel
@@ -24,8 +22,6 @@ namespace Jocasta.Models
         public string Image { get; set; }
         public string Price { get; set; }
         public int Quantity { get; set; }
-        public long CheckIn { get; set; }
-        public long CheckOut { get; set; }
     }
 
     public class CreateCartDetail

@@ -99,7 +99,10 @@ namespace Jocasta.ApiControllers
                             cart.UserId = user.UserId;
                             cart.TotalQuantity = model.Quantity;
                             cart.TotalPrice = model.Quantity * roomCategory.Price;
-                           
+                            DateTime checkIn = Convert.ToDateTime(model.CheckIn);
+                            DateTime checkOut = Convert.ToDateTime(model.CheckOut);
+                            cart.CheckIn = HelperProvider.GetSeconds(checkIn);
+                            cart.CheckOut = HelperProvider.GetSeconds(checkOut);
                             cartService.InsertCart(cart, transaction);
                         }
                         else
@@ -117,10 +120,6 @@ namespace Jocasta.ApiControllers
                             cartDetail.CartId = cart.CartId;
                             cartDetail.Quantity = model.Quantity;
                             cartDetail.RoomCategoryId = model.RoomCategoryId;
-                            DateTime checkIn = Convert.ToDateTime(model.CheckIn);
-                            DateTime checkOut = Convert.ToDateTime(model.CheckOut);
-                            cartDetail.CheckIn = HelperProvider.GetSeconds(checkIn);
-                            cartDetail.CheckOut = HelperProvider.GetSeconds(checkOut);
                             cartService.InsertCartDetail(cartDetail, transaction);
                         }
                         else

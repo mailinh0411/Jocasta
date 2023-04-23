@@ -11,6 +11,8 @@ namespace Jocasta.Models
         public string UserId { get; set; }
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
-    
+        public long CheckIn { get; set; }
+        public long CheckOut { get; set; }
+
     }
 }
