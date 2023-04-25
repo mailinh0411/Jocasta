@@ -42,6 +42,7 @@ namespace Jocasta.Models
     {
         public RoomCategory Category { get; set; }
         public int Count { get; set; }
+        public int CountSelect { get; set; }
     }
 
     public class RoomCategoryCheckNow

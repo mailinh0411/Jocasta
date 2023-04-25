@@ -79,6 +79,8 @@ namespace Jocasta.ApiControllers
                         CartService cartService = new CartService(connect);
                         RoomCategoryService roomCategoryService = new RoomCategoryService(connect);
 
+
+
                         User user = userService.GetUserByToken(token, transaction);
                         if (user == null) return Unauthorized();
 
