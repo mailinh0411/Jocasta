@@ -460,13 +460,18 @@
         }
 
         const CheckNow = async function () {
-            /*window.location.href = ('/check-now/checkin/checkout/room')*/
             
             let model = {
                 RoomCategory: $('#select-room-category').val(),
                 CheckIn: $('#check-in').val(),
                 CheckOut: $('#check-out').val()
             }
+
+            if (model.CheckIn > model.CheckOut) {
+                alert("Ngày check in phải nhỏ hơn ngày check out.");
+                return;
+            }
+            
 
             if (GetObjectProperty(model, 'CheckIn') === '') { alert('Ngày check in không được để trống'); return; }
             if (GetObjectProperty(model, 'CheckOut') === '') { alert('Ngày check out không được để trống'); return; }

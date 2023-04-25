@@ -23,16 +23,75 @@ namespace Jocasta.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
+                        string token = Request.Headers.Authorization.ToString();
+                        UserService userService = new UserService(connect);
+                        CartService cartService = new CartService(connect);
                         RoomCategoryService roomCategoryService = new RoomCategoryService(connect);
                         RoomService roomService = new RoomService(connect);
                         DayRoomService dayRoomService = new DayRoomService(connect);
+
+                        User user = userService.GetUserByToken(token, transaction);
+                        if (user == null) return Unauthorized();
+                       
+                        // Kiểm tra ngày checkin và checkout không được để trống.
+                        if (string.IsNullOrEmpty(checkIn)) throw new Exception("Ngày check in không được để trống.");
+                        if (string.IsNullOrEmpty(checkOut)) throw new Exception("Ngày check out không được để trống.");                        
+
+
+                        DateTime CheckIn = Convert.ToDateTime(checkIn);
+                        DateTime CheckOut = Convert.ToDateTime(checkOut);
+
+                        long timeIn = HelperProvider.GetSeconds(CheckIn);
+                        long timeOut = HelperProvider.GetSeconds(CheckOut);
+
+                        if (CheckIn > CheckOut) throw new Exception("Ngày check in phải nhỏ hơn ngày check out.");
+
+                        DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                        if (CheckIn < now || CheckOut < now) throw new Exception("Ngày check in, check out phải lớn hơn hoặc bằng ngày hiện tại.");
+
+                        // Kiểm tra xem người dùng này đã có thêm phòng vào cart chưa 
+                        Cart cart = cartService.GetCartByUserId(user.UserId, transaction);
+                        if (cart == null)
+                        {
+                            cart = new Cart();
+                            cart.CartId = Guid.NewGuid().ToString();
+                            cart.UserId = user.UserId;
+                            cart.TotalQuantity = 0;
+                            cart.TotalPrice = 0;
+                            cart.CheckIn = timeIn;
+                            cart.CheckOut = timeOut;
+                            cartService.InsertCart(cart, transaction);
+                        }
+                        else
+                        {
+                            // Kiểm tra xem cart đã có theo đúng ngày checkin và checkout
+                            Cart cartCheck = cartService.GetCartByUserCheckInCheckOut(user.UserId, timeIn, timeOut, transaction);
+                            if(cartCheck == null)
+                            {
+                                // Xóa toàn bộ cart detail và cart
+                                if(cartService.GetListCartDetailByCart(cart.CartId, transaction).Count > 0)
+                                {
+                                    cartService.DeleteCartDetailByCart(cart.CartId, transaction);
+                                }  
+                                
+                                cartService.DeleteCart(cart.CartId, transaction);
+
+                                // Tạo ra cart mới
+                                cart = new Cart();
+                                cart.CartId = Guid.NewGuid().ToString();
+                                cart.UserId = user.UserId;
+                                cart.TotalQuantity = 0;
+                                cart.TotalPrice = 0;
+                                cart.CheckIn = timeIn;
+                                cart.CheckOut = timeOut;
+                                cartService.InsertCart(cart, transaction);
+                            }
+                        }
 
                         List<CategoryCountRoom> listCategoryCountRoom = new List<CategoryCountRoom>();
 
                         List<RoomCategory> roomCategories = roomCategoryService.GetAllByKeyword(keyword, transaction);
 
-                        DateTime CheckIn = Convert.ToDateTime(checkIn);
-                        DateTime CheckOut = Convert.ToDateTime(checkOut);
                         int count = 0;
                         bool checkBook = false;
                         foreach (RoomCategory index in roomCategories)
@@ -62,10 +121,24 @@ namespace Jocasta.ApiControllers
                                 if (checkBook == false) count += 1;
                             }
 
+                            // Số lượng phòng trống theo từng loại phòng
                             categoryCountRoom.Count = count;
+
+                            // Lấy ra số lượng đã chọn theo từng loại phòng
+                            CartDetail cartDetail = cartService.GetRoomBookedByCartRoom(cart.CartId, index.RoomCategoryId, transaction);
+                            if(cartDetail == null)
+                            {
+                                categoryCountRoom.CountSelect = 0;
+                            }
+                            else
+                            {
+                                categoryCountRoom.CountSelect = cartDetail.Quantity;
+                            }
+
                             listCategoryCountRoom.Add(categoryCountRoom);                            
                         }
 
+                        transaction.Commit();
                         return Success(listCategoryCountRoom);
                     }
                 }

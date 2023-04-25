@@ -17,10 +17,10 @@
             <div class="row sub-banner">
                 <ul>
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
-                        <a class="select" href="booknow.html">Book Now</a>
+                        <a class="select" href="">Book Now</a>
                     </li>
                 </ul>
             </div>
@@ -38,7 +38,7 @@
                     <div class="input1_wrapper">
                         <label>Check in</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" id="check-in" value="@ViewBag.CheckIn" placeholder="Check in">
+                            <input type="text" class="form-control input datepicker" id="check-in" value="@ViewBag.CheckIn" placeholder="Check in" >
                         </div>
                     </div>
                 </div>
@@ -102,111 +102,6 @@
                         </tr>
                     </thead>
                     <tbody id="list-count-roomcategory">
-                        <tr>
-                            <td>
-                                <div class="room-name">
-                                    Junior Room
-                                </div>
-                                <div class="img-room">
-                                    <img style="width: 140px; height: 100px;" src="img/rooms/1.jpg" alt="">
-                                </div>
-                                <a href=""></a>
-                            </td>
-                            <td><i class="ti-user"></i> x 5</td>
-                            <td>
-                                <div class="price-room">
-                                    <span>1.040.000</span>
-                                    <br> VNĐ/đêm
-                                </div>
-                            </td>
-                            <td>
-                                <div class="input-group input-group-number">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled">
-                                            <i class="ti-minus"></i>
-                                        </button>
-                                    </span>
-
-                                    <input type="text" class="form-control input-number" value="0" min="0" max="20">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-plus btn-number" data-type="plus">
-                                            <i class="ti-plus"></i>
-                                        </button>
-                                    </span>
-
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="room-name">
-                                    Junior Room
-                                </div>
-                                <div class="img-room">
-                                    <img style="width: 140px; height: 100px;" src="img/rooms/1.jpg" alt="">
-                                </div>
-                                <a href=""></a>
-                            </td>
-                            <td><i class="ti-user"></i> x 5</td>
-                            <td>
-                                <div class="price-room">
-                                    <span>1.040.000</span>
-                                    <br> VNĐ/đêm
-                                </div>
-                            </td>
-                            <td>
-                                <div class="input-group input-group-number">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled">
-                                            <i class="ti-minus"></i>
-                                        </button>
-                                    </span>
-
-                                    <input type="text" class="form-control input-number" value="0" min="0" max="20">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-plus btn-number" data-type="plus">
-                                            <i class="ti-plus"></i>
-                                        </button>
-                                    </span>
-
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="room-name">
-                                    Junior Room
-                                </div>
-                                <div class="img-room">
-                                    <img style="width: 140px; height: 100px;" src="img/rooms/1.jpg" alt="">
-                                </div>
-                                <a href=""></a>
-                            </td>
-                            <td><i class="ti-user"></i> x 5</td>
-                            <td>
-                                <div class="price-room">
-                                    <span>1.040.000</span>
-                                    <br> VNĐ/đêm
-                                </div>
-                            </td>
-                            <td>
-                                <div class="input-group input-group-number">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled">
-                                            <i class="ti-minus"></i>
-                                        </button>
-                                    </span>
-
-                                    <input type="text" class="form-control input-number" value="0" min="0" max="20">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-plus btn-number" data-type="plus">
-                                            <i class="ti-plus"></i>
-                                        </button>
-                                    </span>
-
-                                </div>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -216,53 +111,14 @@
                     <div class="list-room">
                         <table>
                             <tbody id="list-room-book">
-                                @*<tr>
-                                        <td>
-                                            <input id="roomCategoryBookId" value="1" hidden />
-                                            <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
-                                        </td>
-                                        <td>Standard Room</td>
-                                        <td>x1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input id="roomCategoryBookId" value="2" hidden />
-                                            <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
-                                        </td>
-                                        <td>Standard Room</td>
-                                        <td>x1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input id="roomCategoryBookId" value="4" hidden />
-                                            <div class="image-room-book" style="background-image: url(/Content/img/rooms/1.jpg)"></div>
-                                        </td>
-                                        <td>Standard Room</td>
-                                        <td>x1</td>
-                                    </tr>*@
                             </tbody>
                         </table>
-                        @*<ul>
-                                <li>
-                                    <div>
-                                        <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
-                                        <span>Junior Room</span>
-                                    </div>
-                                    <div><span>x 1</span></div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <img style="width:100px; height:80px; margin-right:20px;" src="img/rooms/1.jpg " alt=" ">
-                                        <span>Deluxe Room</span>
-                                    </div>
-                                    <div><span>x 1</span></div>
-                                </li>
-                            </ul>*@
                     </div>
                     <button class="btn btn-form1-submit " onclick="bookNow_onClick();">Đặt phòng</button>
                 </div>
             </div>
         </div>
+    </div>
 </section>
 
 
@@ -332,6 +188,13 @@
                 CheckOut: $('#check-out').val(),
                 RoomCategory: $('#select-room-category').val()
             }
+
+            if (model.CheckIn > model.CheckOut) {
+                alert("Ngày check in phải nhỏ hơn ngày check out.");
+                return;
+            }
+            
+
             let rq = await fetch('/api/Order/GetListRoom?checkIn=' + model.CheckIn + '&checkOut=' + model.CheckOut + '&keyword=' + model.RoomCategory, {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
@@ -354,9 +217,10 @@
                     html += `<td><div class="price-room"><span>${rs.data[i].Category.Price}</span><br> VNĐ/đêm</div></td>`;
                     html += `<td><div class="price-room"><span>${rs.data[i].Count}</span></div></td>`;
                     html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
-                   // html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
-                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].Category.RoomCategoryId}" data-name="${rs.data[i].Category.Name}" data-image="${rs.data[i].Category.Image}" value="0" min="0" max="${rs.data[i].Count}" onchange="countRoom_onChange(this);">`;
-                   // html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus" onclick="PlusCountRoom_onClick();"><i class="ti-plus"></i></button></span></div></td>`; onkeyup="ValidateInputOnlyNumber(event,this);"
+                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].Category.RoomCategoryId}" data-name="${rs.data[i].Category.Name}" data-image="${rs.data[i].Category.Image}" value="${rs.data[i].CountSelect}" min="0" max="${rs.data[i].Count}" onchange="countRoom_onChange(this);">`;
+                    html += `</span></div></td>`;
+                    // html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
+                    // html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus" onclick="PlusCountRoom_onClick();"><i class="ti-plus"></i></button></span></div></td>`; onkeyup="ValidateInputOnlyNumber(event,this);"
                     html += `</tr>`;
                 }
                 $('#list-count-roomcategory').append(html);
@@ -379,9 +243,9 @@
                 for (let i = 0; i < rs.data.length; i++) {
                     html += `<tr><td>`;
                     html += `<input id="roomCategoryBookId" value="${GetObjectProperty(rs.data[i], 'RoomCategoryId')}" hidden />`;
-                    html += `<div class="image-room-book" style="background-image: url(${GetObjectProperty(rs.data[i], 'Image') })"></div></td>`;
-                    html += `<td>${GetObjectProperty(rs.data[i], 'Name') }</td>`;
-                    html += `<td>x${GetObjectProperty(rs.data[i], 'Quantity') }</td>`;
+                    html += `<div class="image-room-book" style="background-image: url(${GetObjectProperty(rs.data[i], 'Image')})"></div></td>`;
+                    html += `<td>${GetObjectProperty(rs.data[i], 'Name')}</td>`;
+                    html += `<td>x${GetObjectProperty(rs.data[i], 'Quantity')}</td>`;
                 }
                 $('#list-room-book').append(html);
 
@@ -398,7 +262,7 @@
             }
         }
 
-        const insertRoomBook = async function (id, count) {
+        /*const insertRoomBook = async function (id, count) {
             let model = {
                 RoomCategoryId: id,
                 Quantity: count
@@ -415,10 +279,11 @@
                 if (rs.message !== '' && rs.message !== null) alert(rs.message);
                 getListRoomBooked();
             }
-        }
+        }*/
 
-
+        var _delaySearch = null;
         const countRoom_onChange = async function (el) {
+            
             var id = $(el).data('id');
             /*var name = $(el).data('name');
             var image = $(el).data('image');*/
@@ -433,7 +298,6 @@
             }
             console.log(id);
             console.log(count);
-            //insertRoomBook(id, count);
             let model = {
                 RoomCategoryId: id,
                 Quantity: count,
@@ -441,18 +305,22 @@
                 CheckOut: $('#check-out').val(),
             }
 
-            const rp = await fetch('/api/cart/InsertCartDetail', {
-                method: 'post',
-                headers: Enum.OptionHeaderDefault,
-                body: JSON.stringify(model)
-            });
-            let rs = await rp.json();
+            clearTimeout(_delaySearch);
+            _delaySearch = setTimeout(async function () {
+                const rp = await fetch('/api/cart/InsertCartDetail', {
+                    method: 'post',
+                    headers: Enum.OptionHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rp.json();
 
-            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
-            if (rs.status === 'success') {
-                if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                getListRoomBooked();
-            }
+                if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    getListRoomBooked();
+                }
+            }, 750)
+            
         }
 
         const bookNow_onClick = async function () {
