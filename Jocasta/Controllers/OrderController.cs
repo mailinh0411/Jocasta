@@ -10,12 +10,9 @@ namespace Jocasta.Controllers
     public class OrderController : Controller
     {
         // GET: Order
-        [Route("check-now/{checkin?}/{checkout?}/{room?}")]
-        public ActionResult CheckNow(RoomCategoryCheckNow model)
+        [Route("check-now")]
+        public ActionResult CheckNow()
         {
-            ViewBag.CheckIn = model.CheckIn;
-            ViewBag.CheckOut = model.CheckOut;
-            ViewBag.RoomCategory = model.RoomCategory;
             return View();
         }
 

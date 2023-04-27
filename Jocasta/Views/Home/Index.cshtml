@@ -466,7 +466,7 @@
                 CheckIn: $('#check-in').val(),
                 CheckOut: $('#check-out').val()
             }
-
+            
             if (model.CheckIn > model.CheckOut) {
                 alert("Ngày check in phải nhỏ hơn ngày check out.");
                 return;
@@ -477,8 +477,16 @@
             if (GetObjectProperty(model, 'CheckOut') === '') { alert('Ngày check out không được để trống'); return; }
 
             console.log(model);
-            window.location.href = ('/check-now?CheckIn=' + model.CheckIn + '&CheckOut=' + model.CheckOut + '&RoomCategory=' + model.RoomCategory);   
-            //window.location.href = ('/RoomCategory/BookNow/');
+
+            let rq = await fetch('/api/Order/GetListRoom?checkIn=' + model.CheckIn + '&checkOut=' + model.CheckOut + '&keyword=' + model.RoomCategory, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.href = ('/check-now'); 
+            }
         }
 
         const initPage = function () {
