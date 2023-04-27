@@ -333,6 +333,7 @@
 
             if (lsRoomId.length <= 0) {
                 alert("Bạn phải chọn phòng");
+                return;
             }
 
             if (GetObjectProperty(model, 'StartDate') === '') { alert('Ngày không được để trống.'); return; }
