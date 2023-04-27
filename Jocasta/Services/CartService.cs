@@ -35,10 +35,10 @@ namespace Jocasta.Services
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
-        public void UpdateCart(Cart cart, IDbTransaction transaction = null)
+        public void UpdateCart(decimal price, int quantity, string cartId, IDbTransaction transaction = null)
         {
-            string query = "update [dbo].[cart] set [TotalQuantity] = [TotalQuantity] + @TotalQuantity, [TotalPrice] = [TotalPrice] + @TotalPrice where [CartId] = @CartId";
-            int status = this._connection.Execute(query, cart, transaction);
+            string query = "update [dbo].[cart] set [TotalQuantity] = [TotalQuantity] + @quantity, [TotalPrice] = [TotalPrice] + @price where [CartId] = @cartId";
+            int status = this._connection.Execute(query, new {price, quantity, cartId}, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 

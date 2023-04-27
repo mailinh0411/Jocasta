@@ -28,7 +28,5 @@ namespace Jocasta.Models
     {
         public string RoomCategoryId { get; set; }
         public int Quantity { get; set; }
-        public string CheckIn { get; set; }
-        public string CheckOut { get; set; }
     }
 }

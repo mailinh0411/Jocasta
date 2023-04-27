@@ -155,11 +155,14 @@
 
             if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
+
+            var _index = searchModel.CurrentPage * parseInt(searchModel.RowPerPage) - searchModel.RowPerPage + 1;
+
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 let html = '';
                 for (let i = 0; i < rs.data.List.length; i++) {
                     html += '<tr>';
-                    html += '<td class="text-center"><span class="fs-15 font-w500 text-nowrap">' + (i + 1) + '</span></td>';
+                    html += '<td class="text-center"><span class="fs-15 font-w500 text-nowrap">' + _index + '</span></td>';
                     html += `<td><div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].Name}</h4></div></td>`;
                     html += `<td><div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].RoomCategoryName}</div></td>`;
                     html += `<td class="text-center"><div><span class="fs-15 font-w500">${rs.data.List[i].Floor}</span></div></td>`;
@@ -176,6 +179,8 @@
                                     <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomId}" onclick="TrangThai_onClick(this);">Trạng thái</button>
                                 </div></div></td>`;
                     html += `</tr>`;
+
+                    _index++;
                 }
 
                 $('#list-data').append(html);

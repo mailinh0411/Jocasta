@@ -228,6 +228,8 @@
         }
 
         const getListRoomBooked = async function () {
+            $('#list-room-book').html('');
+
             let rq = await fetch('/api/Cart/GetListRoomBookedByUser', {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
@@ -236,9 +238,7 @@
             if (CheckErrorResponse(rs) === false) return;
 
             console.log(rs);
-
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('#list-room-book').append('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {                
                 let html = '';
                 for (let i = 0; i < rs.data.length; i++) {
                     html += `<tr><td>`;
@@ -254,32 +254,12 @@
                 for (let i = 0; i < tableRow.length; i++) {
                     const row = $(tableRow[i]);
                     const id = $(row).find('input#roomCategoryBookId').val();
-
                     ListRoomBook.push(id);
 
                 }
                 console.log(ListRoomBook);
             }
         }
-
-        /*const insertRoomBook = async function (id, count) {
-            let model = {
-                RoomCategoryId: id,
-                Quantity: count
-            }
-            const rp = await fetch('/api/cart/InsertCartDetail', {
-                method: 'post',
-                headers: Enum.OptionAdminHeaderDefault,
-                body: JSON.stringify(model)
-            });
-            let rs = await rp.json();
-
-            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
-            if (rs.status === 'success') {
-                if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                getListRoomBooked();
-            }
-        }*/
 
         var _delaySearch = null;
         const countRoom_onChange = async function (el) {
@@ -300,9 +280,7 @@
             console.log(count);
             let model = {
                 RoomCategoryId: id,
-                Quantity: count,
-                CheckIn: $('#check-in').val(),
-                CheckOut: $('#check-out').val(),
+                Quantity: count
             }
 
             clearTimeout(_delaySearch);
@@ -319,7 +297,7 @@
                     if (rs.message !== '' && rs.message !== null) alert(rs.message);
                     getListRoomBooked();
                 }
-            }, 750)
+            }, 1000)
             
         }
 
