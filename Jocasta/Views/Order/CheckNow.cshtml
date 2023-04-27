@@ -38,7 +38,8 @@
                     <div class="input1_wrapper">
                         <label>Check in</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" id="check-in" value="@ViewBag.CheckIn" placeholder="Check in">
+                            @*<input type="text" class="form-control input datepicker" id="check-in" value="@ViewBag.CheckIn" placeholder="Check in">*@
+                            <input type="text" class="form-control input datepicker" id="check-in" value="" placeholder="Check in">
                         </div>
                     </div>
                 </div>
@@ -46,7 +47,8 @@
                     <div class="input1_wrapper">
                         <label>Check out</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" id="check-out" value="@ViewBag.CheckOut" placeholder="Check out">
+                            @*<input type="text" class="form-control input datepicker" id="check-out" value="@ViewBag.CheckOut" placeholder="Check out">*@
+                            <input type="text" class="form-control input datepicker" id="check-out" value="" placeholder="Check out">
                         </div>
                     </div>
                 </div>
@@ -67,7 +69,7 @@
                     </div>
                 </div>
                 <div class="col2 c5">
-                    <input type="text" id="txtRoomCategoryId" value="@ViewBag.RoomCategory" hidden />
+                    @*<input type="text" id="txtRoomCategoryId" value="@ViewBag.RoomCategory" hidden />*@
                     <div class="select_wrapper">
                         <label>Room Category</label>
                         <div class="select_inner">
@@ -79,7 +81,7 @@
 
                 </div>
                 <div class="col3 c6">
-                    <button type="submit" class="btn-form1-submit" onclick="CheckNow();">Check Now</button>
+                    <button type="submit" class="btn-form1-submit" onclick="CheckNow_onclick();">Check Now</button>
                 </div>
             </div>
         </div>
@@ -159,6 +161,22 @@
     <script>
         let ListRoomBook = [];
 
+        const getCartUser = async function () {
+            let rq = await fetch('/api/Cart/GetCartByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            console.log(rs);
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#check-in').val(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
+                $('#check-out').val(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
+            }
+        }
+
         const getListRoomCategory = async function () {
             let rq = await fetch('/api/RoomCategory/GetListRoomCategory', {
                 method: 'get',
@@ -182,7 +200,7 @@
             }
         }
 
-        const CheckNow = async function () {
+        const CheckNow_onclick = async function () {
             let model = {
                 CheckIn: $('#check-in').val(),
                 CheckOut: $('#check-out').val(),
@@ -194,6 +212,8 @@
                 return;
             }
 
+            if (GetObjectProperty(model, 'CheckIn') === '') { alert('Ngày check in không được để trống'); return; }
+            if (GetObjectProperty(model, 'CheckOut') === '') { alert('Ngày check out không được để trống'); return; }
 
             let rq = await fetch('/api/Order/GetListRoom?checkIn=' + model.CheckIn + '&checkOut=' + model.CheckOut + '&keyword=' + model.RoomCategory, {
                 method: 'get',
@@ -308,18 +328,19 @@
         }
 
         const initPage = async function () {
+            await getCartUser();
             await getListRoomCategory();
             await getListRoomBooked();
-            var roomCategoryId = $('#txtRoomCategoryId').val();
+            /*var roomCategoryId = $('#txtRoomCategoryId').val();
             await $('#select-room-category').val(roomCategoryId);
             console.log(roomCategoryId);
             var id = $('#select-room-category').val();
-            var nameRoom = $('#select-room-category').text();
+            var nameRoom = $('#select-room-category').text();*/
             //$('.select2-results__option[aria-selected="true"]').text()
             //$('#select2-select-room-category-container').text(nameRoom)
-            console.log(id);
-            console.log(nameRoom);
-            CheckNow();
+            /*console.log(id);
+            console.log(nameRoom);*/
+            await CheckNow_onclick();
         }
         initPage();
 

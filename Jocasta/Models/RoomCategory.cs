@@ -45,10 +45,10 @@ namespace Jocasta.Models
         public int CountSelect { get; set; }
     }
 
-    public class RoomCategoryCheckNow
+    /*public class RoomCategoryCheckNow
     {
         public string RoomCategory { get; set; }
         public string CheckIn { get; set; }
         public string CheckOut { get; set; }
-    }
+    }*/
 }
