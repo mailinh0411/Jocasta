@@ -105,7 +105,7 @@ namespace Jocasta.ApiControllers
                             {
                                 if(room.Enable == false) continue;
                                 // Nếu từ khoảng StartDate đến EndDate có phòng đã đặt thì gán checkBook bằng true, ngược lại thì count được cộng thêm 1 
-                                for (DateTime dateIndex = CheckIn; dateIndex <= CheckOut;)
+                                for (DateTime dateIndex = CheckIn; dateIndex < CheckOut;)
                                 {
                                     checkBook = false;
                                     long date = HelperProvider.GetSeconds(dateIndex);

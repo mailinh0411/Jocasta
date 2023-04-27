@@ -38,7 +38,7 @@
                     <div class="input1_wrapper">
                         <label>Check in</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" id="check-in" value="@ViewBag.CheckIn" placeholder="Check in" >
+                            <input type="text" class="form-control input datepicker" id="check-in" value="@ViewBag.CheckIn" placeholder="Check in">
                         </div>
                     </div>
                 </div>
@@ -193,7 +193,7 @@
                 alert("Ngày check in phải nhỏ hơn ngày check out.");
                 return;
             }
-            
+
 
             let rq = await fetch('/api/Order/GetListRoom?checkIn=' + model.CheckIn + '&checkOut=' + model.CheckOut + '&keyword=' + model.RoomCategory, {
                 method: 'get',
@@ -202,7 +202,6 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
 
             $('#list-count-roomcategory').html('');
 
@@ -217,7 +216,7 @@
                     html += `<td><div class="price-room"><span>${rs.data[i].Category.Price}</span><br> VNĐ/đêm</div></td>`;
                     html += `<td><div class="price-room"><span>${rs.data[i].Count}</span></div></td>`;
                     html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
-                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].Category.RoomCategoryId}" data-name="${rs.data[i].Category.Name}" data-image="${rs.data[i].Category.Image}" value="${rs.data[i].CountSelect}" min="0" max="${rs.data[i].Count}" onchange="countRoom_onChange(this);">`;
+                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].Category.RoomCategoryId}" data-name="${rs.data[i].Category.Name}" data-image="${rs.data[i].Category.Image}" value="${rs.data[i].CountSelect}" min="0" max="${rs.data[i].Count}" onchange="countRoom_onChange(event,this);">`;
                     html += `</span></div></td>`;
                     // html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
                     // html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus" onclick="PlusCountRoom_onClick();"><i class="ti-plus"></i></button></span></div></td>`; onkeyup="ValidateInputOnlyNumber(event,this);"
@@ -237,8 +236,7 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {                
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 let html = '';
                 for (let i = 0; i < rs.data.length; i++) {
                     html += `<tr><td>`;
@@ -255,29 +253,27 @@
                     const row = $(tableRow[i]);
                     const id = $(row).find('input#roomCategoryBookId').val();
                     ListRoomBook.push(id);
-
                 }
-                console.log(ListRoomBook);
             }
         }
 
         var _delaySearch = null;
-        const countRoom_onChange = async function (el) {
-            
+        const countRoom_onChange = async function (e, el) {
             var id = $(el).data('id');
             /*var name = $(el).data('name');
             var image = $(el).data('image');*/
             var maxCount = $(el).attr("max");
             //var maxCount = $(el).data('max');
-
             var count = $(el).val();
-            if (count > maxCount) {
+            console.log(id);
+            console.log(count);
+            console.log(maxCount);
+
+            if (parseInt(count) > parseInt(maxCount)) {
                 alert('Số phòng không được lớn hơn số phòng trống.');
                 $(el).val(0);
                 return;
             }
-            console.log(id);
-            console.log(count);
             let model = {
                 RoomCategoryId: id,
                 Quantity: count
@@ -298,7 +294,7 @@
                     getListRoomBooked();
                 }
             }, 1000)
-            
+
         }
 
         const bookNow_onClick = async function () {
