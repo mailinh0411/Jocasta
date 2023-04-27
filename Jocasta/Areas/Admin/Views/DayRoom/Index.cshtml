@@ -387,7 +387,7 @@
                 $(el).closest('.search-input').find('.autocomplete').html('');
 
                 for (let i = 0; i < _listRoomCategory.length; i++) {
-                    $(el).closest('.search-input').find('.autocomplete').append(`<li onclick="RoomCategory_Select(this);" data-id="${_listRoomCategory[i].RoomCategoryId} ">${GetObjectProperty(_listRoomCategory[i], 'Name')}</li>`);
+                    $(el).closest('.search-input').find('.autocomplete').append(`<li onclick="RoomCategory_Select(this);" data-id="${_listRoomCategory[i].RoomCategoryId} " data-name="${_listRoomCategory[i].Name}">${GetObjectProperty(_listRoomCategory[i], 'Name')}</li>`);
                     
                 }
             }
@@ -396,6 +396,7 @@
 
         const RoomCategory_Select = async function (el) {
             var id = $(el).data('id');
+            var name = $(el).data('name');
             console.log(id);
             $('#list-room').html('');
 
@@ -408,6 +409,7 @@
             console.log(rs.data);
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.InsertDayRoom #keyword').val(name);
                 let html = '';
                 for (let i = 0; i < rs.data.length; i++) {
                     console.log(rs.data[i]);
