@@ -17,10 +17,10 @@
             <div class="row sub-banner">
                 <ul>
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
-                        <a class="select" href="reservation.html">Reservation</a>
+                        <a class="select" href="">Reservation</a>
                     </li>
                 </ul>
             </div>
@@ -72,7 +72,7 @@
                             <li><span><strong>Check In:</strong><span id="check-in"></span></span></li>
                             <li><span><strong>Check Out:</strong><span id="check-out"></span></span></li>
                             @* <li><span><strong>Guests:</strong>2 Adult, 1 Child</span></li>*@
-                            <li><span><strong>Rooms:</strong><span id="total-count-room"></span>Room</span></li>
+                            <li><span><strong>Rooms:</strong><span id="total-count-room"></span></span></li>
                         </ul>
 
                         <div class="total-price">
@@ -149,10 +149,12 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
 
-            $('#check-in').text(rs.data.CheckIn);
-            $('#check-out').text(rs.data.CheckOut);
-            $('#total-count-room').text(rs.data.TotalQuantity);
-            $('#total-price').text(rs.data.TotalPrice);
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#check-in').text(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
+                $('#check-out').text(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
+                $('#total-count-room').text(rs.data.TotalQuantity);
+                $('#total-price').text(NumberFormat(rs.data.TotalPrice));
+            }
         }
 
         const getUserInfo = async function () {
