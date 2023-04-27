@@ -74,9 +74,9 @@
                             <li><span><strong>Check In:</strong><span id="check-in"></span></span></li>
                             <li><span><strong>Check Out:</strong><span id="check-out"></span></span></li>
                             @* <li><span><strong>Guests:</strong>2 Adult, 1 Child</span></li>*@
-                            <li><span><strong>Rooms:</strong><span id="total-count-room"></span>Room</span></li>
+                            <li><span><strong>Rooms:</strong><span id="total-count-room"></span></span></li>
                         </ul>
-                        <button type="submit" class="btn-form1-submit mt-15"><a href="booknow.html">Edit reservation</a></button>
+                        <button type="submit" class="btn-form1-submit mt-15" onclick="editBooked_onClick();">Edit reservation</button>
                     </div>
 
                 </div>
@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="total-price">
-                        <h6>Tổng tiền: <span id="total-price">8.048.000</span></h6>
+                        <h6>Tổng tiền: <span id="total-price">8.048.000</span> VNĐ</h6>
                     </div>
                     <div class="btn-reservation">
                         <button type="submit" class="btn-form1-submit mt-15" onclick="seeInfoUser_onClick();">Chi tiết về bạn</button>
@@ -115,6 +115,7 @@
 }
 
 @section scripts{
+    <script src="~/Content/js/helper.js"></script>
     <script>
         const getCartByUser = async function () {
             let rq = await fetch('/api/cart/GetCartByUser', {
@@ -124,12 +125,13 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
 
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#check-in').text(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
+                $('#check-out').text(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
+                $('#total-count-room').text(rs.data.TotalQuantity);
+                $('#total-price').text(NumberFormat(rs.data.TotalPrice));
+            }
 
-
-            $('#check-in').text(rs.data.CheckIn);
-            $('#check-out').text(rs.data.CheckOut);
-            $('#total-count-room').text(rs.data.TotalQuantity);
-            $('#total-price').text(rs.data.TotalPrice);
         }
 
         const getListRoomBooked = async function () {
@@ -149,7 +151,7 @@
 
                     html += `<li><img src="${rs.data[i].Image}" alt="">`;
                     html += `<div><h6>${GetObjectProperty(rs.data[i], 'Name')}</h6><p>Số lượng: ${GetObjectProperty(rs.data[i], 'Quantity')}</p>`;
-                    html += `<div class="room-price"><span class="current">${(GetObjectProperty(rs.data[i], 'Price'))}</span><span class="per-night">VNĐ/Night</span></div>`;
+                    html += `<div class="room-price"><span class="current">${(NumberFormat(rs.data[i].Price))}</span> VNĐ/Đêm</div>`;
                     html += `</div></li>`;
                 }
                 $('#list-room-booked').append(html);
@@ -158,6 +160,10 @@
 
         const seeInfoUser_onClick = function () {
             window.location.href = '/information-user-book';
+        }
+
+        const editBooked_onClick = function () {
+            window.location.href = '/check-now';
         }
 
         const initPage = async function () {
