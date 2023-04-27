@@ -95,7 +95,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                             /*DateTime startDate = model.StartDate;
                             DateTime endDate = model.EndDate;*/
 
-                            while (startDate < endDate)
+                            while (startDate <= endDate)
                             {
                                 DayRoom dayRoom = new DayRoom();
                                 dayRoom.DayRoomId = Guid.NewGuid().ToString();
