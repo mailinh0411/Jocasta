@@ -13,6 +13,7 @@ namespace Jocasta.Models
         public decimal TotalPrice { get; set; }
         public string Status { get; set; }
         public string Type { get; set; }
+        public string RequestContent { get; set; }
         public long CreateTime { get; set; }
         public class EnumType
         {
