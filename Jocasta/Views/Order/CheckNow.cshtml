@@ -169,7 +169,6 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 $('#check-in').val(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
@@ -185,7 +184,6 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
 
             $('#select-room-category').html('');
 
@@ -228,15 +226,16 @@
             let html = '';
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                console.log(rs);
                 for (let i = 0; i < rs.data.length; i++) {
                     html += `<tr>`;
-                    html += `<tr><td><div class="room-name">${rs.data[i].Category.Name}</div>`;
-                    html += `<div class="img-room"><img style="width: 140px; height: 100px;" src="${rs.data[i].Category.Image}" alt=""></div></td>`;
-                    html += `<td><i class="ti-user"></i> x ${rs.data[i].Category.NumberOfPeople}</td>`;
-                    html += `<td><div class="price-room"><span>${rs.data[i].Category.Price}</span><br> VNĐ/đêm</div></td>`;
-                    html += `<td><div class="price-room"><span>${rs.data[i].Count}</span></div></td>`;
+                    html += `<tr><td><div class="room-name">${rs.data[i].RoomAvaiable.Category.Name}</div>`;
+                    html += `<div class="img-room"><img style="width: 140px; height: 100px;" src="${rs.data[i].RoomAvaiable.Category.Image}" alt=""></div></td>`;
+                    html += `<td><i class="ti-user"></i> x ${rs.data[i].RoomAvaiable.Category.NumberOfPeople}</td>`;
+                    html += `<td><div class="price-room"><span>${rs.data[i].RoomAvaiable.Category.Price}</span><br> VNĐ/đêm</div></td>`;
+                    html += `<td><div class="price-room"><span>${rs.data[i].RoomAvaiable.ListRoom.length}</span></div></td>`;
                     html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
-                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].Category.RoomCategoryId}" data-name="${rs.data[i].Category.Name}" data-image="${rs.data[i].Category.Image}" value="${rs.data[i].CountSelect}" min="0" max="${rs.data[i].Count}" onchange="countRoom_onChange(event,this);">`;
+                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].RoomAvaiable.Category.RoomCategoryId}" data-name="${rs.data[i].RoomAvaiable.Category.Name}" data-image="${rs.data[i].RoomAvaiable.Category.Image}" value="${rs.data[i].CountSelect}" min="0" max="${rs.data[i].RoomAvaiable.ListRoom.length}" onchange="countRoom_onChange(event,this);">`;
                     html += `</span></div></td>`;
                     // html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
                     // html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus" onclick="PlusCountRoom_onClick();"><i class="ti-plus"></i></button></span></div></td>`; onkeyup="ValidateInputOnlyNumber(event,this);"
@@ -280,14 +279,8 @@
         var _delaySearch = null;
         const countRoom_onChange = async function (e, el) {
             var id = $(el).data('id');
-            /*var name = $(el).data('name');
-            var image = $(el).data('image');*/
             var maxCount = $(el).attr("max");
-            //var maxCount = $(el).data('max');
             var count = $(el).val();
-            console.log(id);
-            console.log(count);
-            console.log(maxCount);
 
             if (parseInt(count) > parseInt(maxCount)) {
                 alert('Số phòng không được lớn hơn số phòng trống.');

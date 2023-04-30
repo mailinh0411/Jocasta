@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using System.Web.UI.WebControls;
 
 
 namespace Jocasta.ApiControllers
@@ -88,58 +89,32 @@ namespace Jocasta.ApiControllers
                             }
                         }
 
-                        List<CategoryCountRoom> listCategoryCountRoom = new List<CategoryCountRoom>();
+                        List<RoomInCart> listRoomInCart = new List<RoomInCart>();
 
                         List<RoomCategory> roomCategories = roomCategoryService.GetAllByKeyword(keyword, transaction);
 
-                        int count = 0;
-                        bool checkBook = false;
                         foreach (RoomCategory index in roomCategories)
                         {
-                            CategoryCountRoom categoryCountRoom = new CategoryCountRoom();
-                            categoryCountRoom.Category = index;
-                            List<Room> rooms = roomService.GetListRoomByCategory(index.RoomCategoryId, transaction);
-                            // Gán đầu tiên số lượng phòng bằng 0
-                            count = 0;
-                            foreach (Room room in rooms)
-                            {
-                                if(room.Enable == false) continue;
-                                // Nếu từ khoảng StartDate đến EndDate có phòng đã đặt thì gán checkBook bằng true, ngược lại thì count được cộng thêm 1 
-                                for (DateTime dateIndex = CheckIn; dateIndex < CheckOut;)
-                                {
-                                    checkBook = false;
-                                    long date = HelperProvider.GetSeconds(dateIndex);
-                                    DayRoom dayRoom = dayRoomService.CheckDayRoomAvailable(room.RoomId, date, transaction);
-                                    if(dayRoom != null && dayRoom.Status == DayRoom.EnumStatus.BOOKED)
-                                    {
-                                        checkBook = true;
-                                        break;
-                                    }
-                                    dateIndex = dateIndex.AddDays(1);
-                                }
-
-                                if (checkBook == false) count += 1;
-                            }
-
-                            // Số lượng phòng trống theo từng loại phòng
-                            categoryCountRoom.Count = count;
+                            // Lấy ra danh sách phòng trống theo từng loại phòng
+                            RoomInCart roomInCart = new RoomInCart();
+                            roomInCart.RoomAvaiable = roomService.GetListRoomAvailable(index.RoomCategoryId, CheckIn, CheckOut, transaction);
 
                             // Lấy ra số lượng đã chọn theo từng loại phòng
                             CartDetail cartDetail = cartService.GetRoomBookedByCartRoom(cart.CartId, index.RoomCategoryId, transaction);
                             if(cartDetail == null)
                             {
-                                categoryCountRoom.CountSelect = 0;
+                                roomInCart.CountSelect = 0;
                             }
                             else
                             {
-                                categoryCountRoom.CountSelect = cartDetail.Quantity;
+                                roomInCart.CountSelect = cartDetail.Quantity;
                             }
 
-                            listCategoryCountRoom.Add(categoryCountRoom);                            
+                            listRoomInCart.Add(roomInCart);                            
                         }
 
                         transaction.Commit();
-                        return Success(listCategoryCountRoom);
+                        return Success(listRoomInCart);
                     }
                 }
             }
@@ -165,6 +140,9 @@ namespace Jocasta.ApiControllers
                         UserService userService = new UserService(connect);
                         CartService cartService = new CartService(connect);
                         OrderService orderService = new OrderService(connect);
+                        InvoiceService invoiceService = new InvoiceService(connect);
+                        RoomService roomService = new RoomService(connect);
+                        DayRoomService dayRoomService = new DayRoomService(connect);    
 
                         User user = userService.GetUserByToken(token,transaction);
                         if (user == null) return Unauthorized();
@@ -191,22 +169,7 @@ namespace Jocasta.ApiControllers
                         order.CreateTime = HelperProvider.GetSeconds();
                         orderService.InsertOrder(order, transaction);
 
-                        // Tạo order_detail
-                        foreach (var item in cartDetail)
-                        {
-                            OrderDetail orderDetail = new OrderDetail();
-                            orderDetail.OrderDetailId = Guid.NewGuid().ToString();
-                            orderDetail.OrderId = order.OrderId;
-                            orderDetail.RoomCategoryId = item.RoomCategoryId;
-                            orderDetail.NumberOfRoom = item.Quantity;
-
-                            orderService.InsertOrderDetail(orderDetail, transaction);
-
-                            // Giữ chỗ cho khách hàng thêm vào bảng day_room
-
-                        }
-
-                        // Tạo invoice và invoice detail
+                        // Tạo invoice 
                         Invoice invoice = new Invoice();
                         invoice.InvoiceId = Guid.NewGuid().ToString();
                         invoice.OrderId = order.OrderId;
@@ -215,7 +178,61 @@ namespace Jocasta.ApiControllers
                         invoice.Type = Invoice.EnumType.BOOKING_INVOICE;
                         invoice.RequestContent = model.RequestContent;
                         invoice.CreateTime = HelperProvider.GetSeconds();
+                        invoiceService.InsertInvoice(invoice, transaction);
 
+                        DateTime checkIn = HelperProvider.GetDateTime_v2(cart.CheckIn);
+                        DateTime checkOut = HelperProvider.GetDateTime_v2(cart.CheckOut);
+
+
+                        // Tạo order_detail và invoice detail
+                        foreach (var item in cartDetail)
+                        {
+                            OrderDetail orderDetail = new OrderDetail();
+                            orderDetail.OrderDetailId = Guid.NewGuid().ToString();
+                            orderDetail.OrderId = order.OrderId;
+                            orderDetail.RoomCategoryId = item.RoomCategoryId;
+                            orderDetail.NumberOfRoom = item.Quantity;
+                            orderService.InsertOrderDetail(orderDetail, transaction);
+
+                            InvoiceDetail invoiceDetail = new InvoiceDetail();
+                            invoiceDetail.InvoiceDetailId = Guid.NewGuid().ToString();
+                            invoiceDetail.InvoiceId = invoice.InvoiceId;
+                            invoiceDetail.RoomCategoryId = item.RoomCategoryId;
+                            invoiceDetail.Quantity = item.Quantity;
+                            invoiceService.InsertInvoiceDetail(invoiceDetail, transaction);
+
+                            // Giữ chỗ cho khách hàng thêm vào bảng day_room
+                            // Lấy ra danh sách phòng trống
+                            CategoryRoomAvaiable categoryRoomAvaiable = roomService.GetListRoomAvailable(item.RoomCategoryId, checkIn, checkOut, transaction);
+
+                            // Danh sách phòng trống
+                            List<Room> rooms = categoryRoomAvaiable.ListRoom;
+
+                            for(int i = 0; i< item.Quantity; i++)
+                            {
+                                // Random chọn phòng cho khách và thêm order và sửa status vào bảng day_room để giữ phòng cho khách 
+                                Random rand = new Random();
+                                int randRoom = rand.Next(0, rooms.Count);
+                                
+                                Room room = rooms[randRoom];
+
+                                for (DateTime dateIndex = checkIn; dateIndex < checkOut;)
+                                {
+                                    long date = HelperProvider.GetSeconds(dateIndex);
+                                    DayRoom dayRoom = dayRoomService.GetDayRoomByRoomAndDate(room.RoomId, date, transaction);
+                                    if (dayRoom == null) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+
+                                    dayRoom.OrderDetailId = orderDetail.OrderDetailId;
+                                    dayRoom.Status = DayRoom.EnumStatus.BOOKED;
+                                    dayRoomService.UpdateDayRoom(dayRoom, transaction);
+                                    
+                                    dateIndex = dateIndex.AddDays(1);
+                                }
+
+                                // Xóa phòng đó ra khỏi phòng trống.
+                                rooms.RemoveAt(randRoom+1);
+                            }
+                        }
 
                         transaction.Commit();
                         return Success();

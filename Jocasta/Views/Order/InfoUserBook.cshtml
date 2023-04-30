@@ -176,13 +176,17 @@
         const orderBookRoom_onClick = async function () {
             //window.location.href = '/information-user-book';
 
-            /*let model = {
-                TotalPrice: $('#total-price').text(rs.data.TotalPrice)
-            }*/
+            let model = {
+                Name: $('#name').val(),
+                Phone: $('#phone').val(),
+                Email: $('#email').val(),
+                RequestContent: $('#request-content').val()
+            }
 
             let rq = await fetch('/api/order/CreateOrder', {
                 method: 'post',
-                headers: Enum.OptionHeaderDefault
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
             });
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;

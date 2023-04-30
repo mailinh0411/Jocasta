@@ -202,7 +202,6 @@
                 headers: Enum.OptionHeaderDefault,
             });
             let rs = await rq.json();
-            console.log(rs)
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 $('#avatar-user').attr('src', GetObjectProperty(rs.data, 'Avatar'));
                 $('#user-name').text(GetObjectProperty(rs.data, 'Name'));

@@ -38,10 +38,16 @@ namespace Jocasta.Models
         public string Keyword { get; set; }
     }
 
-    public class CategoryCountRoom
+    public class CategoryRoomAvaiable
     {
         public RoomCategory Category { get; set; }
-        public int Count { get; set; }
+        public List<Room> ListRoom { get; set; }
+       
+    }
+
+    public class RoomInCart
+    {
+        public CategoryRoomAvaiable RoomAvaiable { get; set; }
         public int CountSelect { get; set; }
     }
 
