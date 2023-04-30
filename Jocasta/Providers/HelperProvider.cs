@@ -252,6 +252,11 @@ namespace Jocasta.Providers
             DateTime dateTime = new DateTime(1970, 1, 1) + timeSpan;
             return dateTime;
         }
+
+        public static DateTime GetDateTime_v2(long time)
+        {
+            return DateTimeOffset.FromUnixTimeMilliseconds(time).DateTime;
+        }
         public static bool DeleteFile(string path)
         {
             try

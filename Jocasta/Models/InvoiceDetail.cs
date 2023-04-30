@@ -10,6 +10,7 @@ namespace Jocasta.Models
         public string InvoiceDetailId { get; set; }
         public string InvoiceId { get; set; }
         public string ServiceId { get; set; }
-        public decimal Price { get; set; }
+        public string RoomCategoryId { get; set; }
+        public int Quantity { get; set; }
     }
 }
