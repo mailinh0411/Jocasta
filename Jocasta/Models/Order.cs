@@ -13,11 +13,16 @@ namespace Jocasta.Models
         public string Status { get; set; }
         public long CheckIn { get; set; }
         public long CheckOut { get; set; }
+        public string Code { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }   
+        public string Name { get; set; }
         public long CreateTime { get; set; }
         public class EnumStatus
         {
             public const string PENDING = "PENDING";
             public const string CONFIRM = "CONFIRM";
+            public const string BOOKED = "BOOKED";
             public const string CHECKED_IN = "CHECKED_IN";
             public const string CHECKED_OUT = "CHECKED_OUT";
         }
@@ -34,11 +39,20 @@ namespace Jocasta.Models
         public string Account { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public string Code { get; set; }
     }
 
     public class ListOrderUserModel : BaseListModel
     {
         public List<OrderUserModel> List { get; set; }
+    }
+
+    public class CreateOrder
+    {
+        public string Name { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string RequestContent { get; set; }
     }
     
 }

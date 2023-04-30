@@ -194,6 +194,7 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CartService.cs" />
     <Compile Include="Services\DayRoomService.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\ManageUserService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\RoomCategoryService.cs" />

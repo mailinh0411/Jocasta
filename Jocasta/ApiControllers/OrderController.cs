@@ -152,7 +152,7 @@ namespace Jocasta.ApiControllers
 
         // Tao order dat phong
         [HttpPost]
-        public JsonResult CreateOrder()
+        public JsonResult CreateOrder(CreateOrder model)
         {
             try
             {
@@ -176,17 +176,22 @@ namespace Jocasta.ApiControllers
                         List<CartDetailModel> cartDetail = cartService.GetListRoomBookedByCart(cart.CartId, transaction);
                         if (cartDetail.Count == 0) throw new Exception("Người dùng này chưa chọn phòng để đặt");
 
-
+                        // Tạo order 
                         Order order = new Order();
                         order.OrderId = Guid.NewGuid().ToString();
                         order.UserId = user.UserId;
                         order.TotalPrice = cart.TotalPrice;
-                        order.Status = Order.EnumStatus.PENDING;
+                        order.Status = Order.EnumStatus.BOOKED;
                         order.CheckIn = cart.CheckIn;
                         order.CheckOut = cart.CheckOut;
+                        order.Code = HelperProvider.MakeCode();
+                        order.Email = model.Email;
+                        order.Phone = model.Phone;
+                        order.Name = model.Name;
                         order.CreateTime = HelperProvider.GetSeconds();
                         orderService.InsertOrder(order, transaction);
 
+                        // Tạo order_detail
                         foreach (var item in cartDetail)
                         {
                             OrderDetail orderDetail = new OrderDetail();
@@ -196,7 +201,21 @@ namespace Jocasta.ApiControllers
                             orderDetail.NumberOfRoom = item.Quantity;
 
                             orderService.InsertOrderDetail(orderDetail, transaction);
+
+                            // Giữ chỗ cho khách hàng thêm vào bảng day_room
+
                         }
+
+                        // Tạo invoice và invoice detail
+                        Invoice invoice = new Invoice();
+                        invoice.InvoiceId = Guid.NewGuid().ToString();
+                        invoice.OrderId = order.OrderId;
+                        invoice.UserId = user.UserId;
+                        invoice.TotalPrice = order.TotalPrice;
+                        invoice.Type = Invoice.EnumType.BOOKING_INVOICE;
+                        invoice.RequestContent = model.RequestContent;
+                        invoice.CreateTime = HelperProvider.GetSeconds();
+
 
                         transaction.Commit();
                         return Success();
