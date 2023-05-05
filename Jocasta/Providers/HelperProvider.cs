@@ -249,7 +249,7 @@ namespace Jocasta.Providers
         {
             double sticks = double.Parse(time.ToString());
             TimeSpan timeSpan = TimeSpan.FromMilliseconds(sticks);
-            DateTime dateTime = new DateTime(1970, 1, 1) + timeSpan;
+            DateTime dateTime = new DateTime(1970, 1, 1,7,0,0,0) + timeSpan;
             return dateTime;
         }
 

@@ -180,8 +180,8 @@ namespace Jocasta.ApiControllers
                         invoice.CreateTime = HelperProvider.GetSeconds();
                         invoiceService.InsertInvoice(invoice, transaction);
 
-                        DateTime checkIn = HelperProvider.GetDateTime_v2(cart.CheckIn);
-                        DateTime checkOut = HelperProvider.GetDateTime_v2(cart.CheckOut);
+                        DateTime checkIn = HelperProvider.GetDateTime(cart.CheckIn);
+                        DateTime checkOut = HelperProvider.GetDateTime(cart.CheckOut);
 
 
                         // Tạo order_detail và invoice detail
@@ -230,9 +230,13 @@ namespace Jocasta.ApiControllers
                                 }
 
                                 // Xóa phòng đó ra khỏi phòng trống.
-                                rooms.RemoveAt(randRoom+1);
+                                rooms.RemoveAt(randRoom);
                             }
                         }
+
+                        // Tạo xong đơn hàng thì xóa giỏ hàng
+                        cartService.DeleteCartDetailByCart(cart.CartId, transaction);
+                        cartService.DeleteCart(cart.CartId, transaction);
 
                         transaction.Commit();
                         return Success();

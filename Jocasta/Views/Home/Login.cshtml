@@ -119,8 +119,8 @@
             swal({
                 title: "Đăng nhập thành công!",
                 type: "success",
-            }, function () { window.location.href = '/'; })
-            window.location.href = '/';
+                preConfirm: function () { window.location.href = '/' },
+            })
         }
     }
 </script>
