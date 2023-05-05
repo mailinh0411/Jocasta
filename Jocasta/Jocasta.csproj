@@ -163,6 +163,7 @@
     <Compile Include="Areas\Admin\Services\AdminRoomCategoryService.cs" />
     <Compile Include="Areas\Admin\Services\AdminRoomService.cs" />
     <Compile Include="Areas\Admin\Services\AdminServiceRoomService.cs" />
+    <Compile Include="Areas\Admin\Services\ManageUserService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RoomCategoryController.cs" />
@@ -196,7 +197,6 @@
     <Compile Include="Services\CartService.cs" />
     <Compile Include="Services\DayRoomService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
-    <Compile Include="Services\ManageUserService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\RoomCategoryService.cs" />
     <Compile Include="Services\RoomService.cs" />
