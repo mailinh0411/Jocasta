@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "OrderDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--@section slider{-->
+    <!-- Header Banner -->
+    <!--<div class="banner-header section-padding valign bg-img bg-fixed" data-overlay-dark="4" data-background="/Content/img/slider/1.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 caption mt-90">
+                    <h5>The Jocasta Mai Linh Hotel</h5>
+                    <h1>List Order</h1>
+                </div>
+            </div>
+            <div class="row sub-banner">
+                <ul>
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a class="select" href="">List Order</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}-->
+
+<!-- Your room -->
+<section class="section-padding">
+    <div class="container">
+        <h3 class="title">Chi tiết đơn hàng</h3>
+        <ul id="list-user-order">
+        </ul>
+    </div>
+</section>
+
+
+
+@section styles{
+    <style>
+
+        .title {
+            color: #aa8453;
+        }
+
+        #list-user-order {
+            margin: auto 60px;
+        }
+
+            #list-user-order li {
+                display: flex;
+                justify-content: space-between;
+                margin: 15px;
+                padding: 15px 25px;
+                border: .5px solid #aa8453;
+                cursor: pointer;
+                border-radius: 7px;
+            }
+
+                #list-user-order li > div {
+                    line-height: 30px;
+                }
+    </style>
+}
+
+@section scripts{
+    
+    <script>
+        const getListOrderByUser = async function () {
+            let rq = await fetch('/api/order/GetListOrderUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            $('#list-user-order').html('');
+            let html = '';
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<li data-id="${rs.data[i].OrderId}" onclick="OrderDetail_onClick(this);">`;
+                    html += '<div><div><span><strong>Mã đơn đặt: </strong><span> ' + GetObjectProperty(rs.data[i], 'Code') + '</span></span></div>';
+                    html += '<div><span><strong>Check In: </strong><span id="check-in"> ' + DateStringFormat({ stringDate: new Date(rs.data[i].CheckIn), newFormat: 'mm/dd/yyyy' }) + '</span></span></div>';
+                    html += '<div><span><strong>Check Out: </strong><span id="check-out">' + DateStringFormat({ stringDate: new Date(rs.data[i].CheckOut), newFormat: 'mm/dd/yyyy' }) + '</span></span></div>';
+                    html += '</div>';
+                    html += '<div>';
+                    html += '<div><span><strong>Ngày đặt: </strong><span id="create-time">' + DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'mm/dd/yyyy' }) + '</span></span></div>';
+                    html += '<div><span><strong>Tổng tiền: </strong><span id="total-price">' + NumberFormat(rs.data[i].TotalPrice) + '</span> VNĐ</span></div>';
+                    switch (rs.data[i].Status) {
+                        case 'BOOKED':
+                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-success" id="">Đã đặt</span></span></div>';
+                            break;
+                        case 'CHECKED_IN':
+                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-info" id="">Check In</span></span></div>';
+                            break;
+                        case 'CHECKED_OUT':
+                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-secondary" id="">Check Out</span></span></div>';
+                            break;
+                        case 'USER_CANCEL':
+                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-danger" id="">Người dùng hủy</span></span></div>';
+                            break;
+                        case 'SYSTEM_CANCEL':
+                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-danger" id="">Hệ thống hủy</span></span></div>';
+                            break;
+                    }
+                    html += '</div></li>';
+                }
+            }
+            $('#list-user-order').append(html);
+        }
+
+        const OrderDetail_onClick = function (el) {
+            var id = $(el).data('id');
+            window.location.href = '/user/list-order/' + id;
+
+        }
+
+        const initPage = async function () {
+            await getListOrderByUser();
+        }
+
+        initPage();
+
+    </script>
+}
+
+

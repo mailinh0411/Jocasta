@@ -21,6 +21,12 @@ namespace Jocasta.Services
             int status = this._connection.Execute(query, order, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public List<Order> GetListOrderByUserId(string userId, IDbTransaction transaction = null)
+        {
+            string query = "select * from [order] where UserId = @userId order by CreateTime desc";
+            return this._connection.Query<Order>(query, new {userId}, transaction).ToList();
+        }
         #endregion
 
         #region OrderDetail

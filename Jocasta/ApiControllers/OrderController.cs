@@ -248,5 +248,27 @@ namespace Jocasta.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        // Danh sách order của người dùng
+        [HttpGet]
+        public JsonResult GetListOrderUser()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                OrderService orderService = new OrderService(); 
+
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                List<Order> orders = orderService.GetListOrderByUserId(user.UserId);
+                return Success(orders);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }
