@@ -22,5 +22,18 @@ namespace Jocasta.Controllers
         {
             return View();
         }
+
+        [Route("user/list-order")]
+        public ActionResult ListOrder()
+        {
+            return View();
+        }
+
+        [Route("user/list-order/{id}")]
+        public ActionResult OrderDetail(string id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
     }
 }

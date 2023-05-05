@@ -20,8 +20,8 @@ namespace Jocasta.Models
         public long CreateTime { get; set; }
         public class EnumStatus
         {
-            public const string PENDING = "PENDING";
-            public const string CONFIRM = "CONFIRM";
+            public const string USER_CANCEL = "USER_CANCEL";
+            public const string SYSTEM_CANCEL = "SYSTEM_CANCEL";
             public const string BOOKED = "BOOKED";
             public const string CHECKED_IN = "CHECKED_IN";
             public const string CHECKED_OUT = "CHECKED_OUT";
