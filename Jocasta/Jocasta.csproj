@@ -166,6 +166,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RoomCategoryController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Filters\ApiAdminTokenRequireAttribute.cs" />
     <Compile Include="Filters\ApiTokenRequireAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -2801,12 +2802,13 @@
     <Content Include="Views\Order\CheckNow.cshtml" />
     <Content Include="Views\Order\InfoUserBook.cshtml" />
     <Content Include="Views\Order\SuccessOrder.cshtml" />
+    <Content Include="Views\User\UserInfo.cshtml" />
+    <Content Include="Views\User\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Views\Cart\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
