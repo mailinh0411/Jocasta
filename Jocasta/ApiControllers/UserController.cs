@@ -147,5 +147,59 @@ namespace Jocasta.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpPost]
+        public JsonResult UpdateUserInfo(User model)
+        {
+            try
+            {
+                using(var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using(var transaction = connect.BeginTransaction())
+                    {
+                        string token = Request.Headers.Authorization.ToString();
+                        UserService userService = new UserService();
+                        User user = userService.GetUserByToken(token);
+                        if (user == null) return Unauthorized();
+
+                        if (string.IsNullOrEmpty(user.Name)) throw new Exception("Tên người dùng không được để trống.");
+                        user.Name = model.Name.Trim();
+                        if (string.IsNullOrEmpty(user.Account)) throw new Exception("Tên đăng nhập không được để trống.");
+                        userService.CheckAccountExist(model.Account, user.UserId, transaction);
+                        user.Account = model.Account.Trim();
+
+                        if(!string.IsNullOrEmpty(model.Email))
+                        {
+                            userService.CheckEmailExit(model.Email, user.UserId, transaction);
+                            user.Email = model.Email.Trim();
+                        }
+
+                        if (!string.IsNullOrEmpty(model.Phone))
+                        {
+                            userService.CheckPhoneExit(model.Phone, user.UserId, transaction);
+                            user.Phone = model.Phone.Trim();
+                        }
+
+                        if (!string.IsNullOrEmpty(model.Avatar))
+                        {
+                            string filename = Guid.NewGuid().ToString() + ".jpg";
+                            var path = System.Web.HttpContext.Current.Server.MapPath("~" + Constant.USER_IMAGE_PATH + filename);
+                            HelperProvider.Base64ToImage(model.Avatar, path);
+                            if (!HelperProvider.DeleteFile(user.Avatar)) return Error();
+                            user.Avatar = Constant.USER_IMAGE_URL + filename;
+                        }
+
+                        userService.UpdateUserInfo(user, transaction);
+
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+            }catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

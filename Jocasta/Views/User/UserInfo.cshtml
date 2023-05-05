@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "UserInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section-padding">
+    <div class="container">
+        <div class="tab-show-info d-flex row">
+            <div class="tab-avatar col-md-3">
+
+            </div>
+
+            <div style="flex:1;" class="col-md-9">
+                <input id="UserId" value="@ViewBag.Id" type="hidden" />
+                <div class="form-group" id="">
+                    <label class="font-weight-semibold fs-16" for="name">Tên người dùng:</label>
+                    <input type="text" class="form-control" id="Name" placeholder="Nhập tên người dùng" required>
+                </div>
+
+                <div class="form-group" id="">
+                    <label class="font-weight-semibold fs-16">Tên đăng nhập:</label>
+                    <input type="text" class="form-control" id="Account" placeholder="Nhập tên đăng nhập" required>
+                </div>
+
+                <div class="form-group" id="">
+                    <label class="font-weight-semibold fs-16">Email:</label>
+                    <input type="text" class="form-control" id="Email" placeholder="Email" required>
+                </div>
+
+                <div class="form-group" id="">
+                    <label class="font-weight-semibold fs-16">Số điện thoại:</label>
+                    <input type="text" class="form-control" id="Phone" placeholder="Số điện thoại" required>
+                </div>
+
+                <div style="float: right;">
+                    <button type="button" onclick="UpdateUser_onClick();" class="create-button btn-info">Cập nhật</button>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+@section styles{
+    <style>
+        .tab-show-info{
+            margin-top: 100px;
+        }
+
+        .tab-avatar {
+            margin: 10px auto;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: none!important;
+            outline: 0;
+            box-shadow: none!important;
+        }
+
+        .create-button{
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+    </style>
+}
+
+@section scripts{
+    <script>
+        var ChooseImage = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseImage_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+
+        const getUserInfo = async function () {
+            let rp = await fetch('/api/User/GetInforUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            console.log(rs);
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '<div class="form-group">';
+                html += '<div class="preview" style="margin:auto; width: 200px; height: 200px; background-position: center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; border: .5px solid #d7d7d7; cursor: pointer; background-image: url(' + rs.data.Avatar + ');" onclick="ChooseImage(this);"></div>';
+                html += '<input type="file" style="display:none;" onchange="ChooseImage_OnChange(this);" required />';
+                html += '<input type="hidden" id="Image" /></div>'
+
+                $('.tab-avatar').append(html);
+
+                $('#Name').val(rs.data.Name);
+                $('#Account').val(rs.data.Account);
+                $('#Email').val(rs.data.Email);
+                $('#Phone').val(rs.data.Phone);
+                /*$('#Phone').val('******' + rs.data.Phone.substr(rs.data.Phone.length - 4, 4));*/
+            }
+        }
+
+        getUserInfo();
+
+        const UpdateUser_onClick = async function () {
+            let model = {
+                Name: $('#Name').val(),
+                Avatar: $('#Image').val(),
+                Account: $('#Account').val(),
+                Email: $('#Email').val(),
+                Phone: $('#Phone').val()
+            }
+
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên người dùng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Account') === '') { alert('Tên đăng nhập không được để trống.'); return; }
+
+            if (!validateEmail(model.Email)) { alert('Email không đúng định dạng.'); return; }
+
+            let url = '/api/ManageUser/UpdateUserInfo';
+
+            let rp = await fetch(url, {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật người dùng thành công.')
+                window.location.href = '/';
+            }
+        }
+
+        function validateEmail($email) {
+            var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+            return emailReg.test($email);
+        }
+    </script>
+    }

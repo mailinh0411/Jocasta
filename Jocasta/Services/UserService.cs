@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Policy;
 using System.Web;
 
 namespace Jocasta.Services
@@ -13,6 +14,7 @@ namespace Jocasta.Services
         public UserService() : base() { }
         public UserService(IDbConnection db) : base(db) { }
 
+        #region user
         public List<User> GetListUser(IDbTransaction transaction = null)
         {
             string query = "select * from [user]";
@@ -51,6 +53,34 @@ namespace Jocasta.Services
             return this._connection.Query<User>(query, new { Token }, transaction).FirstOrDefault();
         }
 
+        public void CheckAccountExist(string account, string userId, IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [user] where Account = @account and Account <> '' and UserId <> @userId";
+            int count = this._connection.Query<int>(query, new { account = account, userId = userId }, transaction).FirstOrDefault();
+            if (count > 0) throw new Exception("Tên đăng nhập đã tồn tại.");
+        }
+        public void CheckEmailExit(string email, string userId, IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [user] where Email = @email and Email <> '' and UserId <> @userId";
+            int count = this._connection.Query<int>(query, new { email = email, userId = userId }, transaction).FirstOrDefault();
+            if (count > 0) throw new Exception("Email đã tồn tại.");
+        }
+        public void CheckPhoneExit(string phone, string userId, IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [user] where Phone = @phone and Phone <> '' and UserId <> @userId";
+            int count = this._connection.Query<int>(query, new { phone = phone, userId = userId }, transaction).FirstOrDefault();
+            if (count > 0) throw new Exception("Số điện thoại đã tồn tại.");
+        }
+
+        public void UpdateUserInfo(User user, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[user] SET [Name]=@Name,[Account]=@Account,[Email]=@Email,[Phone]=@Phone,[Avatar]=@Avatar WHERE [UserId]=@UserId";
+            int count = this._connection.Execute(query, user, transaction);
+            if (count > 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+        #endregion
+
+        #region User Token
         public bool InsertUserToken(UserToken userToken, IDbTransaction transaction = null)
         {
             string query = "INSERT INTO [dbo].[user_token] ([UserTokenId],[UserId],[Token],[CreateTime],[ExpireTime]) VALUES (@UserTokenId,@UserId,@Token,@CreateTime,@ExpireTime)";
@@ -83,5 +113,7 @@ namespace Jocasta.Services
             int status = this._connection.Execute(query, new { token = token }, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        #endregion
     }
 }
