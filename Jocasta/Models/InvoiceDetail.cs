@@ -12,5 +12,6 @@ namespace Jocasta.Models
         public string ServiceId { get; set; }
         public string RoomCategoryId { get; set; }
         public int Quantity { get; set; }
+        public decimal Price { get; set; }
     }
 }

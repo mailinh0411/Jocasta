@@ -21,6 +21,12 @@ namespace Jocasta.Services
             int status = this._connection.Execute(query, invoice, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public Invoice GetInvoiceBooking(string orderId, IDbTransaction transaction = null)
+        {
+            string query = $"select * from [dbo].[invoice] where OrderId = @orderId and Type = '${Invoice.EnumType.BOOKING_INVOICE}'";
+            return this._connection.Query<Invoice>(query, new { orderId }, transaction).FirstOrDefault();
+        }
         #endregion
 
         #region InvoiceDetail
@@ -29,6 +35,12 @@ namespace Jocasta.Services
             string query = "INSERT INTO [dbo].[invoice_detail] ([InvoiceDetailId],[InvoiceId],[RoomCategoryId],[ServiceId],[Quantity]) VALUES (@InvoiceDetailId,@InvoiceId,@RoomCategoryId,@ServiceId,@Quantity)";
             int status = this._connection.Execute(query, invoiceDetail, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public List<InvoiceDetail> GetInvoiceDetailByInvoiceId(string invoiceId, IDbTransaction transaction = null)
+        {
+            string query = "select * from [invoice_detail] where InvoiceId = @invoiceId";
+            return this._connection.Query<InvoiceDetail>(query, new {invoiceId }, transaction).ToList();
         }
         #endregion
     }

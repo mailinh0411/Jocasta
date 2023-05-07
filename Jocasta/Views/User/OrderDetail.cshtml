@@ -4,9 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!--@section slider{-->
+
+@section slider{
     <!-- Header Banner -->
-    <!--<div class="banner-header section-padding valign bg-img bg-fixed" data-overlay-dark="4" data-background="/Content/img/slider/1.jpg">
+    <div class="banner-header section-padding valign bg-img bg-fixed" data-overlay-dark="4" data-background="/Content/img/slider/1.jpg">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 caption mt-90">
@@ -26,14 +27,47 @@
             </div>
         </div>
     </div>
-}-->
+}
 
 <!-- Your room -->
 <section class="section-padding">
     <div class="container">
-        <h3 class="title">Chi tiết đơn hàng</h3>
-        <ul id="list-user-order">
-        </ul>
+        <h3 class="title">Chi tiết đơn đặt của bạn</h3>
+        <div class="user-info row">
+            <div class="col-md-6">
+                <div class="item user-name">
+                    <strong class="text">Người nhận phòng: </strong>
+                    <span class="value"></span>
+                </div>
+                <div class="item user-phone">
+                    <strong class="text">Điện thoại: </strong>
+                    <span class="value"></span>
+                </div>
+                <div class="item user-email">
+                    <strong class="text">Email: </strong>
+                    <span class="value"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="item check-in">
+                    <strong class="text">Check in: </strong>
+                    <span class="value"></span>
+                </div>
+                <div class="item check-out">
+                    <strong class="text">Check out: </strong>
+                    <span class="value"></span>
+                </div>
+                <div class="item user-time">
+                    <strong class="text">Ngày đặt: </strong>
+                    <span class="value"></span>
+                </div>
+            </div>            
+        </div>
+
+        <div class="list-room">
+            <ul id="list-room-booked">
+            </ul>
+        </div>
     </div>
 </section>
 
@@ -46,7 +80,14 @@
             color: #aa8453;
         }
 
-        #list-user-order {
+        .user-info {
+        }
+
+        .user-info .item{
+            line-height: 3;
+        }
+
+        /*#list-user-order {
             margin: auto 60px;
         }
 
@@ -62,70 +103,55 @@
 
                 #list-user-order li > div {
                     line-height: 30px;
-                }
+                }*/
     </style>
 }
 
 @section scripts{
-    
     <script>
-        const getListOrderByUser = async function () {
-            let rq = await fetch('/api/order/GetListOrderUser', {
+        const id = "@ViewBag.Id";
+        const getOrderById = async function () {
+            let rq = await fetch('/api/order/GetOrderById?id=' + id, {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
             });
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
-
-            $('#list-user-order').html('');
-            let html = '';
-
+            console.log(rs.data)
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                for (let i = 0; i < rs.data.length; i++) {
-                    html += `<li data-id="${rs.data[i].OrderId}" onclick="OrderDetail_onClick(this);">`;
-                    html += '<div><div><span><strong>Mã đơn đặt: </strong><span> ' + GetObjectProperty(rs.data[i], 'Code') + '</span></span></div>';
-                    html += '<div><span><strong>Check In: </strong><span id="check-in"> ' + DateStringFormat({ stringDate: new Date(rs.data[i].CheckIn), newFormat: 'mm/dd/yyyy' }) + '</span></span></div>';
-                    html += '<div><span><strong>Check Out: </strong><span id="check-out">' + DateStringFormat({ stringDate: new Date(rs.data[i].CheckOut), newFormat: 'mm/dd/yyyy' }) + '</span></span></div>';
-                    html += '</div>';
-                    html += '<div>';
-                    html += '<div><span><strong>Ngày đặt: </strong><span id="create-time">' + DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'mm/dd/yyyy' }) + '</span></span></div>';
-                    html += '<div><span><strong>Tổng tiền: </strong><span id="total-price">' + NumberFormat(rs.data[i].TotalPrice) + '</span> VNĐ</span></div>';
-                    switch (rs.data[i].Status) {
-                        case 'BOOKED':
-                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-success" id="">Đã đặt</span></span></div>';
-                            break;
-                        case 'CHECKED_IN':
-                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-info" id="">Check In</span></span></div>';
-                            break;
-                        case 'CHECKED_OUT':
-                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-secondary" id="">Check Out</span></span></div>';
-                            break;
-                        case 'USER_CANCEL':
-                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-danger" id="">Người dùng hủy</span></span></div>';
-                            break;
-                        case 'SYSTEM_CANCEL':
-                            html += '<div><span><strong>Trạng thái: </strong><span class="badge badge-lg light badge-danger" id="">Hệ thống hủy</span></span></div>';
-                            break;
-                    }
-                    html += '</div></li>';
-                }
+                $('.user-info .user-name .value').html(GetObjectProperty(rs.data, 'Name'));
+                $('.user-info .user-phone .value').html(GetObjectProperty(rs.data, 'Phone'));
+                $('.user-info .user-email .value').html(GetObjectProperty(rs.data, 'Email'));
+                $('.user-info .user-time .value').html(DateStringFormat({ stringDate: new Date(rs.data.CreateTime), newFormat: 'mm/dd/yyyy' }));
+                $('.user-info .check-in .value').html(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
+                $('.user-info .check-out .value').html(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
             }
-            $('#list-user-order').append(html);
         }
 
-        const OrderDetail_onClick = function (el) {
-            var id = $(el).data('id');
-            window.location.href = '/user/list-order/' + id;
-
+        const getListRoomBooked = async function () {
+            let rq = await fetch('/api/order/GetOrderById?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            console.log(rs.data)
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.user-info .user-name .value').html(GetObjectProperty(rs.data, 'Name'));
+                $('.user-info .user-phone .value').html(GetObjectProperty(rs.data, 'Phone'));
+                $('.user-info .user-email .value').html(GetObjectProperty(rs.data, 'Email'));
+                $('.user-info .user-time .value').html(DateStringFormat({ stringDate: new Date(rs.data.CreateTime), newFormat: 'mm/dd/yyyy' }));
+                $('.user-info .check-in .value').html(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
+                $('.user-info .check-out .value').html(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
+            }
         }
 
         const initPage = async function () {
-            await getListOrderByUser();
+            await getOrderById();
         }
 
         initPage();
 
     </script>
 }
-
 
