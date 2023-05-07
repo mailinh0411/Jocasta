@@ -27,6 +27,12 @@ namespace Jocasta.Services
             string query = "select * from [order] where UserId = @userId order by CreateTime desc";
             return this._connection.Query<Order>(query, new {userId}, transaction).ToList();
         }
+
+        public Order GetOrderById(string id, IDbTransaction transaction = null)
+        {
+            string query = "select * from [order] where OrderId = @id";
+            return this._connection.Query<Order>(query, new { id }, transaction).FirstOrDefault();
+        }
         #endregion
 
         #region OrderDetail

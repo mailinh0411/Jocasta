@@ -199,6 +199,7 @@ namespace Jocasta.ApiControllers
                             invoiceDetail.InvoiceId = invoice.InvoiceId;
                             invoiceDetail.RoomCategoryId = item.RoomCategoryId;
                             invoiceDetail.Quantity = item.Quantity;
+                            invoiceDetail.Price = item.Price;
                             invoiceService.InsertInvoiceDetail(invoiceDetail, transaction);
 
                             // Giữ chỗ cho khách hàng thêm vào bảng day_room
@@ -264,6 +265,39 @@ namespace Jocasta.ApiControllers
 
                 List<Order> orders = orderService.GetListOrderByUserId(user.UserId);
                 return Success(orders);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetOrderById(string id)
+        {
+            try
+            {
+                OrderService orderService = new OrderService();
+                return Success(orderService.GetOrderById(id));
+            }catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetListRoomBooked(string orderId)
+        {
+            try
+            {
+                InvoiceService invoiceService = new InvoiceService();
+                Invoice invoice = invoiceService.GetInvoiceBooking(orderId);
+                if (invoice == null) throw new Exception("Không có hóa đơn đặt phòng của đơn này.");
+
+
+
+
+                return Success();
             }
             catch (Exception ex)
             {
