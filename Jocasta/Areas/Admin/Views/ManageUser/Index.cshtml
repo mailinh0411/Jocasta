@@ -158,7 +158,6 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
 
             if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
@@ -206,7 +205,6 @@
         const Delete_onClick = async function (el) {
             if (confirm('Bạn có chắc muốn xóa người dùng này không?') === false) return;
             const id = $(el).data('id');
-            console.log(id);
 
             let rq = await fetch('/api/ManageUser/DeleteUser?id=' + id, {
                 method: 'get',
@@ -224,7 +222,6 @@
         const ChangeEnable_onClick = async function (el) {
             if (confirm('Bạn có chắc muốn thay đổi trạng thái người dùng này không?') === false) return;
             const id = $(el).data('id');
-            console.log(id);
 
             let rq = await fetch('/api/ManageUser/ChangeUserEnable?id=' + id, {
                 method: 'get',

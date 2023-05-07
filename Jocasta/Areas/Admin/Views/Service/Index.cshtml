@@ -101,7 +101,7 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
+       
 
             if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
@@ -135,7 +135,7 @@
 
         const Update_onClick = function (el) {
             let id = $(el).data('id');
-            console.log(id);
+
             window.location.href = ('/admin/Service/UpdateService?id=' + id);
         }
 

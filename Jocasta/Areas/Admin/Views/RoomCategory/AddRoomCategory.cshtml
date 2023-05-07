@@ -124,7 +124,7 @@
         var AddMoreImage = function (el) { $(el).siblings('input[type=file]').click(); }
         var AddMoreImage_OnChange = function (e, el) {
             var files = e.currentTarget.files;
-            console.log(files);
+            
             for (let i = 0; i < files.length; i++) {
                 let currFile = files[i];
 

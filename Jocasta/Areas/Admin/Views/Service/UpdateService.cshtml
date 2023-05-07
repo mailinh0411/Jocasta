@@ -68,7 +68,7 @@
             });
             let rs = await rp.json();
             if (AdminCheckErrorResponse(rs) === false) return;
-            console.log(rs);
+
             let item = rs.data;
             $('#Name').val(item.Name);
             $('.preview').css('background-image', `url(${item.Image})`)

@@ -284,25 +284,5 @@ namespace Jocasta.ApiControllers
                 return Error(ex.Message);
             }
         }
-
-        [HttpGet]
-        public JsonResult GetListRoomBooked(string orderId)
-        {
-            try
-            {
-                InvoiceService invoiceService = new InvoiceService();
-                Invoice invoice = invoiceService.GetInvoiceBooking(orderId);
-                if (invoice == null) throw new Exception("Không có hóa đơn đặt phòng của đơn này.");
-
-
-
-
-                return Success();
-            }
-            catch (Exception ex)
-            {
-                return Error(ex.Message);
-            }
-        }
     }
 }

@@ -267,7 +267,6 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
 
             if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
@@ -318,18 +317,15 @@
                 const check = $(row).find('[name=checkedRoom]').prop('checked');
                 if (check === true) {
                     var id = $(row).data('id');
-                    console.log(id);
                     lsRoomId.push(id);
                 }
             }
-            console.log(lsRoomId);
 
             let model = {
                 ListRoomId: lsRoomId,
                 StartDate: $('#start-date-insert').val(),
                 EndDate: $('#end-date-insert').val()
             };
-            console.log(model);
 
             if (lsRoomId.length <= 0) {
                 alert("Bạn phải chọn phòng");
@@ -381,7 +377,6 @@
 
                 _listRoomCategory = rs.data;
 
-                console.log(_listRoomCategory);
 
                 if (_listRoomCategory.length <= 0) { $(el).closest('.search-input').find('.autocomplete').html('<li>Không tìm thấy loại phòng nào</li>'); return; }
                 $(el).closest('.search-input').find('.autocomplete').html('');
@@ -406,13 +401,11 @@
             });
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
-            console.log(rs.data);
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 $('.InsertDayRoom #keyword').val(name);
                 let html = '';
                 for (let i = 0; i < rs.data.length; i++) {
-                    console.log(rs.data[i]);
                     html += `<tr data-id="${rs.data[i].RoomId}">`;
                     html += `<td><div class="form-check style-1"><input class="form-check-input" type="checkbox" value="" name="checkedRoom"></div></td>`;
                     html += `<td> <div class="guest-bx">`;
