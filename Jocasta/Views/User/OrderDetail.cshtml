@@ -117,7 +117,6 @@
             });
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
-            console.log(rs.data)
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 $('.user-info .user-name .value').html(GetObjectProperty(rs.data, 'Name'));
                 $('.user-info .user-phone .value').html(GetObjectProperty(rs.data, 'Phone'));
@@ -129,7 +128,7 @@
         }
 
         const getListRoomBooked = async function () {
-            let rq = await fetch('/api/order/GetOrderById?id=' + id, {
+            let rq = await fetch('/api/invoice/GetListRoomBooked?orderId=' + id, {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
             });
@@ -137,17 +136,13 @@
             if (CheckErrorResponse(rs) === false) return;
             console.log(rs.data)
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('.user-info .user-name .value').html(GetObjectProperty(rs.data, 'Name'));
-                $('.user-info .user-phone .value').html(GetObjectProperty(rs.data, 'Phone'));
-                $('.user-info .user-email .value').html(GetObjectProperty(rs.data, 'Email'));
-                $('.user-info .user-time .value').html(DateStringFormat({ stringDate: new Date(rs.data.CreateTime), newFormat: 'mm/dd/yyyy' }));
-                $('.user-info .check-in .value').html(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
-                $('.user-info .check-out .value').html(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
+                
             }
         }
 
         const initPage = async function () {
             await getOrderById();
+            await getListRoomBooked();
         }
 
         initPage();

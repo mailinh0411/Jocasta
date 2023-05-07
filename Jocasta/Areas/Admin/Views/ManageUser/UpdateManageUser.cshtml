@@ -82,7 +82,7 @@
             });
             let rs = await rp.json();
             if (AdminCheckErrorResponse(rs) === false) return;
-            console.log(rs);
+
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 let html = '<div class="form-group">';
                 html += '<div class="preview" style=" width: 200px; height: 200px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url(' + rs.data.Avatar +');" onclick="ChooseImage(this);"></div>';
@@ -106,7 +106,6 @@
 
         const Save_onClick = async function () {
             if (confirm('Bạn có chắc muốn cập nhật người dùng này?') === false) return;
-            console.log($('#Image').val());
             let model = {
                 UserId: $('#UserId').val(),
                 Name: $('#Name').val(),
@@ -117,7 +116,6 @@
                 Password: $('#Password').val()
             }
 
-            console.log(model);
 
             if (GetObjectProperty(model, 'Name') === '') { alert('Tên người dùng không được để trống.'); return; }
             if (GetObjectProperty(model, 'Account') === '') { alert('Tên đăng nhập không được để trống.'); return; }

@@ -135,6 +135,7 @@
   <ItemGroup>
     <Compile Include="ApiControllers\ApiBaseController.cs" />
     <Compile Include="ApiControllers\CartController.cs" />
+    <Compile Include="ApiControllers\InvoiceController.cs" />
     <Compile Include="ApiControllers\OrderController.cs" />
     <Compile Include="ApiControllers\RoomCategoryController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />

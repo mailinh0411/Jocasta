@@ -151,7 +151,7 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
+          
 
             if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
@@ -196,7 +196,6 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-            console.log(rs);
 
             if (AdminCheckErrorResponse(rs) === false) return;
             $('[name=RoomCategory]').html('');
@@ -207,7 +206,7 @@
                     html += `<option value="${rs.data[i].RoomCategoryId}">${rs.data[i].Name}</option>`;
                 }
             }
-            console.log(html);
+            
             $('[name=RoomCategory]').append(html);
             $('[name=RoomCategoryId]').append(html);
         }
@@ -236,7 +235,7 @@
                 headers: Enum.OptionAdminHeaderDefault
             });
             let rs = await rq.json();
-            console.log(rs);
+            
             if (AdminCheckErrorResponse(rs) == false) return;
             $('#RoomId').val(rs.data.RoomId);
             $('#Name').val(rs.data.Name);
@@ -318,7 +317,7 @@
                 RoomCategoryId: $('#RoomCategoryId').val(),
                 Description: $('#Description').val()
             }
-            console.log(model);
+           
             if (GetObjectProperty(model, 'Name') === '') { alert('Tên phòng không được để trống.'); return; }
             if (GetObjectProperty(model, 'Floor') === '') { alert('Tầng không được để trống.'); return; }
             if (GetObjectProperty(model, 'RoomCategoryId') === '') { alert('Loại phòng không được để trống.'); return; }

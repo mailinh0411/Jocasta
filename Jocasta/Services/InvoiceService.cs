@@ -24,7 +24,7 @@ namespace Jocasta.Services
 
         public Invoice GetInvoiceBooking(string orderId, IDbTransaction transaction = null)
         {
-            string query = $"select * from [dbo].[invoice] where OrderId = @orderId and Type = '${Invoice.EnumType.BOOKING_INVOICE}'";
+            string query = $"select * from [dbo].[invoice] where OrderId = @orderId and Type = '{Invoice.EnumType.BOOKING_INVOICE}'";
             return this._connection.Query<Invoice>(query, new { orderId }, transaction).FirstOrDefault();
         }
         #endregion
