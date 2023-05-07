@@ -79,7 +79,7 @@
     <div class="booking-wrapper">
         <div class="container">
             <div class="booking-inner clearfix">
-                <div class="form1 clearfix">
+                <div class="form1 clearfix d-flex justify-content-center">
                     <div class="col1 c1">
                         <div class="input1_wrapper">
                             <label>Check in</label>
@@ -96,46 +96,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col2 c3">
+                    @*<div class="col2 c3">
                         <div class="input1_wrapper">
                             <label>Adults</label>
                             <div class="input_inner">
                                 <input type="text" class="input" placeholder="Adults">
                             </div>
                         </div>
-                        @*<div class="select1_wrapper">
-                            <label>Adults</label>
-                            <div class="select1_inner">
-                                <select class="select2 select" style="width: 100%">
-                                    <option value="1">1 Adult</option>
-                                    <option value="2">2 Adults</option>
-                                    <option value="3">3 Adults</option>
-                                    <option value="4">4 Adults</option>
-                                </select>
-                            </div>
-                        </div>*@
-                    </div>
-                    <div class="col2 c4">
+                    </div>*@
+                    <!--<div class="col2 c4">
                         <div class="input1_wrapper">
                             <label>Children(age <= 12)</label>
                             <div class="input_inner">
                                 <input type="text" class="input" placeholder="Children(age <= 12)">
                             </div>
-                        </div>
-                        @*<div class="select1_wrapper">
-                            <label>Children</label>
-                            <div class="select1_inner">
-                                <select class="select2 select" style="width: 100%">
-                                    <option value="1">Children</option>
-                                    <option value="1">1 Child</option>
-                                    <option value="2">2 Children</option>
-                                    <option value="3">3 Children</option>
-                                    <option value="4">4 Children</option>
-                                </select>
-                            </div>
-                        </div>*@
-                    </div>
-                    <div class="col2 c5">
+                        </div>                        
+                    </div>-->
+                    @*<div class="col2 c5">
                         <div class="select_wrapper">
                             <label>Room Category</label>
                             <div class="select_inner">
@@ -144,8 +121,8 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="col3 c6">
+                    </div>*@
+                    <div class="col1 c6">
                         <button class="btn-form1-submit" onclick="CheckNow();">Check Now</button>
                     </div>
                 </div>
@@ -462,7 +439,6 @@
         const CheckNow = async function () {
             
             let model = {
-                RoomCategory: $('#select-room-category').val(),
                 CheckIn: $('#check-in').val(),
                 CheckOut: $('#check-out').val()
             }
@@ -478,7 +454,7 @@
 
             console.log(model);
 
-            let rq = await fetch('/api/Order/GetListRoom?checkIn=' + model.CheckIn + '&checkOut=' + model.CheckOut + '&keyword=' + model.RoomCategory, {
+            let rq = await fetch('/api/Order/GetListRoom?checkIn=' + model.CheckIn + '&checkOut=' + model.CheckOut + '&keyword=', {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
             });
