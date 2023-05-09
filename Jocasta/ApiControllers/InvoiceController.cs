@@ -21,9 +21,7 @@ namespace Jocasta.ApiControllers
                 Invoice invoice = invoiceService.GetInvoiceBooking(orderId);
                 if (invoice == null) throw new Exception("Không có hóa đơn đặt phòng của đơn này.");
 
-                List<InvoiceDetail> list = invoiceService.GetInvoiceDetailByInvoiceId(invoice.InvoiceId);
-
-                return Success(list);
+                return Success(invoiceService.GetListBookingService(invoice.InvoiceId));
             }
             catch (Exception ex)
             {

@@ -284,5 +284,37 @@ namespace Jocasta.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult UserCancelOrder(string orderId)
+        {
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        OrderService orderService = new OrderService(connect);
+
+                        Order order = orderService.GetOrderById(orderId, transaction);
+                        if (order == null) throw new Exception("Không có đơn đặt của đơn này.");
+
+                        if (order.Status != Order.EnumStatus.BOOKED) throw new Exception("Bạn không thể hủy đơn đặt này.");
+                        order.Status = Order.EnumStatus.USER_CANCEL;
+
+                        orderService.UpdateStatusOrder(order.OrderId, order.Status, transaction);
+
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
     }
 }

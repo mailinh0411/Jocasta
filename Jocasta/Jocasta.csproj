@@ -138,6 +138,7 @@
     <Compile Include="ApiControllers\InvoiceController.cs" />
     <Compile Include="ApiControllers\OrderController.cs" />
     <Compile Include="ApiControllers\RoomCategoryController.cs" />
+    <Compile Include="ApiControllers\ServiceController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
