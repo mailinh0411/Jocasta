@@ -34,12 +34,14 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th style="width: 40%;">Ngày tạo</th>
-                                        <th style="width: 40%;">Khách hàng</th>
+                                        <th>Mã đơn đặt</th>
+                                        <th>Người đặt</th>
                                         <th>Tổng tiền</th>
-                                        <th style="width: 25%;">Trạng thái</th>
-                                        <th class="bg-none" style="width: 15%;"></th>
-                                        <th class="bg-none" style="width: 15%;"></th>
+                                        <th>Ngày check in</th>
+                                        <th>Ngày check out</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Trạng thái</th>
+                                        <th class="bg-none"></th>
                                     </tr>
                                 </thead>
 
@@ -58,7 +60,7 @@
     <div class="form-inline" id="dynamic-table_length">
         <div class="d-lg-flex align-items-center">
             <div style="width: 50px;">Hiển thị </div>
-            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchRoomCategory();">
+            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchOrder();">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -103,43 +105,55 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-
-            if (AdminCheckErrorResponse(rs) === false) return;
+            console.log(rs);
             $('#list-data').html('');
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 let html = '';
                 for (let i = 0; i < rs.data.List.length; i++) {
                     html += '<tr>';
                     html += '<td><span class="fs-15 font-w500 text-nowrap">' + (i + 1) + '</span></td>';
-                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</span></div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${rs.data.List[i].Code}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${rs.data.List[i].Name}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${rs.data.List[i].TotalPrice}</span></div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CheckIn), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CheckOut), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
                     switch (rs.data.List[i].Status) {
-                        case "PENDING":
-                            html += `<td><div><span class="class="badge badge-lg light badge-warning"">Chờ duyệt</span></div></td>`;
-                            html += `<td class="d-flex"><button class="fs-15" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "Update_onClick(this);">Duyệt</button>`;
-                            html += `<button class="fs-15" data-id="${rs.data.List[i].OrderId}" onclick="Delete_onClick(this);">Hủy</button></td>`;
-                            break;
-                        case "CONFIRM":
-                            html += `<td class="text-center"><div><span class="class="badge badge-lg light badge-primary"">Đã xác nhận</span></div></td>`;
-                            html += `<td><button class="dropdown-item fs-15" data-id="${rs.data.List[i].OrderId}" onclick = "Update_onClick(this);">Check in</button></td>`;
-                            break;
+                        case "BOOKED":
+                            html += `<td class="text-center"><span class="badge badge-lg light badge-success">Đã đặt</span></td>`;
+                            html += `<td>`;
+                            html += `<button class="btn btn-sm btn-success" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckIn_onClick(this);">Check in</button>`;
+                            html += `<button class="btn btn-sm btn-danger" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick="SystemCancel_onClick(this);">Hủy</button>`;
+                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button><td>`;
+                            break;                        
                         case "CHECKED_IN":
-                            html += `<td class="text-center"><div><span class="fs-15 font-w500 text-nowrap">Đã check in</span></div></td>`;
-                            html += `<td><button class="dropdown-item fs-15" data-id="${rs.data.List[i].OrderId}" onclick = "Update_onClick(this);">Check out</button></td>`;
+                            html += `<td class="text-center"><span class="badge badge-lg light badge-info">Đã check in</span></td>`;
+                            html += `<td>`;
+                            html += `<button class="btn btn-sm btn-secondary" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckOut_onClick(this);">Check out</button>`;
+                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button><td>`;
                             break;
                         case "CHECKED_OUT":
-                            html += `<td class="text-center"><div><span class="fs-15 font-w500 text-nowrap">Đã check out</span></div></td>`;
-                            html += `<td></td>`;
+                            html += `<td class="text-center"><span class="badge badge-lg light badge-primary">Đã check out</span></td>`;
+                            html += `<td>`;
+                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button><td>`;
+                            break;
+                        case "USER_CANCEL":
+                            html += `<td class="text-center"><span class="badge badge-lg light badge-danger" id="">Người dùng hủy</span></td>`;
+                            html += `<td>`;
+                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button><td>`;
+                            break;
+                        case "SYSTEM_CANCEL":
+                            html += `<td class="text-center"><span class="badge badge-lg light badge-secondary">Hệ thống hủy</span></td>`;
+                            html += `<td>`;
+                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button><td>`;
                             break;
                     }
                     
-                    html += `<td class="text-center"><div><button class="fs-15 font-w500 text-nowrap">Chi tiết</button></div></td>`;
                     html += `</tr>`;
                 }
 
                 $('#list-data').append(html);
-                Pagination(searchModel, rs.data.TotalPage, null, getdataListRoomCategory);
+                Pagination(searchModel, rs.data.TotalPage, null, getdataListOrder);
             }
         }
 
