@@ -18,5 +18,11 @@ namespace Jocasta.Services
             string query = "select Top(6) * from [service] where Enable=1 ORDER BY CreateTime DESC";
             return this._connection.Query<Service>(query, null, transaction).ToList();
         }
+
+        public List<Service> GetListService(IDbTransaction transaction = null)
+        {
+            string query = "select * from [service]";
+            return this._connection.Query<Service>(query, transaction).ToList();
+        }
     }
 }

@@ -42,6 +42,12 @@ namespace Jocasta.Services
             string query = "select * from [invoice_detail] where InvoiceId = @invoiceId";
             return this._connection.Query<InvoiceDetail>(query, new {invoiceId }, transaction).ToList();
         }
+
+        public object GetListBookingService(string invoiceId, IDbTransaction transaction = null)
+        {
+            string query = "select ind.*, rc.Image, rc.Name from [invoice_detail] ind left join [room_category] rc on ind.RoomCategoryId = rc.RoomCategoryId where InvoiceId = @invoiceId";
+            return this._connection.Query<object>(query, new { invoiceId }, transaction).ToList();
+        }
         #endregion
     }
 }

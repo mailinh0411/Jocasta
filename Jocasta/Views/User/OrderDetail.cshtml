@@ -61,15 +61,79 @@
                     <strong class="text">Ngày đặt: </strong>
                     <span class="value"></span>
                 </div>
-            </div>            
+            </div>
         </div>
 
         <div class="list-room">
-            <ul id="list-room-booked">
-            </ul>
+            <h6>Các phòng bạn đã đặt: </h6>
+            <table>
+                <tbody id="list-room-booked"></tbody>
+            </table>
+        </div>
+
+        <div class="list-service">
+            <h6>Các dịch vụ bạn đã đặt: </h6>
+            <table>
+                <tbody id="list-service-invoice"></tbody>
+            </table>
+        </div>
+
+        <div class="button-booked">
+            <button id="btn-service" class="btn btn-primary" onclick="orderService_onClick();">Đặt dịch vụ</button>
+            <button id="btn-cancel" class="btn btn-danger" onclick="userCancel_onClick();">Hủy</button>
         </div>
     </div>
 </section>
+
+<div class="modal" id="order-service">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Đặt dịch vụ</h2>
+            <button type="button" onclick="CloseModal_onClick();">
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group col-md-6 mb-0">
+                    <label class="font-weight-semibold fs-16" for="service">Tên dịch vụ</label>
+                    <select class="form-control" id="Service" name="Service">
+                        <option value="">Chọn dịch vụ</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-6 mb-0">
+                    <label class="font-weight-semibold fs-16" for="quantity">Số lượng</label>
+                    <input type="text" class="form-control" id="Quantity" placeholder="Nhập số lượng" onkeyup="ValidateInputOnlyNumber(event,this)" required>
+                </div>
+
+                <div class="form-group col-md-12 mb-0">
+                    <label class="font-weight-semibold fs-16" for="request">Nội dung yêu cầu</label>
+                    <textarea class="form-control" aria-label="With textarea" style="resize:none;" placeholder="Nhập nội dung" rows="2" id="Request"></textarea>
+                </div>
+                
+            </div>
+            <div><button class="btn btn-success" onclick="AddService_onClick();">Thêm</button></div>
+            <div class="service-booked">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Dịch vụ</th>
+                            <th>Số lượng</th>
+                            <th style="width: 45%;">Nội dung yêu cầu</th>
+                            <th style="width: 7%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="list-service-booked">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger light" data-bs-dismiss="modal" onclick="CloseModal_onClick();">Close</button>
+            <button type="button" class="btn btn-primary" onclick="SaveService_onClick();">Save</button>
+        </div>
+    </div>
+</div>
 
 
 
@@ -83,27 +147,81 @@
         .user-info {
         }
 
-        .user-info .item{
-            line-height: 3;
-        }
-
-        /*#list-user-order {
-            margin: auto 60px;
-        }
-
-            #list-user-order li {
-                display: flex;
-                justify-content: space-between;
-                margin: 15px;
-                padding: 15px 25px;
-                border: .5px solid #aa8453;
-                cursor: pointer;
-                border-radius: 7px;
+            .user-info .item {
+                line-height: 3;
             }
 
-                #list-user-order li > div {
-                    line-height: 30px;
-                }*/
+        .container {
+            width: 60% !important;
+            margin: auto;
+        }
+
+        .list-room {
+            margin-top: 20px;
+        }
+
+            .list-room table {
+                width: 80%;
+                margin: auto;
+            }
+
+                .list-room table tbody {
+                    font-size: 15px;
+                }
+
+        #list-room-booked td img {
+            width: 80px;
+            height: 60px;
+        }
+
+        #list-room-booked td {
+            border: none;
+        }
+
+            #list-room-booked td .room-price {
+                padding-top: 10px;
+            }
+
+        .button-booked {
+            float: right;
+            margin: 20px;
+        }
+
+            .button-booked > button {
+                margin-left: 15px;
+                display: none;
+            }
+
+        #order-service {
+            display: none;
+            position: fixed;
+            background-color: #00000060;
+            top: 0;
+            left: 0;
+            z-index: 1055;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            outline: 0;
+        }
+
+        #order-service .modal-content{
+            height: 700px;
+            width: 700px;
+            margin: auto;
+        }
+
+        .modal-body .service-booked{
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .modal-body .service-booked table{
+            width: 100%;
+        }
+
+
     </style>
 }
 
@@ -124,6 +242,14 @@
                 $('.user-info .user-time .value').html(DateStringFormat({ stringDate: new Date(rs.data.CreateTime), newFormat: 'mm/dd/yyyy' }));
                 $('.user-info .check-in .value').html(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
                 $('.user-info .check-out .value').html(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
+
+                if (GetObjectProperty(rs.data, 'Status') == 'BOOKED') {
+                    $('#btn-cancel').css('display', 'block');
+                }
+
+                else if (GetObjectProperty(rs.data, 'Status') == 'CHECKED_IN') {
+                    $('#btn-service').css('display', 'block');
+                }
             }
         }
 
@@ -135,14 +261,84 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
             console.log(rs.data)
+            $('#list-room-booked').html('');
+
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                
+                let html = '';
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<tr>`
+                    html += `<td style="width: 80px;"><img src="${rs.data[i].Image}" alt=""></td>`;
+                    html += `<td><div>${GetObjectProperty(rs.data[i], 'Name')}</div><div class="room-price">Giá: ${(NumberFormat(rs.data[i].Price))} VNĐ/Đêm</div></td>`;
+                    html += `<td style="width:150px;"><div>Số lượng: ${GetObjectProperty(rs.data[i], 'Quantity')}</div></td>`;
+                    html += `</tr>`;
+                }
+                $('#list-room-booked').append(html);
+
             }
+        }
+
+        const userCancel_onClick = async function () {
+            let rq = await fetch('/api/order/UserCancelOrder?orderId=' + id, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.href = '/user/list-order';
+            }
+        }
+
+        const orderService_onClick = function () {
+            $('#order-service').css('display', 'flex');
+        }
+
+        const getListService = async function () {
+            let rq = await fetch('/api/service/GetListService', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            $('[name=Service]').html('');
+            let html = '<option value="">Chọn dịch vụ</option>';
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<option value="${rs.data[i].ServiceId}" data-name="${rs.data[i].Name}">${rs.data[i].Name}</option>`;
+                }
+            }
+
+            $('[name=Service]').append(html);
+        }
+
+        const AddService_onClick = function () {
+            let model = {
+                Service: $('select[name=Service]').val(),
+                ServiceName: $('#Service').find(':selected').text(),
+                Quantity: $('#Quantity').val(),
+                Request: $('#Request').val()
+            }
+
+            console.log(model);
+
+            if (GetObjectProperty(model,'Service') === '') { alert('Bạn chưa chọn dịch vụ.'); return; }
+            if (GetObjectProperty(model,'Quantity') === '') { alert('Số lượng không được để trống'); return; }
+
+            let html = '<tr class="item-service">';
+            html += '<td><input value="' + model.Service + '" hidden />' + model.ServiceName + '</td>';
+            html += '<td>' + model.Quantity + '</td>';
+            html += '<td>' + model.Request + '</td>';
+            html += '<td class="text-center" style="width:100px;"><input type="hidden" name="serviceid"/><button onclick="DeleteService(this);" class="btn btn-outline-danger btn-xs"><i class="fas fa-trash"></i></button></td>';
+            
+            $('#list-service-booked').append(html);
         }
 
         const initPage = async function () {
             await getOrderById();
             await getListRoomBooked();
+            await getListService();
         }
 
         initPage();
