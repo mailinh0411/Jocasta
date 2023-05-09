@@ -17,13 +17,13 @@ namespace Jocasta.Areas.Admin.Services
         #region Order
         public ListOrderUserModel GetListOrder(string keyword, int page, int pageSize, IDbTransaction transaction = null)
         {
-            string querySelect = "select o.*, u.Name, u.Account, u.Email, u.Phone";
+            string querySelect = "select o.*, u.Name as UserName";
             string queryCount = "select count(*)";
             string query = " from [order] o left join [user] u on o.UserId = u.UserId where 1=1";
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(" ", "%") + "%";
-                query += " and (Email like @keyword or [Phone] like @keyword)";
+                query += " and (u.Email like @keyword or u.[Phone] like @keyword)";
             }
 
             ListOrderUserModel list = new ListOrderUserModel();

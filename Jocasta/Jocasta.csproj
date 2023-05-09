@@ -178,6 +178,7 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartDetail.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\UserAdmin.cs" />
     <Compile Include="Models\DayRoom.cs" />
     <Compile Include="Models\ImageRoom.cs" />
