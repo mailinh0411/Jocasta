@@ -40,6 +40,19 @@ namespace Jocasta.Areas.Admin.Services
             list.List = this._connection.Query<OrderUserModel>(querySelect + query, new { keyword }, transaction).ToList();
             return list;
         }
+
+        public Order GetOrderById(string orderId, IDbTransaction transaction = null)
+        {
+            string query = "select * from [order] where OrderId = @orderId";
+            return this._connection.Query<Order>(query, new { orderId }, transaction).FirstOrDefault();
+        }
+
+        public void UpdateStatusOrder(string orderId, string status, IDbTransaction transaction = null)
+        {
+            string query = "update [order] set Status = @status where OrderId = @orderId";
+            int count = this._connection.Execute(query, new { orderId, status }, transaction);
+            if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
         #endregion
 
         #region OrderDetail

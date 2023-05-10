@@ -162,9 +162,12 @@
     <Compile Include="Areas\Admin\Services\AdminDayRoomService.cs" />
     <Compile Include="Areas\Admin\Services\AdminNewService.cs" />
     <Compile Include="Areas\Admin\Services\AdminOrderService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminReportService.cs" />
     <Compile Include="Areas\Admin\Services\AdminRoomCategoryService.cs" />
     <Compile Include="Areas\Admin\Services\AdminRoomService.cs" />
     <Compile Include="Areas\Admin\Services\AdminServiceRoomService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminSystemTransactionService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminSystemWalletService.cs" />
     <Compile Include="Areas\Admin\Services\ManageUserService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -179,6 +182,11 @@
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartDetail.cs" />
     <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\ReportDaily.cs" />
+    <Compile Include="Models\ReportMonthly.cs" />
+    <Compile Include="Models\ReportYearly.cs" />
+    <Compile Include="Models\SystemTransaction.cs" />
+    <Compile Include="Models\SystemWallet.cs" />
     <Compile Include="Models\UserAdmin.cs" />
     <Compile Include="Models\DayRoom.cs" />
     <Compile Include="Models\ImageRoom.cs" />
