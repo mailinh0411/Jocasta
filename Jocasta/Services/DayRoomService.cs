@@ -22,8 +22,15 @@ namespace Jocasta.Services
         public void UpdateDayRoom(DayRoom dayRoom, IDbTransaction transaction = null)
         {
             string query = "update [day_room] set [OrderDetailId]=@OrderDetailId, [Status]=@Status where [DayRoomId]=@DayRoomId";
-            int status = this._connection.Execute(query, dayRoom, transaction);
-            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+            int count = this._connection.Execute(query, dayRoom, transaction);
+            if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public void UpdateDayRoomByOrderDetail(string orderDetailId, string status, IDbTransaction transaction = null)
+        {
+            string query = "update [day_room] set [OrderDetailId]=NULL, [Status]=@status where [OrderDetailId]=@orderDetailId";
+            int count = this._connection.Execute(query, new { orderDetailId , status }, transaction);
+            if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
             
     }

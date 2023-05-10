@@ -1,8 +1,10 @@
-﻿using Jocasta.Models;
+﻿using Jocasta.Areas.Admin.Services;
+using Jocasta.Models;
 using Jocasta.Providers;
 using Jocasta.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -142,7 +144,8 @@ namespace Jocasta.ApiControllers
                         OrderService orderService = new OrderService(connect);
                         InvoiceService invoiceService = new InvoiceService(connect);
                         RoomService roomService = new RoomService(connect);
-                        DayRoomService dayRoomService = new DayRoomService(connect);    
+                        DayRoomService dayRoomService = new DayRoomService(connect);
+                        NotificationService notificationService = new NotificationService(connect); 
 
                         User user = userService.GetUserByToken(token,transaction);
                         if (user == null) return Unauthorized();
@@ -239,6 +242,16 @@ namespace Jocasta.ApiControllers
                         cartService.DeleteCartDetailByCart(cart.CartId, transaction);
                         cartService.DeleteCart(cart.CartId, transaction);
 
+                        DateTime now = DateTime.Now;
+                        // Tạo thông báo cho người dùng
+                        Notification notification = new Notification();
+                        notification.NotificationId = Guid.NewGuid().ToString();
+                        notification.Title = "Bạn đã đặt đơn thành công";
+                        notification.Content = "Bạn đã đặt thành công đơn hàng có mã " + order.Code + " ngày " + now.ToString();
+                        notification.UserId = order.UserId;
+                        notification.CreateTime = HelperProvider.GetSeconds(now);
+                        notificationService.InsertNotification(notification, transaction);
+
                         transaction.Commit();
                         return Success();
                     }
@@ -296,6 +309,7 @@ namespace Jocasta.ApiControllers
                     using (var transaction = connect.BeginTransaction())
                     {
                         OrderService orderService = new OrderService(connect);
+                        DayRoomService dayRoomService = new DayRoomService(connect);    
 
                         Order order = orderService.GetOrderById(orderId, transaction);
                         if (order == null) throw new Exception("Không có đơn đặt của đơn này.");
@@ -304,6 +318,16 @@ namespace Jocasta.ApiControllers
                         order.Status = Order.EnumStatus.USER_CANCEL;
 
                         orderService.UpdateStatusOrder(order.OrderId, order.Status, transaction);
+
+                        // Xóa cột orderDetail ở trong phòng ngày (Xóa giữ chỗ của khách hàng)
+                        // 1. Lấy ra danh sách chi tiết đơn đặt của đơn đặt
+                        List<OrderDetail> listOrderDetail = orderService.GetListOrderDetailByOrderId(order.OrderId, transaction);
+
+                        // 2. Xóa cột orderDetailId trong phòng ngày
+                        foreach (OrderDetail index in listOrderDetail)
+                        {
+                            dayRoomService.UpdateDayRoomByOrderDetail(index.OrderDetailId, DayRoom.EnumStatus.AVAILABLE, transaction);
+                        }
 
                         transaction.Commit();
                         return Success();

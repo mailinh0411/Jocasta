@@ -50,6 +50,12 @@ namespace Jocasta.Services
             int status = this._connection.Execute(query, orderDetail, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public List<OrderDetail> GetListOrderDetailByOrderId(string orderId, IDbTransaction transaction = null)
+        {
+            string query = "select * from [order_detail] where OrderId = @orderId";
+            return this._connection.Query<OrderDetail>(query, new { orderId }, transaction).ToList();
+        }
         #endregion
     }
 }
