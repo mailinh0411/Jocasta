@@ -157,7 +157,47 @@
             }
         }
 
-        
+        const SystemCancel_onClick = async function (el) {
+            var id = $(el).data('id');
+            let rq = await fetch('/api/AdminOrder/SystemCancelOrder?orderId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.reload();
+            }
+        }
+
+        const CheckIn_onClick = async function (el) {
+            var id = $(el).data('id');
+            let rq = await fetch('/api/AdminOrder/CheckInOrder?orderId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.reload();
+            }
+        }
+
+        const CheckOut_onClick = async function (el) {
+            var id = $(el).data('id');
+            let rq = await fetch('/api/AdminOrder/CheckOutOrder?orderId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.reload();
+            }
+        }
 
         const initPage = function () {
             searchOrder();
