@@ -74,15 +74,26 @@ namespace Jocasta.Areas.Admin.ApiControllers
                     using (var transaction = connect.BeginTransaction())
                     {
                         AdminOrderService adminOrderService = new AdminOrderService(connect);
+                        AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
 
                         Order order = adminOrderService.GetOrderById(orderId, transaction);
                         if (order == null) throw new Exception("Hóa đơn này không tồn tại.");
 
                         if (order.Status != Order.EnumStatus.BOOKED) throw new Exception("Bạn không thể chuyển trạng thái cho đơn đặt này.");
-
                         order.Status = Order.EnumStatus.CHECKED_IN;
 
                         adminOrderService.UpdateStatusOrder(order.OrderId, order.Status, transaction);
+
+                        DateTime now = DateTime.Now;
+
+                        // Tạo thông báo cho người dùng
+                        Notification notification = new Notification();
+                        notification.NotificationId = Guid.NewGuid().ToString();
+                        notification.Title = "Đơn đặt đã được check in";
+                        notification.Content = "Đơn đặt có mã " + order.Code + " của bạn đã được check in ngày " + now.ToString();
+                        notification.UserId = order.UserId;
+                        notification.CreateTime = HelperProvider.GetSeconds(now);
+                        adminNotificationService.InsertNotification(notification, transaction);
 
                         transaction.Commit();
                         return Success();
@@ -109,6 +120,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         AdminSystemWalletService adminSystemWalletService = new AdminSystemWalletService(connect);
                         AdminSystemTransactionService adminSystemTransactionService = new AdminSystemTransactionService(connect);
                         AdminReportService adminReportService = new AdminReportService(connect);
+                        AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
 
                         Order order = adminOrderService.GetOrderById(orderId, transaction);
                         if (order == null) throw new Exception("Hóa đơn này không tồn tại.");
@@ -171,7 +183,16 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         {
                             adminReportService.UpdateTotalPriceByReportYearlyId(order.TotalPrice, reportYearly.ReportYearlyId, transaction);
                         }
-                        
+
+                        // Tạo thông báo cho người dùng
+                        Notification notification = new Notification();
+                        notification.NotificationId = Guid.NewGuid().ToString();
+                        notification.Title = "Đơn đặt đã được check out";
+                        notification.Content = "Đơn đặt có mã " + order.Code + " của bạn đã được check out ngày " + now.ToString();
+                        notification.UserId = order.UserId;
+                        notification.CreateTime = HelperProvider.GetSeconds(now);
+                        adminNotificationService.InsertNotification(notification, transaction);
+
 
                         transaction.Commit();
                         return Success();
