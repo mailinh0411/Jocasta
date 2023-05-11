@@ -27,6 +27,12 @@ namespace Jocasta.Services
             string query = $"select * from [dbo].[invoice] where OrderId = @orderId and Type = '{Invoice.EnumType.BOOKING_INVOICE}'";
             return this._connection.Query<Invoice>(query, new { orderId }, transaction).FirstOrDefault();
         }
+
+        public List<Invoice> GetInvoiceService(string orderId, IDbTransaction transaction = null)
+        {
+            string query = $"select * from [invoice] where OrderId = @orderId and Type = '{Invoice.EnumType.SERVICE_INVOICE}'";
+            return this._connection.Query<Invoice>(query , new { orderId }, transaction).ToList();
+        }
         #endregion
 
         #region InvoiceDetail
@@ -39,8 +45,14 @@ namespace Jocasta.Services
 
         public List<InvoiceDetail> GetInvoiceDetailByInvoiceId(string invoiceId, IDbTransaction transaction = null)
         {
-            string query = "select * from [invoice_detail] where InvoiceId = @invoiceId";
+            string query = "select ind.*, inv.CreateTime from [invoice_detail] ind join [invoice] inv on ind.InvoiceId = inv.InvoiceId where inv.InvoiceId = @invoiceId order by inv.CreateTime desc";
             return this._connection.Query<InvoiceDetail>(query, new {invoiceId }, transaction).ToList();
+        }
+
+        public List<object> GetListServiceBooked(string invoiceId, IDbTransaction transaction = null)
+        {
+            string query = "select ind.*, inv.CreateTime, s.Name from [invoice] inv left join [invoice_detail] ind on inv.InvoiceId = ind.InvoiceId left join [service] s on ind.ServiceId = s.ServiceId where inv.InvoiceId = @invoiceId order by inv.CreateTime desc";
+            return this._connection.Query<object>(query, new {invoiceId}, transaction).ToList();
         }
 
         public object GetListBookingService(string invoiceId, IDbTransaction transaction = null)
