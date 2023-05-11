@@ -40,6 +40,13 @@ namespace Jocasta.Services
             int count = this._connection.Execute(query, new { orderId, status }, transaction);
             if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public void UpdateTotalPriceOrder(string orderId, decimal totalPrice, IDbTransaction transaction = null)
+        {
+            string query = "update [order] set [TotalPrice] = [TotalPrice] + @totalPrice where [OrderId] = @orderId";
+            int count = this._connection.Execute(query, new {orderId, totalPrice}, transaction);
+            if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
         #endregion
 
         #region OrderDetail
