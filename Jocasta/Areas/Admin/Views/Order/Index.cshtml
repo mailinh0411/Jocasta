@@ -199,6 +199,11 @@
             }
         }
 
+        const OrderDetail_onClick = function (el) {
+            let id = $(el).data('id');
+            window.location.href = ('/admin/Order/Detail?id=' + id);
+        }
+
         const initPage = function () {
             searchOrder();
         }

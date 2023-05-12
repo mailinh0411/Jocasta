@@ -13,5 +13,11 @@ namespace Jocasta.Areas.Admin.Controllers
         {
             return View();
         }
+
+        public ActionResult Detail(string id)
+        {
+            ViewBag.OrderId = id;   
+            return View();
+        }
     }
 }

@@ -2790,6 +2790,7 @@
     <Content Include="Areas\Admin\Views\ManageUser\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUser\UpdateManageUser.cshtml" />
     <Content Include="Areas\Admin\Views\Order\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Detail.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
