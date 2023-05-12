@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Chi tiết đơn hàng</h2>
+    </div>
+    <div class=" d-block d-lg-flex align-items-center justify-content-between mb-5">
+        <div class="coin-tabs input-group search-area2 w-50">
+            <div>Họ và tên người đặt: <span>Bùi Mai Linh</span></div>
+            <div>Mã hóa đơn: <span>MSFDGHJS</span></div>
+            <div>Số điện thoại: <span>0846076166</span></div>
+            <div>Email: <span>buimailinh@gmail.com</span></div>
+        </div>
+    </div>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="list" aria-labelledby="list-tab">
+            <div class="tab-content" id="ListViewTabLinkContent">
+                <div class="tab-pane fade active show" id="all-status" aria-labelledby="boxed-all-status-tab">
+                    <div class="table-responsive card">
+                        <div class="table-responsive">
+                            <table class="table table-hover border-0 display mb-4 dataTablesCard booking-table table-responsive-lg " id="guestTable-all6">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã đơn đặt</th>
+                                        <th>Người đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Ngày check in</th>
+                                        <th>Ngày check out</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Trạng thái</th>
+                                        <th class="bg-none"></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="list-data">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-lg-flex justify-content-between" style="padding: 0 1.875rem 3rem 1.875rem;">
+    <div class="form-inline" id="dynamic-table_length">
+        <div class="d-lg-flex align-items-center">
+            <div style="width: 50px;">Hiển thị </div>
+            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchOrder();">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <div style="width: 100px;"> bản ghi </div>
+        </div>
+    </div>
+
+    <div class="">
+        <ul class="pagination pagination-circle mb-0" id="pagination">
+        </ul>
+    </div>
+</div>
+
+
+@section styles{
+    <style>
+    </style>
+}
+@section scripts{
+    <script>
+
+
+        const initPage = function () {
+
+        }
+        initPage();
+    </script>
+
+}
+
+
+
+
