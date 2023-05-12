@@ -296,9 +296,9 @@
 .icon-arrow-down-circle:before {
   content: "\e07b";
 }
-.icon-check:before {
+/*.icon-check:before {
   content: "\e080";
-}
+}*/
 .icon-clock:before {
   content: "\e081";
 }
