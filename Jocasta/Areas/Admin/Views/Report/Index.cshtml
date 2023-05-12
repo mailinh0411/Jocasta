@@ -6,3 +6,1336 @@
 
 
 
+@section styles {
+    <style>
+        .main-report {
+            margin: 15px auto;
+            display: flex;
+            gap: 20px;
+        }
+
+            .main-report .sidebar-left {
+                width: 18%;
+            }
+
+                .main-report .sidebar-left .header-report {
+                    font-weight: 600;
+                    font-size: 20px;
+                    padding-top: 10px;
+                    color: #434343;
+                }
+
+                .main-report .sidebar-left .list-sidebar {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                    .main-report .sidebar-left .list-sidebar .item-sidebar {
+                        background-color: white;
+                        padding: 10px 15px 20px;
+                        border-radius: 5px;
+                        box-shadow: 0 5px 14px rgb(0 0 0 / 10%);
+                        margin-top: 20px;
+                    }
+
+                        .main-report .sidebar-left .list-sidebar .item-sidebar .header-item-sidebar {
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: #4f4f4f;
+                            padding: 10px 0;
+                        }
+
+                        .main-report .sidebar-left .list-sidebar .item-sidebar .list-item-sidebar {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 12px;
+                            position: relative;
+                        }
+
+                            .main-report .sidebar-left .list-sidebar .item-sidebar .list-item-sidebar .item {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                width: max-content;
+                                cursor: pointer;
+                                position: relative;
+                                flex-wrap: wrap;
+                            }
+
+                                .main-report .sidebar-left .list-sidebar .item-sidebar .list-item-sidebar .item.active .icon-check {
+                                    border-color: #44c4c4;
+                                }
+
+                                    .main-report .sidebar-left .list-sidebar .item-sidebar .list-item-sidebar .item.active .icon-check .circle-icon {
+                                        width: 8px;
+                                        height: 8px;
+                                        border-radius: 50%;
+                                        background-color: white;
+                                        background-color: #44c4c4;
+                                    }
+
+                                .main-report .sidebar-left .list-sidebar .item-sidebar .list-item-sidebar .item .icon-check {
+                                    width: 18px;
+                                    height: 18px;
+                                    border: 1px solid #676767;
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                }
+
+                                    .main-report .sidebar-left .list-sidebar .item-sidebar .list-item-sidebar .item .icon-check .circle-icon {
+                                    }
+
+                                .main-report .sidebar-left .list-sidebar .item-sidebar .list-item-sidebar .item .text {
+                                    font-size: 14px;
+                                    font-family: Arial,Helvetica,sans-serif;
+                                    letter-spacing: 0.3px;
+                                    border: none;
+                                    outline: none;
+                                }
+
+            .main-report .content-report {
+                width: 82%;
+                margin-top: 20px;
+            }
+
+                .main-report .content-report .chart-report {
+                    background-color: white;
+                    padding: 20px 10px;
+                }
+
+                .main-report .content-report .document-report {
+                    background-color: #909090;
+                    display: flex;
+                    justify-content: center;
+                    height: 90vh;
+                    max-height: 100%;
+                    overflow-y: scroll;
+                }
+
+                    .main-report .content-report .document-report .content {
+                        width: 76%;
+                        background-color: white;
+                        margin: 30px 0;
+                        min-height: 80%;
+                        height: max-content;
+                        padding: 20px 15px;
+                        display: flex;
+                        justify-content: space-between;
+                        flex-direction: column;
+                        gap: 15px;
+                    }
+
+                        .main-report .content-report .document-report .content .header-document {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                        }
+
+                            .main-report .content-report .document-report .content .header-document .title {
+                                font-size: 22px;
+                                font-weight: 600;
+                            }
+
+                            .main-report .content-report .document-report .content .header-document .from-time {
+                                font-size: 14px;
+                                color: #5b5b5b;
+                            }
+
+                        .main-report .content-report .document-report .content .body-document {
+                            display: flex;
+                            flex: 1;
+                            flex-direction: column;
+                        }
+
+                            .main-report .content-report .document-report .content .body-document > table {
+                                margin: 0 auto;
+                                width: 100%;
+                                font-size: 15px;
+                            }
+
+                                .main-report .content-report .document-report .content .body-document > table > tbody tr {
+                                    border-bottom: 1px solid #d5d5d5;
+                                }
+
+                                    .main-report .content-report .document-report .content .body-document > table > tbody tr:first-child {
+                                        background-color: #B2E8Fd;
+                                    }
+
+                                    .main-report .content-report .document-report .content .body-document > table > tbody tr:nth-child(2) {
+                                        background-color: #ffddb1;
+                                        font-weight: 600;
+                                    }
+
+                                        .main-report .content-report .document-report .content .body-document > table > tbody tr:nth-child(2) td {
+                                            padding: 12px 8px;
+                                        }
+
+                                    .main-report .content-report .document-report .content .body-document > table > tbody tr:first-child th {
+                                        padding: 10px 8px;
+                                        border: 1px solid #d5d5d5;
+                                        border-left: none;
+                                        border-right: none;
+                                    }
+
+                                    .main-report .content-report .document-report .content .body-document > table > tbody tr td,
+                                    .main-report .content-report .document-report .content .body-document > table > tbody tr th {
+                                        text-align: center;
+                                        padding: 8px;
+                                    }
+
+                                        .main-report .content-report .document-report .content .body-document > table > tbody tr td:first-child,
+                                        .main-report .content-report .document-report .content .body-document > table > tbody tr th:first-child {
+                                            text-align: left;
+                                            padding-left: 15px;
+                                        }
+
+                                        .main-report .content-report .document-report .content .body-document > table > tbody tr td:first-child {
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            color: #666666;
+                                            font-style: italic;
+                                        }
+
+                                        .main-report .content-report .document-report .content .body-document > table > tbody tr td:last-child,
+                                        .main-report .content-report .document-report .content .body-document > table > tbody tr th:last-child {
+                                            text-align: right;
+                                            padding-right: 15px;
+                                        }
+
+                        .main-report .content-report .document-report .content .footer-document {
+                            font-size: 13px;
+                            font-weight: 500;
+                            text-align: center;
+                        }
+
+        input[name="chossedaypicker"], input[name="daterangepicker"] {
+            opacity: 0.8;
+            outline: none;
+            border: none;
+            font-size: 13px;
+            color: #818181;
+            padding: 0 30px;
+            transform: translateY(-10px);
+        }
+
+        .daterangepicker {
+            left: 430px !important;
+            top: 656px !important;
+        }
+
+            .daterangepicker.opensleft:after, .daterangepicker.opensright:before, .daterangepicker.opensleft:before, .daterangepicker.opensright:after {
+                display: none;
+            }
+
+        .main-report .sidebar-left .list-sidebar .item-sidebar .button-export-excel {
+            background-color: #3da93d;
+            display: block;
+            padding: 6px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: 600;
+            margin: 10px;
+        }
+
+            .main-report .sidebar-left .list-sidebar .item-sidebar .button-export-excel:hover {
+                background-color: forestgreen;
+            }
+
+            .main-report .sidebar-left .list-sidebar .item-sidebar .button-export-excel .text-export {
+                color: white;
+            }
+    </style>
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Báo cáo thống kê</h2>
+    </div>
+    <div class="main-report">
+        <div class="sidebar-left">
+            <div class="list-sidebar">
+                <div class="item-sidebar export-excel">
+                    <a class="button-export-excel" onclick="downloadExportFileExcel()">
+                        <div class="text-export">
+                            Xuất ra Excel
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="item-sidebar item-time">
+                    <h3 class="header-item-sidebar">Thời gian</h3>
+                    <div class="list-item-sidebar" id="sidebartime">
+                        <div class="item" onclick="showtype(this);" data-time="thisday">
+                            <div class="icon-check">
+                                <div class="circle-icon">
+                                </div>
+                            </div>
+                            <div class="text">Hôm nay</div>
+                        </div>
+                        <div class="item" onclick="showtype(this);" data-time="prevday">
+                            <div class="icon-check">
+                                <div class="circle-icon">
+                                </div>
+                            </div>
+                            <div class="text">Hôm qua</div>
+                        </div>
+                        <div class="item active" onclick="showtype(this);" data-time="thismonth">
+                            <div class="icon-check">
+                                <div class="circle-icon">
+                                </div>
+                            </div>
+                            <div class="text">Tháng này</div>
+                        </div>
+                        <div class="item" onclick="showtype(this);" data-time="prevmonth">
+                            <div class="icon-check">
+                                <div class="circle-icon">
+                                </div>
+                            </div>
+                            <div class="text">Tháng trước</div>
+                        </div>
+                        <div class="item" onclick="showtype(this);" data-time="thisyear">
+                            <div class="icon-check">
+                                <div class="circle-icon">
+                                </div>
+                            </div>
+                            <div class="text">Năm nay</div>
+                        </div>
+                        <div class="item" onclick="showtype(this);" data-time="prevyear">
+                            <div class="icon-check">
+                                <div class="circle-icon">
+                                </div>
+                            </div>
+                            <div class="text">Năm ngoái</div>
+                        </div>
+                        <div class="item custom-day" onclick="chosseday(this);" data-time="chosseday">
+                            <div class="icon-check">
+                                <div class="circle-icon">
+                                </div>
+                            </div>
+                            <div class="text" style="width:max-content">
+                                Chọn ngày
+                            </div>
+                        </div>
+                        <input name="chossedaypicker" disabled />
+                        <div class="item custom-time" onclick="chosseaboutday(this);" data-time="chosserange">
+                            <div class="icon-check">
+                                <div class="circle-icon">
+                                </div>
+                            </div>
+                            <div class="text" style="width:max-content">
+                                Chọn khoảng ngày
+                            </div>
+                        </div>
+                        <input name="daterangepicker" disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-report">
+            <div class="document-report report-type" id="documentshow">
+                <div class="content">
+                    <div class="header-document">
+                        <div class="title">
+                            Báo cáo doanh thu theo thời gian
+                        </div>
+                        <div class="from-time" id="documenttime">
+
+                        </div>
+                    </div>
+                    <div class="body-document">
+                        <table>
+                            <tbody id="tabledocument">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer-document">
+                        Địa chỉ shop : ...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script src="/Scripts/helper.js"></script>
+    <script>
+        // time
+        var now = new Date();
+        var prevDay = new Date();
+        prevDay.setDate(prevDay.getDate() - 1);
+        var prevMonth = new Date();
+        prevMonth.setMonth(now.getMonth() - 1);
+        var prevYear = new Date();
+        prevYear.setFullYear(now.getFullYear() - 1);
+
+        // Doanh thu
+        var datarevenuethisday = [];
+        var datarevenueprevday = [];
+        var datarevenuethismonth = [];
+        var datarevenueprevmonth = [];
+        var datarevenuethisyear = [];
+        var datarevenueprevyear = [];
+
+        // Lợi nhuận
+        var dataprofitthisday = [];
+        var dataprofitprevday = [];
+        var dataprofitthismonth = [];
+        var dataprofitprevmonth = [];
+        var dataprofitthisyear = [];
+        var dataprofitprevyear = [];
+
+        // Sản phẩm
+        var dataproductthisday = [];
+        var dataproductprevday = [];
+        var dataproductthismonth = [];
+        var dataproductprevmonth = [];
+        var dataproductthisyear = [];
+        var dataproductprevyear = [];
+
+        // pick ngày
+        var listDataRevenueHourDayPicker = [];
+        var listDataProfitHourDayPicker = [];
+        var listDataProductDayPicker = [];
+
+        // pick khoảng ngày
+        var listDataRevenueAboutDayPicker = [];
+        var listDataProfitAboutDayPicker = [];
+        var listDataProductAboutDayPicker = [];
+
+
+        var listDataHour = [];
+        var listDataDaily = [];
+        var listDataProduct = [];
+
+
+        var InitPage = async function () {
+            Loading.Show();
+            let rq = await fetch('/api/ShopReport/GetAllShopReport', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                Loading.Hide();
+                 listDataHour = rs.data.listHourlyReport;
+                 listDataDaily = rs.data.listDailyReport;
+                 listDataProduct = rs.data.listShopProductReport;
+                let listDataMonthlyThisYear = rs.data.listMonthlyReportThisYear;
+                let listDataMonthlyPrevYear = rs.data.listMonthlyReportPrevYear;
+                let listDataProductThisYear = rs.data.listReportProductThisYear;
+                let listDataProductPrevYear = rs.data.listReportProductPrevYear;
+
+                // cho vào các mảng lấy giờ
+                for (let indexhour = 0; indexhour < listDataHour.length; indexhour++) {
+                    if (listDataHour[indexhour].Day === now.getDate() && listDataHour[indexhour].Month === now.getMonth() + 1) {
+                        datarevenuethisday.push(
+                            {
+                                ChartId: listDataHour[indexhour].Hour + ' h',
+                                Hour: listDataHour[indexhour].Hour,
+                                ChartData: listDataHour[indexhour].Revenue,
+                                TableId: listDataHour[indexhour].Hour + 'h / ' + listDataHour[indexhour].Day + '-' + listDataHour[indexhour].Month + '-' + listDataHour[indexhour].Year,
+                                TableData: listDataHour[indexhour].Revenue
+                            });
+                        dataprofitthisday.push(
+                            {
+                                ChartId: listDataHour[indexhour].Hour + ' h',
+                                Hour: listDataHour[indexhour].Hour,
+                                ChartData: listDataHour[indexhour].Revenue - (listDataHour[indexhour].ProductCost + listDataHour[indexhour].DiscountCost),
+                                TableId: listDataHour[indexhour].Hour + 'h / ' + listDataHour[indexhour].Day + '-' + listDataHour[indexhour].Month + '-' + listDataHour[indexhour].Year,
+                                TableData: listDataHour[indexhour].Revenue - (listDataHour[indexhour].ProductCost + listDataHour[indexhour].DiscountCost)
+                            });
+                    }
+                    if (listDataHour[indexhour].Day === prevDay.getDate() && listDataHour[indexhour].Month === prevDay.getMonth() + 1) {
+                        datarevenueprevday.push(
+                            {
+                                ChartId: listDataHour[indexhour].Hour + ' h',
+                                Hour: listDataHour[indexhour].Hour,
+                                ChartData: listDataHour[indexhour].Revenue,
+                                TableId: listDataHour[indexhour].Hour + 'h / ' + listDataHour[indexhour].Day + '-' + listDataHour[indexhour].Month + '-' + listDataHour[indexhour].Year,
+                                TableData: listDataHour[indexhour].Revenue
+                            });
+                        dataprofitprevday.push(
+                            {
+                                ChartId: listDataHour[indexhour].Hour + ' h',
+                                Hour: listDataHour[indexhour].Hour,
+                                ChartData: listDataHour[indexhour].Revenue - (listDataHour[indexhour].ProductCost + listDataHour[indexhour].DiscountCost),
+                                TableId: listDataHour[indexhour].Hour + 'h / ' + listDataHour[indexhour].Day + '-' + listDataHour[indexhour].Month + '-' + listDataHour[indexhour].Year,
+                                TableData: listDataHour[indexhour].Revenue - (listDataHour[indexhour].ProductCost + listDataHour[indexhour].DiscountCost)
+                            });
+                    }
+                }
+
+                // các mảng lấy ngày
+                for (let indexdaily = 0; indexdaily < listDataDaily.length; indexdaily++) {
+                    if (listDataDaily[indexdaily].Month === now.getMonth() + 1) {
+                        datarevenuethismonth.push(
+                            {
+                                Day: listDataDaily[indexdaily].Day,
+                                ChartId: listDataDaily[indexdaily].Day,
+                                ChartData: listDataDaily[indexdaily].Revenue,
+                                TableId: listDataDaily[indexdaily].Day + '-' + listDataDaily[indexdaily].Month + '-' + listDataDaily[indexdaily].Year,
+                                TableData: listDataDaily[indexdaily].Revenue
+                            });
+                        dataprofitthismonth.push(
+                            {
+                                Day: listDataDaily[indexdaily].Day,
+                                ChartId: listDataDaily[indexdaily].Day,
+                                ChartData: listDataDaily[indexdaily].Revenue - (listDataDaily[indexdaily].ProductCost + listDataDaily[indexdaily].DiscountCost),
+                                TableId: listDataDaily[indexdaily].Day + '-' + listDataDaily[indexdaily].Month + '-' + listDataDaily[indexdaily].Year,
+                                TableData: listDataDaily[indexdaily].Revenue - (listDataDaily[indexdaily].ProductCost + listDataDaily[indexdaily].DiscountCost)
+                            });
+                    }
+                    if (listDataDaily[indexdaily].Month === prevMonth.getMonth() + 1) {
+                        datarevenueprevmonth.push(
+                            {
+                                Day: listDataDaily[indexdaily].Day,
+                                ChartId: listDataDaily[indexdaily].Day,
+                                ChartData: listDataDaily[indexdaily].Revenue,
+                                TableId: listDataDaily[indexdaily].Day + '-' + listDataDaily[indexdaily].Month + '-' + listDataDaily[indexdaily].Year,
+                                TableData: listDataDaily[indexdaily].Revenue
+                            });
+                        dataprofitprevmonth.push(
+                            {
+                                Day: listDataDaily[indexdaily].Day,
+                                ChartId: listDataDaily[indexdaily].Day,
+                                ChartData: listDataDaily[indexdaily].Revenue - (listDataDaily[indexdaily].ProductCost + listDataDaily[indexdaily].DiscountCost),
+                                TableId: listDataDaily[indexdaily].Day + '-' + listDataDaily[indexdaily].Month + '-' + listDataDaily[indexdaily].Year,
+                                TableData: listDataDaily[indexdaily].Revenue - (listDataDaily[indexdaily].ProductCost + listDataDaily[indexdaily].DiscountCost)
+                            });
+                    }
+                }
+
+                // Các mảng lấy năm
+                for (let indexThisYear = 0; indexThisYear < listDataMonthlyThisYear.length; indexThisYear++) {
+                    datarevenuethisyear.push(
+                        {
+                            ChartId: listDataMonthlyThisYear[indexThisYear].Month,
+                            ChartData: listDataMonthlyThisYear[indexThisYear].Revenue,
+                            TableId: 'Tháng ' + listDataMonthlyThisYear[indexThisYear].Month,
+                            TableData: listDataMonthlyThisYear[indexThisYear].Revenue
+                        });
+                    dataprofitthisyear.push(
+                        {
+                            ChartId: listDataMonthlyThisYear[indexThisYear].Month,
+                            ChartData: listDataMonthlyThisYear[indexThisYear].Revenue - (listDataMonthlyThisYear[indexThisYear].ProductCost + listDataMonthlyThisYear[indexThisYear].DiscountCost),
+                            TableId: 'Tháng ' + listDataMonthlyThisYear[indexThisYear].Month,
+                            TableData: listDataMonthlyThisYear[indexThisYear].Revenue - (listDataMonthlyThisYear[indexThisYear].ProductCost + listDataMonthlyThisYear[indexThisYear].DiscountCost)
+                        });
+                }
+                for (let indexPrevYear = 0; indexPrevYear < listDataMonthlyPrevYear.length; indexPrevYear++) {
+                    datarevenueprevyear.push(
+                        {
+                            ChartId: listDataMonthlyPrevYear[indexPrevYear].Month,
+                            ChartData: listDataMonthlyPrevYear[indexPrevYear].Revenue,
+                            TableId: 'Tháng ' + listDataMonthlyPrevYear[indexPrevYear].Month,
+                            TableData: listDataMonthlyPrevYear[indexPrevYear].Revenue
+                        });
+                    dataprofitprevyear.push(
+                        {
+                            ChartId: listDataMonthlyPrevYear[indexPrevYear].Month,
+                            ChartData: listDataMonthlyPrevYear[indexPrevYear].Revenue - (listDataMonthlyPrevYear[indexPrevYear].ProductCost + listDataMonthlyPrevYear[indexPrevYear].DiscountCost),
+                            TableId: 'Tháng ' + listDataMonthlyPrevYear[indexPrevYear].Month,
+                            TableData: listDataMonthlyPrevYear[indexPrevYear].Revenue - (listDataMonthlyPrevYear[indexPrevYear].ProductCost + listDataMonthlyPrevYear[indexPrevYear].DiscountCost)
+                        });
+                }
+                for (let indexProduct = 0; indexProduct < listDataProductThisYear.length; indexProduct++) {
+                    dataproductthisyear.push(
+                        {
+                            ChartId: listDataProductThisYear[indexProduct].ProductName,
+                            ChartData: listDataProductThisYear[indexProduct].TotalSellNumber,
+                            TableId: 'Năm nay',
+                            TableData: listDataProductThisYear[indexProduct].TotalSellNumber,
+                            TableNameData: listDataProductThisYear[indexProduct].ProductName
+                        });
+                }
+                for (let indexProduct = 0; indexProduct < listDataProductPrevYear.length; indexProduct++) {
+                    dataproductprevyear.push(
+                        {
+                            ChartId: listDataProductPrevYear[indexProduct].ProductName,
+                            ChartData: listDataProductPrevYear[indexProduct].TotalSellNumber,
+                            TableId: 'Năm ngoái',
+                            TableData: listDataProductPrevYear[indexProduct].TotalSellNumber,
+                            TableNameData: listDataProductPrevYear[indexProduct].ProductName
+                        });
+                }
+                // sắp xếp lại data theo giờ nhỏ -> lớn
+                for (let i = 0; i < datarevenuethisday.length - 1; i++) {
+                    for (let j = i + 1; j < datarevenuethisday.length; j++) {
+                        if (datarevenuethisday[i].Hour > datarevenuethisday[j].Hour) {
+                            let temp = datarevenuethisday[i];
+                            datarevenuethisday[i] = datarevenuethisday[j];
+                            datarevenuethisday[j] = temp;
+                        }
+                    }
+                }
+                for (let i = 0; i < dataprofitthisday.length - 1; i++) {
+                    for (let j = i + 1; j < dataprofitthisday.length; j++) {
+                        if (dataprofitthisday[i].Hour > dataprofitthisday[j].Hour) {
+                            let temp = dataprofitthisday[i];
+                            dataprofitthisday[i] = dataprofitthisday[j];
+                            dataprofitthisday[j] = temp;
+                        }
+                    }
+                }
+                for (let i = 0; i < datarevenueprevday.length - 1; i++) {
+                    for (let j = i + 1; j < datarevenueprevday.length; j++) {
+                        if (datarevenueprevday[i].Hour > datarevenueprevday[j].Hour) {
+                            let temp = datarevenueprevday[i];
+                            datarevenueprevday[i] = datarevenueprevday[j];
+                            datarevenueprevday[j] = temp;
+                        }
+                    }
+                }
+                for (let i = 0; i < dataprofitprevday.length - 1; i++) {
+                    for (let j = i + 1; j < dataprofitprevday.length; j++) {
+                        if (dataprofitprevday[i].Hour > dataprofitprevday[j].Hour) {
+                            let temp = dataprofitprevday[i];
+                            dataprofitprevday[i] = dataprofitprevday[j];
+                            dataprofitprevday[j] = temp;
+                        }
+                    }
+                }
+
+                // sắp xếp lại data theo ngày nhỏ -> lớn
+                for (let i = 0; i < datarevenuethismonth.length - 1; i++) {
+                    for (let j = i + 1; j < datarevenuethismonth.length; j++) {
+                        if (datarevenuethismonth[i].Day < datarevenuethismonth[j].Day) {
+                            let temp = datarevenuethismonth[i];
+                            datarevenuethismonth[i] = datarevenuethismonth[j];
+                            datarevenuethismonth[j] = temp;
+                        }
+                    }
+                }
+                for (let i = 0; i < dataprofitthismonth.length - 1; i++) {
+                    for (let j = i + 1; j < dataprofitthismonth.length; j++) {
+                        if (dataprofitthismonth[i].Day < dataprofitthismonth[j].Day) {
+                            let temp = dataprofitthismonth[i];
+                            dataprofitthismonth[i] = dataprofitthismonth[j];
+                            dataprofitthismonth[j] = temp;
+                        }
+                    }
+                }
+                for (let i = 0; i < datarevenueprevmonth.length - 1; i++) {
+                    for (let j = i + 1; j < datarevenueprevmonth.length; j++) {
+                        if (datarevenueprevmonth[i].Day < datarevenueprevmonth[j].Day) {
+                            let temp = datarevenueprevmonth[i];
+                            datarevenueprevmonth[i] = datarevenueprevmonth[j];
+                            datarevenueprevmonth[j] = temp;
+                        }
+                    }
+                }
+                for (let i = 0; i < dataprofitprevmonth.length - 1; i++) {
+                    for (let j = i + 1; j < dataprofitprevmonth.length; j++) {
+                        if (dataprofitprevmonth[i].Day < dataprofitprevmonth[j].Day) {
+                            let temp = dataprofitprevmonth[i];
+                            dataprofitprevmonth[i] = dataprofitprevmonth[j];
+                            dataprofitprevmonth[j] = temp;
+                        }
+                    }
+                }
+
+                // mảng lấy product
+                for (let indexproduct = 0; indexproduct < listDataProduct.length; indexproduct++) {
+                    if (listDataProduct[indexproduct].Day === now.getDate() && listDataProduct[indexproduct].Month === now.getMonth() + 1) {
+                        dataproductthisday.push(listDataProduct[indexproduct]);
+                    }
+                    if (listDataProduct[indexproduct].Day === prevDay.getDate() && listDataProduct[indexproduct].Month === prevDay.getMonth() + 1) {
+                        dataproductprevday.push(listDataProduct[indexproduct]);
+                    }
+                    if (listDataProduct[indexproduct].Month === now.getMonth() + 1) {
+                        dataproductthismonth.push(listDataProduct[indexproduct]);
+                    }
+                    if (listDataProduct[indexproduct].Month === prevMonth.getMonth() + 1) {
+                        dataproductprevmonth.push(listDataProduct[indexproduct]);
+                    }
+                }
+                // Tạo dataChart cho product
+                for (let i = 0; i < dataproductthisday.length; i++) {
+                    dataproductthisday[i].ChartId = dataproductthisday[i].ProductName;
+                    dataproductthisday[i].ChartData = dataproductthisday[i].SellNumber;
+                    dataproductthisday[i].TableId = dataproductthisday[i].Day + '-' + dataproductthisday[i].Month + '-' + dataproductthisday[i].Year;
+                    dataproductthisday[i].TableData = dataproductthisday[i].SellNumber;
+                    dataproductthisday[i].TableNameData = dataproductthisday[i].ProductName;
+                }
+                for (let i = 0; i < dataproductprevday.length; i++) {
+                    dataproductprevday[i].ChartId = dataproductprevday[i].ProductName;
+                    dataproductprevday[i].ChartData = dataproductprevday[i].SellNumber;
+                    dataproductprevday[i].TableId = dataproductprevday[i].Day + '-' + dataproductprevday[i].Month + '-' + dataproductprevday[i].Year;
+                    dataproductprevday[i].TableData = dataproductprevday[i].SellNumber;
+                    dataproductprevday[i].TableNameData = dataproductprevday[i].ProductName;
+                }
+                // Sắp xếp lại từ Cao -> thấp cho mảng product Hôm nay - Hôm qua
+                for (let i = 0; i < dataproductthisday.length - 1; i++) {
+                    for (let j = i + 1; j < dataproductthisday.length; j++) {
+                        if (dataproductthisday[i].ChartData < dataproductthisday[j].ChartData) {
+                            let temp = dataproductthisday[i];
+                            dataproductthisday[i] = dataproductthisday[j];
+                            dataproductthisday[j] = temp;
+                        }
+                    }
+                }
+                for (let i = 0; i < dataproductprevday.length - 1; i++) {
+                    for (let j = i + 1; j < dataproductprevday.length; j++) {
+                        if (dataproductprevday[i].ChartData < dataproductprevday[j].ChartData) {
+                            let temp = dataproductprevday[i];
+                            dataproductprevday[i] = dataproductprevday[j];
+                            dataproductprevday[j] = temp;
+                        }
+                    }
+                }
+                // Gộp vào cùng nhóm Product
+                var lsdataproductthismonth = [];
+                var lsdataproductprevmonth = [];
+                let datapaintingproductthismonth = dataproductthismonth;
+                var dataproductthismonthformat = [];
+                for (let i = 0; i < datapaintingproductthismonth.length; i++) {
+                    let currentIndex = -1;
+                    for (let j = 0; j < dataproductthismonthformat.length; j++) {
+                        if (datapaintingproductthismonth[i].ProductId === dataproductthismonthformat[j].ProductId) {
+                            currentIndex = j;
+                            break;
+                        }
+                    }
+                    if (currentIndex === -1) {
+                        dataproductthismonthformat.push({
+                            ChartId: datapaintingproductthismonth[i].ProductName,
+                            ChartData: 0,
+                            ProductId: datapaintingproductthismonth[i].ProductId,
+                            ProductName: datapaintingproductthismonth[i].ProductName,
+                            Month: datapaintingproductthismonth[i].Month,
+                            TotalSellNumber: 0,
+                            TotalRevenue: 0,
+                            TableId: datapaintingproductthismonth[i].Day + '-' + datapaintingproductthismonth[i].Month + '-' + datapaintingproductthismonth[i].Year,
+                            TableNameData: datapaintingproductthismonth[i].ProductName,
+                            TableData:0,
+                            ListProductReport: []
+                        });
+                        currentIndex = dataproductthismonthformat.length - 1;
+                    }
+                    if (dataproductthismonthformat[currentIndex].ProductId === datapaintingproductthismonth[i].ProductId) {
+                        dataproductthismonthformat[currentIndex].ChartData = dataproductthismonthformat[currentIndex].ChartData + datapaintingproductthismonth[i].SellNumber;
+                        dataproductthismonthformat[currentIndex].TableData += datapaintingproductthismonth[i].SellNumber;
+                        dataproductthismonthformat[currentIndex].ListProductReport.push({
+                            ProductId: datapaintingproductthismonth[i].ProductId,
+                            Day: datapaintingproductthismonth[i].Day,
+                            Month: datapaintingproductthismonth[i].Month,
+                            Year: datapaintingproductthismonth[i].Year,
+                            ProductName: datapaintingproductthismonth[i].ProductName,
+                            Profit: datapaintingproductthismonth[i].Profit,
+                            SellNumber: datapaintingproductthismonth[i].SellNumber,
+                            ShopId: datapaintingproductthismonth[i].ShopId,
+                            ShopProductReportId: datapaintingproductthismonth[i].ShopProductReportId
+                        })
+                    }
+                }
+                // danh sách theo product
+                for (let index = 0; index < dataproductthismonthformat.length; index++) {
+                    lsdataproductthismonth.push(dataproductthismonthformat[index]);
+                }
+                // Sắp xếp lại từ Cao -> thấp
+                for (let i = 0; i < lsdataproductthismonth.length - 1; i++) {
+                    for (let j = i + 1; j < lsdataproductthismonth.length; j++) {
+                        if (lsdataproductthismonth[i].ChartData < lsdataproductthismonth[j].ChartData) {
+                            let temp = lsdataproductthismonth[i];
+                            lsdataproductthismonth[i] = lsdataproductthismonth[j];
+                            lsdataproductthismonth[j] = temp;
+                        }
+                    }
+                }
+                dataproductthismonth = lsdataproductthismonth;
+
+                // Gộp cho tháng trước
+                let datapaintingproductprevmonth = dataproductprevmonth;
+                var dataproductprevmonthformat = [];
+                for (let i = 0; i < datapaintingproductprevmonth.length; i++) {
+                    let currentIndex = -1;
+                    for (let j = 0; j < dataproductprevmonthformat.length; j++) {
+                        if (datapaintingproductprevmonth[i].ProductId === dataproductprevmonthformat[j].ProductId) {
+                            currentIndex = j;
+                            break;
+                        }
+                    }
+                    if (currentIndex === -1) {
+                        dataproductprevmonthformat.push({
+                            ChartId: datapaintingproductprevmonth[i].ProductName,
+                            ChartData: 0,
+                            ProductId: datapaintingproductprevmonth[i].ProductId,
+                            ProductName: datapaintingproductprevmonth[i].ProductName,
+                            Month: datapaintingproductprevmonth[i].Month,
+                            TotalSellNumber: 0,
+                            TotalRevenue: 0,
+                            TableId: datapaintingproductprevmonth[i].Day + '-' + datapaintingproductprevmonth[i].Month + '-' + datapaintingproductprevmonth[i].Year,
+                            TableNameData: datapaintingproductprevmonth[i].ProductName,
+                            TableData: 0,
+                            ListProductReport: []
+                        });
+                        currentIndex = dataproductprevmonthformat.length - 1;
+                    }
+                    if (dataproductprevmonthformat[currentIndex].ProductId === datapaintingproductprevmonth[i].ProductId) {
+                        dataproductprevmonthformat[currentIndex].ChartData = dataproductprevmonthformat[currentIndex].ChartData + datapaintingproductprevmonth[i].SellNumber;
+                        dataproductprevmonthformat[currentIndex].TableData += datapaintingproductprevmonth[i].SellNumber;
+                        dataproductprevmonthformat[currentIndex].ListProductReport.push({
+                            ProductId: datapaintingproductprevmonth[i].ProductId,
+                            Day: datapaintingproductprevmonth[i].Day,
+                            Month: datapaintingproductprevmonth[i].Month,
+                            Year: datapaintingproductprevmonth[i].Year,
+                            ProductName: datapaintingproductprevmonth[i].ProductName,
+                            Profit: datapaintingproductprevmonth[i].Profit,
+                            SellNumber: datapaintingproductprevmonth[i].SellNumber,
+                            ShopId: datapaintingproductprevmonth[i].ShopId,
+                            ShopProductReportId: datapaintingproductprevmonth[i].ShopProductReportId
+                        })
+                    }
+                }
+                // danh sách theo product
+                for (let index = 0; index < dataproductprevmonthformat.length; index++) {
+                    lsdataproductprevmonth.push(dataproductprevmonthformat[index]);
+                }
+                // Sắp xếp lại từ Cao -> thấp
+                for (let i = 0; i < lsdataproductprevmonth.length - 1; i++) {
+                    for (let j = i + 1; j < lsdataproductprevmonth.length; j++) {
+                        if (lsdataproductprevmonth[i].ChartData < lsdataproductprevmonth[j].ChartData) {
+                            let temp = lsdataproductprevmonth[i];
+                            lsdataproductprevmonth[i] = lsdataproductprevmonth[j];
+                            lsdataproductprevmonth[j] = temp;
+                        }
+                    }
+                }
+                dataproductprevmonth = lsdataproductprevmonth;
+
+                // Trùng sản phẩm , khác ngày thì gom lại
+            } else {
+                Loading.Hide();
+                alert(rs.Message);
+                return;
+            }
+            showForInitPage();
+        }
+        InitPage();
+        // chọn loại biểu đồ hiển thị
+        var displaytype = function (displaytype) {
+            var dataIdshow = $(displaytype).data("display");
+            $(displaytype).closest(".list-item-sidebar").find(".active").removeClass("active");
+            $(displaytype).addClass("active");
+            $("#" + dataIdshow).slideDown("slide");
+            switch (dataIdshow) {
+                case "chartshow":
+                    $('.export-excel').slideUp("slide");
+                    $(".content-report").find('.document-report').hide();
+                    showForInitPage();
+                    break;
+                case "documentshow":
+                    $('.export-excel').slideDown("slide");
+                    $(".content-report").find('.chart-report').hide();
+                    showForInitPage();
+                    break;
+            }
+        }
+        // chọn loại data hiển thị
+        var showtype = function (item) {
+            $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
+            $(item).addClass('active');
+            if ($('#sidebartime').find('.active').hasClass('custom-day')) {
+                chossedaypicker();
+            }
+            else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
+                let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
+                inputVal = inputVal.split('đến');
+                chosseaboutdaypicker(inputVal[0], inputVal[1]);
+            }
+            // không chọn ngày thì ở trong đây
+            else if (!($(item).hasClass('custom-day') || $(item).hasClass('custom-time'))) {
+                let dataitemtypeshow = $('.list-item-sidebar').find('.active').data("display");
+                let dataclassify = $('#sidebarclassify').find('.active').data("item");
+                let datatime = $('#sidebartime').find('.active').data("time");
+                if (dataclassify === "" || datatime === "") { alert("Có lỗi sảy ra khi tạo báo cáo !"); return; }
+                if (dataitemtypeshow === "chartshow") {
+                    paintingchart(eval("data" + dataclassify + datatime));
+                }
+                else if (dataitemtypeshow === "documentshow") {
+                    paintingdocument(eval("data" + dataclassify + datatime));
+                }
+            }
+        }
+
+        // hàm show ngày + click chọn ngày , khoảng ngày
+        $(function () {
+            $('input[name="chossedaypicker"]').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                singleDatePicker: true,
+                showDropdowns: true,
+                minDate: new Date(2022, 11, 1),
+                minYear: 2022,
+                maxYear: parseInt(moment().format('YYYY'), 10)
+            });
+            $('input[name="chossedaypicker"]').on('apply.daterangepicker', function (ev, picker) {
+                chossedaypicker();
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            });
+        });
+        $(function () {
+            $('input[name="daterangepicker"]').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    separator: " đến "
+                },
+                opens: 'left',
+            }, function (start, end, label) {
+@*                let from = start.format('YYYY-MM-DD');
+                let to = end.format('YYYY-MM-DD');
+                chosseaboutdaypicker(from, to);*@
+               /// console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
+            });
+            $('input[name="daterangepicker"]').on('apply.daterangepicker', function (ev, picker) {
+                let from = picker.startDate.format('YYYY-MM-DD');
+                let to = picker.endDate.format('YYYY-MM-DD');
+                chosseaboutdaypicker(from, to);
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' đến ' + picker.endDate.format('YYYY-MM-DD'));
+            });
+        });
+
+        // vẽ theo ngày
+        var chosseday = function (item) {
+            $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
+            $(item).addClass('active');
+         if($(item).hasClass('custom-day')) {
+             $(item).siblings('input[name="chossedaypicker"]').click();
+            }
+
+        }
+        var chossedaypicker = function () {
+            let dataitemtypeshow = $('#sidebardisplay').find('.active').data("display");
+            listDataRevenueHourDayPicker = [];
+            listDataProfitHourDayPicker = [];
+            listDataProductDayPicker = [];
+            let time = $('input[name="chossedaypicker"]').val();
+            time = time.split('-');
+            let newTimeFormart = '';
+            for (let i = time.length; i > 0; i--) {
+                newTimeFormart += time[i - 1];
+                if (i > 1) {
+                    newTimeFormart += '-';
+                }
+            }
+            newTimeFormart = ConvertTime(newTimeFormart);
+            newTimeFormart = new Date(newTimeFormart);
+            let dayPicker = newTimeFormart.getDate();
+            let monthPicker = newTimeFormart.getMonth() + 1;
+            for (let indexHour = 0; indexHour < listDataHour.length; indexHour++) {
+                if (listDataHour[indexHour].Day === dayPicker && listDataHour[indexHour].Month === monthPicker) {
+                    listDataRevenueHourDayPicker.push(
+                        {
+                            ChartId: listDataHour[indexHour].Hour + ' h',
+                            ChartData: listDataHour[indexHour].Revenue,
+                            TableId: listDataHour[indexHour].Hour + ' h',
+                            TableData: listDataHour[indexHour].Revenue
+                        });
+                    listDataProfitHourDayPicker.push(
+                        {
+                            ChartId: listDataHour[indexHour].Hour + ' h',
+                            ChartData: listDataHour[indexHour].Revenue - (listDataHour[indexHour].ProductCost + listDataHour[indexHour].DiscountCost),
+                            TableId: listDataHour[indexHour].Hour + ' h',
+                            TableData: listDataHour[indexHour].Revenue - (listDataHour[indexHour].ProductCost + listDataHour[indexHour].DiscountCost)
+                        });
+                }
+            }
+            for (let indexProduct = 0; indexProduct < listDataProduct.length; indexProduct++) {
+                if (listDataProduct[indexProduct].Day === dayPicker && listDataProduct[indexProduct].Month === monthPicker) {
+                    listDataProductDayPicker.push(
+                        {
+                            ChartId: listDataProduct[indexProduct].ProductName,
+                            ChartData: listDataProduct[indexProduct].SellNumber,
+                            TableId: listDataProduct[indexProduct].Day + '-' + listDataProduct[indexProduct].Month + '-' + listDataProduct[indexProduct].Year,
+                            TableData: listDataProduct[indexProduct].SellNumber,
+                            TableNameData: listDataProduct[indexProduct].ProductName
+                        });
+                }
+            }
+            console.log(listDataRevenueHourDayPicker);
+            console.log(listDataProfitHourDayPicker);
+            console.log(listDataProductDayPicker);
+            let item = $('#sidebarclassify').find('.active').data('item');
+            if (dataitemtypeshow === 'chartshow') {
+                switch (item) {
+                    case "revenue":
+                        paintingchart(listDataRevenueHourDayPicker);
+                        break;
+                    case "profit":
+                        paintingchart(listDataProfitHourDayPicker);
+                        break;
+                    case "product":
+                        paintingchart(listDataProductDayPicker);
+                        break;
+                }
+            } else if (dataitemtypeshow === "documentshow") {
+                switch (item) {
+                    case "revenue":
+                        paintingdocument(listDataRevenueHourDayPicker);
+                        break;
+                    case "profit":
+                        paintingdocument(listDataProfitHourDayPicker);
+                        break;
+                    case "product":
+                        paintingdocument(listDataProductDayPicker);
+                        break;
+                }
+            }
+        }
+
+        // vẽ theo khoảng ngày
+        var chosseaboutday = function (item) {
+            $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
+            $(item).addClass('active');
+            if ($(item).hasClass('custom-time')) {
+                $(item).siblings('input[name="daterangepicker"]').click();
+            }
+        }
+        var chosseaboutdaypicker = async function (from, to) {
+            let urlData = '';
+            let rq;
+            let rs;
+            let dataitemtypeshow = $('.list-item-sidebar').find('.active').data("display");
+            if (dataitemtypeshow === "documentshow") {
+                $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo khoảng ngày').toLowerCase());
+            }
+            if (from !== null && to !== null) {
+                let item = $('#sidebarclassify').find('.active').data('item');
+                if (item === "revenue" || item === "profit") {
+                    urlData = '/api/ShopReport/GetListShopReportByAboutTime?fromTime=' + from + '&toTime=' + to;
+                } else if (item === "product") {
+                    urlData = '/api/ShopReport/GetListShopProductReportByAboutTime?fromTime=' + from + '&toTime=' + to;
+                }
+                rq = await fetch(urlData, {
+                    method: 'get',
+                    headers: Enum.OptionHeaderDefault
+                });
+                rs = await rq.json();
+                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                    switch (item) {
+                        case "revenue":
+                            listDataRevenueAboutDayPicker = [];
+                            console.log(rs.data);
+                            for (let index = 0; index < rs.data.length; index++) {
+                                let _item = rs.data[index];
+                                listDataRevenueAboutDayPicker.push(
+                                    {
+                                        ChartId: _item.Day + '/' + _item.Month,
+                                        ChartData: _item.Revenue,
+                                        TableId: _item.Day + '-' + _item.Month + '-' + _item.Year,
+                                        TableData: _item.Revenue
+                                    });
+                            }
+                            switch (dataitemtypeshow) {
+                                case "chartshow":
+                                    paintingchart(listDataRevenueAboutDayPicker);
+                                    break;
+
+                                case "documentshow":
+                                    paintingdocument(listDataRevenueAboutDayPicker);
+                                    break;
+                            }
+                            break;
+                        case "profit":
+                            listDataProfitAboutDayPicker = [];
+                            console.log(rs.data);
+                            for (let index = 0; index < rs.data.length; index++) {
+                                let _item = rs.data[index];
+                                listDataProfitAboutDayPicker.push(
+                                    {
+                                        ChartId: _item.Day + '/' + _item.Month,
+                                        ChartData: _item.Revenue - (_item.ProductCost + _item.DiscountCost),
+                                        TableId: _item.Day + '-' + _item.Month + '-' + _item.Year,
+                                        TableData: _item.Revenue - (_item.ProductCost + _item.DiscountCost)
+                                    });
+                            }
+                            switch (dataitemtypeshow) {
+                                case "chartshow":
+                                    paintingchart(listDataProfitAboutDayPicker);
+                                    break;
+
+                                case "documentshow":
+                                    paintingdocument(listDataProfitAboutDayPicker);
+                                    break;
+                            }
+                            break;
+                        case "product":
+                            listDataProductAboutDayPicker = [];
+                            console.log(rs.data);
+                            for (let index = 0; index < rs.data.length; index++) {
+                                let _item = rs.data[index];
+                                listDataProductAboutDayPicker.push(
+                                    {
+                                        ChartId: _item.Day + '/' + _item.Month,
+                                        ChartData: _item.SellNumber,
+                                        TableId: _item.Day + '-' + _item.Month + '-' + _item.Year,
+                                        TableData: _item.SellNumber,
+                                        TableNameData: _item.ProductName
+                                    });
+                            }
+                            switch (dataitemtypeshow) {
+                                case "chartshow":
+                                    paintingchart(listDataProductAboutDayPicker);
+                                    break;
+
+                                case "documentshow":
+                                    paintingdocument(listDataProductAboutDayPicker);
+                                    break;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        // vẽ khi truyền data vào dạng [{ChartId:key, ChartData: data}]
+        var datachart = null;
+        var paintingchart = function (datapaint) {
+            let dataclassify = $('#sidebarclassify').find('.active').data("item");
+            var chart = '#chartpainting';
+            var labels = [];
+            var datas = [];
+            for (let i = 0; i < datapaint.length; i++) {
+                labels.push(datapaint[i].ChartId);
+                datas.push(datapaint[i].ChartData);
+            }
+            'use strict'
+
+            var ticksStyle = {
+                fontColor: '#495057',
+                fontStyle: 'bold'
+            }
+
+            var mode = 'index'
+            var intersect = true
+
+            var $totalcostChart = $(chart)
+            // eslint-disable-next-line no-unused-vars
+            if (datachart !== null) datachart.destroy();
+            datachart = new Chart($totalcostChart, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            backgroundColor: '#007bff',
+                            borderColor: '#007bff',
+                            data: datas
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        mode: mode,
+                        intersect: intersect,
+                        callbacks: {
+                            label: function (tooltipItem, datas) {
+                                switch (dataclassify) {
+                                    case "product":
+                                        return NumberFormat(tooltipItem.yLabel) + ' sản phẩm';
+                                        break;
+                                    default:
+                                        if (tooltipItem.yLabel >= 1000000) {
+                                            return Number(tooltipItem.yLabel / 1000000).toFixed(2).replace(/./g, function (c, i, a) {
+                                                return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+                                            }) + ' tr';
+                                        } else {
+                                            return NumberFormat(tooltipItem.yLabel)
+                                        }
+                                }
+                            }
+                        }
+                    },
+                    hover: {
+                        mode: mode,
+                        intersect: intersect
+                    },
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            // display: false,
+
+                            ticks: $.extend({
+                                beginAtZero: true,
+                                // Include a dollar sign in the ticks
+                                callback: function (value) {
+                                    if ((value + '').length > 6) {
+                                        value /= 1000000
+                                        value += ' tr'
+                                    } else {
+                                        value /= 1000
+                                        if (value !== 0) value += 'k';
+                                    }
+                                    return value
+                                }
+                            }, ticksStyle)
+                        }],
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: true,
+                                // set width của grid thì có ô vuông
+                                lineWidth: '4px'
+                            },
+                            ticks: ticksStyle,
+                            barThickness: 30,
+                            maxBarThickness: 40
+                        }]
+                    }
+                }
+            })
+        }
+
+        // hàm này vẽ lần đầu (Hoặc vẽ khi quay lại tab)
+        var showForInitPage = function () {
+            let dataitemtypeshow = $('#sidebardisplay').find('.active').data("display");
+            let dataclassify = $('#sidebarclassify').find('.active').data("item");
+            let datatime = $('#sidebartime').find('.active').data("time");
+            if (dataclassify === "" || datatime === "") { alert("Có lỗi sảy ra khi tạo báo cáo !"); return; }
+            if (dataitemtypeshow === "chartshow") {
+                if ($('#sidebartime').find('.active').hasClass('custom-day')) {
+                    chossedaypicker();
+                }
+                else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
+                    let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
+                    inputVal = inputVal.split('đến');
+                    chosseaboutdaypicker(inputVal[0], inputVal[1]);
+                } else {
+                    paintingchart(eval("data" + dataclassify + datatime))
+                }
+            } else if (dataitemtypeshow === "documentshow") {
+                if ($('#sidebartime').find('.active').hasClass('custom-day')) {
+                    chossedaypicker();
+                }
+                else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
+                    let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
+                    inputVal = inputVal.split('đến');
+                    chosseaboutdaypicker(inputVal[0], inputVal[1]);
+                } else {
+                    paintingdocument(eval("data" + dataclassify + datatime))
+                }
+            }
+        }
+
+
+        // vẽ bảng (document)
+        var paintingdocument = function (datapaint) {
+            if ($('#sidebartime').find('.active').hasClass('custom-day')) {
+                $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo ngày').toLowerCase());
+                $('#documenttime').text('Thời gian : ' + $('input[name=chossedaypicker]').val());
+            }
+            else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
+                $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo khoảng ngày').toLowerCase());
+                $('#documenttime').text('Thời gian : ' + $('input[name=daterangepicker]').val());
+            } else {
+                $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' ' + $('#sidebartime').find('.active').find('.text').text()).toLowerCase());
+                $('#documenttime').text('Thời gian : ' + $('#sidebartime').find('.active').find('.text').text().toLowerCase());
+            }
+            $('#tabledocument').html('');
+            let dataclassify = $('#sidebarclassify').find('.active').data("item");
+            let html = '';
+            html += '<tr>';
+            switch (dataclassify) {
+                case "revenue":
+                    html += '<th style="text-align:center">Thời gian</th>';
+                    html += '<th style="text-align:center">Doanh thu</th>';
+                    break;
+                case "profit":
+                    html += '<th style="text-align:center">Thời gian</th>';
+                    html += '<th style="text-align:center">Lợi nhuận</th>';
+                    break;
+                case "product":
+                    html += '<th>Thời gian</th>';
+                    html += '<th>Số lượng bán</th>';
+                    html += '<th>Sản phẩm</th>';
+                    break;
+            }
+            html += '</tr>';
+            html += '<tr><td></td>';
+            let total = 0;
+            for (let index = 0; index < datapaint.length; index++) {
+                total += datapaint[index].TableData;
+            }
+            html += '<td style="text-align:center">' + NumberFormat(total) + '</td>';
+            if (dataclassify === "product") {
+                html += '<td></td>';
+            }
+            html += '</tr>';
+            for (let index = 0; index < datapaint.length; index++) {
+                if (dataclassify !== "product") {
+                    html += '<tr><td style="text-align:center">' + GetObjectProperty(datapaint[index], 'TableId') + '</td>';
+                    html += '<td style="text-align:center">' + NumberFormat(datapaint[index].TableData) + '</td>';
+                } else {
+                    html += '<tr><td>' + GetObjectProperty(datapaint[index], 'TableId') + '</td>';
+                    html += '<td>' + NumberFormat(datapaint[index].TableData) + '</td>';
+                    html += '<td>' + GetObjectProperty(datapaint[index], 'TableNameData') + '</td>';
+                }
+                html += '</tr>';
+            }
+            $('#tabledocument').append(html);
+        }
+
+
+        var downloadExportFileExcel = async function () {
+            Loading.Show(2000);
+            let sidebardisplay = $('#sidebardisplay').find('.active').data('display');
+            let sidebarclassify = $('#sidebarclassify').find('.active').data('item');
+
+            let model = {
+                TypeShowReport: sidebarclassify,
+                ListShopReport: []
+            };
+            let datatable = $('#tabledocument').find('tr');
+            for (let i = 1; i < datatable.length; i++) {
+                let datatablechild = $(datatable[i]).find('td');
+                model.ListShopReport.push({
+                    ReportTime: $(datatablechild[0]).text(),
+                    Revenue: $(datatablechild[1]).text(),
+                    Profit: $(datatablechild[1]).text(),
+                    NumberProduct: $(datatablechild[1]).text(),
+                    NameProduct: $(datatablechild[2]).text()
+                });
+            }
+            if (confirm("Xác nhận tải xuống !")) {
+                let rq = await fetch('/api/ShopReport/ExportFileExcelReport', {
+                    method: 'POST',
+                    headers: Enum.OptionHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rq.blob();
+                var fileName = "Bao-cao-ban-hang.xlsx";
+                if (window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(rs, fileName);
+                } else {
+                    const a = document.createElement('a');
+                    document.body.appendChild(a);
+                    const url = window.URL.createObjectURL(rs);
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    }, 0)
+                }
+                Loading.Hide();
+                alert("File của bạn đang được tải xuống !");
+            }
+            Loading.Hide();
+        }
+    </script>
+
+}
