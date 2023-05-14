@@ -269,19 +269,19 @@
                     <h3 class="header-item-sidebar">Thời gian</h3>
                     <div class="list-item-sidebar" id="sidebartime">
                         @*<div class="item" onclick="showtype(this);" data-time="thisday">
-                            <div class="icon-check">
-                                <div class="circle-icon">
+                                <div class="icon-check">
+                                    <div class="circle-icon">
+                                    </div>
                                 </div>
+                                <div class="text">Hôm nay</div>
                             </div>
-                            <div class="text">Hôm nay</div>
-                        </div>
-                        <div class="item" onclick="showtype(this);" data-time="prevday">
-                            <div class="icon-check">
-                                <div class="circle-icon">
+                            <div class="item" onclick="showtype(this);" data-time="prevday">
+                                <div class="icon-check">
+                                    <div class="circle-icon">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="text">Hôm qua</div>
-                        </div>*@
+                                <div class="text">Hôm qua</div>
+                            </div>*@
                         <div class="item active" onclick="showtype(this);" data-time="thismonth">
                             <div class="icon-check">
                                 <div class="circle-icon">
@@ -365,7 +365,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <script src="/Scripts/helper.js"></script>
+    @* <script src="/Scripts/helper.js"></script>*@
     <script>
         // time
         var now = new Date();
@@ -377,35 +377,63 @@
         prevYear.setFullYear(now.getFullYear() - 1);
 
         // Doanh thu
-        var datarevenuethisday = [];
-        var datarevenueprevday = [];
-        var datarevenuethismonth = [];
-        var datarevenueprevmonth = [];
-        var datarevenuethisyear = [];
-        var datarevenueprevyear = [];
+        /*var datathismonth = {
+            Revenue = 0,
+            listDataThisMonth =[]
+        };
+        var dataprevmonth = {
+            Revenue = 0,
+            listDataPrevMonth =[]
+        };
+        var datathisyear = {
+            Revenue = 0,
+            listDataThisYear =[]
+        };
+        var dataprevyear = {
+            Revenue = 0,
+            listDataPrevYear =[]
+        };
+*/
 
-        // pick ngày
-        var listDataRevenueHourDayPicker = [];
 
+        const InitPage = async function () {
+            let rq = await fetch('/api/AdminReport/GetAllReportMonthYear', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
 
-        // pick khoảng ngày
-        var listDataRevenueAboutDayPicker = [];
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let reportThisMonth = rs.data.ListReportThisMonth;
+                let reportPrevMonth = rs.data.ListReportPrevMonth;
+                let reportThisYear = rs.data.ListReportThisYear;
+                let reportPrevYear = rs.data.ListReportPrevYear;
 
+                console.log(rs.data);
 
-        var listDataHour = [];
-        var listDataDaily = [];
-        var listDataProduct = [];
+                //Báo cáo tháng này
+                datathismonth.Revenue = reportThisMonth.TotalPrice;
+                for (let thismonth = 0; thismonth < reportThisMonth.ListAllReportDaily.length; thismonth++) {
 
+                }
 
-        var InitPage = async function () {
+                //Báo cáo tháng trước
+                dataprevmonth.Revenue = reportPrevMonth.TotalPrice;
 
-            showForInitPage();
+                //Báo cáo năm này
+                datathisyear.Revenue = reportThisYear.TotalPrice;
+
+                //Báo cáo năm trước
+                dataprevyear.Revenue = reportPrevYear.TotalPrice;
+            }
+           // showForInitPage();
         }
         InitPage();
 
 
         // chọn loại data hiển thị
-        var showtype = function (item) {
+        /*var showtype = function (item) {
             $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
             $(item).addClass('active');
             if ($('#sidebartime').find('.active').hasClass('custom-day')) {
@@ -423,10 +451,10 @@
                 console.log(datatime);
                 paintingdocument(eval("data" + datatime));
             }
-        }
+        }*/
 
         // hàm show ngày + click chọn ngày , khoảng ngày
-        $(function () {
+        /*$(function () {
             $('input[name="chossedaypicker"]').daterangepicker({
                 locale: {
                     format: 'YYYY-MM-DD'
@@ -449,22 +477,19 @@
                     separator: " đến "
                 },
                 opens: 'left',
-            }, function (start, end, label) {
-@*                let from = start.format('YYYY-MM-DD');
-                let to = end.format('YYYY-MM-DD');
-                chosseaboutdaypicker(from, to);*@
-               /// console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
-            });
+            }, function (start, end, label) {});
             $('input[name="daterangepicker"]').on('apply.daterangepicker', function (ev, picker) {
                 let from = picker.startDate.format('YYYY-MM-DD');
                 let to = picker.endDate.format('YYYY-MM-DD');
+                console.log(from);
+                console.log(to);
                 chosseaboutdaypicker(from, to);
                 $(this).val(picker.startDate.format('YYYY-MM-DD') + ' đến ' + picker.endDate.format('YYYY-MM-DD'));
             });
-        });
+        });*/
 
         // vẽ theo ngày
-        var chosseday = function (item) {
+        /*var chosseday = function (item) {
             $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
             $(item).addClass('active');
             if($(item).hasClass('custom-day')) {
@@ -502,78 +527,78 @@
             }
             console.log(listDataRevenueHourDayPicker);
             paintingdocument(listDataRevenueHourDayPicker);
-        }
+        }*/
 
         // vẽ theo khoảng ngày
-        var chosseaboutday = function (item) {
+        /*var chosseaboutday = function (item) {
             $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
             $(item).addClass('active');
             if ($(item).hasClass('custom-time')) {
                 $(item).siblings('input[name="daterangepicker"]').click();
             }
-        }
-        var chosseaboutdaypicker = async function (from, to) {
-            let urlData = '';
-            let rq;
-            let rs;
-            
-            $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo khoảng ngày').toLowerCase());
-            if (from !== null && to !== null) {
-                let item = $('#sidebarclassify').find('.active').data('item');
-                if (item === "revenue" || item === "profit") {
-                    urlData = '/api/ShopReport/GetListShopReportByAboutTime?fromTime=' + from + '&toTime=' + to;
-                } else if (item === "product") {
-                    urlData = '/api/ShopReport/GetListShopProductReportByAboutTime?fromTime=' + from + '&toTime=' + to;
-                }
-                rq = await fetch(urlData, {
-                    method: 'get',
-                    headers: Enum.OptionHeaderDefault
-                });
-                rs = await rq.json();
-                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                    switch (item) {
-                        case "revenue":
-                            listDataRevenueAboutDayPicker = [];
-                            console.log(rs.data);
-                            for (let index = 0; index < rs.data.length; index++) {
-                                let _item = rs.data[index];
-                                listDataRevenueAboutDayPicker.push(
-                                    {
-                                        ChartId: _item.Day + '/' + _item.Month,
-                                        ChartData: _item.Revenue,
-                                        TableId: _item.Day + '-' + _item.Month + '-' + _item.Year,
-                                        TableData: _item.Revenue
-                                    });
-                            }
-                            paintingdocument(listDataRevenueAboutDayPicker);
-                            break;
-                    }
-                }
-            }
-        }
+        }*/
+        /* var chosseaboutdaypicker = async function (from, to) {
+             let urlData = '';
+             let rq;
+             let rs;
+
+             $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo khoảng ngày').toLowerCase());
+             if (from !== null && to !== null) {
+                 let item = $('#sidebarclassify').find('.active').data('item');
+                 if (item === "revenue" || item === "profit") {
+                     urlData = '/api/ShopReport/GetListShopReportByAboutTime?fromTime=' + from + '&toTime=' + to;
+                 } else if (item === "product") {
+                     urlData = '/api/ShopReport/GetListShopProductReportByAboutTime?fromTime=' + from + '&toTime=' + to;
+                 }
+                 rq = await fetch(urlData, {
+                     method: 'get',
+                     headers: Enum.OptionHeaderDefault
+                 });
+                 rs = await rq.json();
+                 if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                     switch (item) {
+                         case "revenue":
+                             listDataRevenueAboutDayPicker = [];
+                             console.log(rs.data);
+                             for (let index = 0; index < rs.data.length; index++) {
+                                 let _item = rs.data[index];
+                                 listDataRevenueAboutDayPicker.push(
+                                     {
+                                         ChartId: _item.Day + '/' + _item.Month,
+                                         ChartData: _item.Revenue,
+                                         TableId: _item.Day + '-' + _item.Month + '-' + _item.Year,
+                                         TableData: _item.Revenue
+                                     });
+                             }
+                             paintingdocument(listDataRevenueAboutDayPicker);
+                             break;
+                     }
+                 }
+             }
+         }*/
 
         // vẽ khi truyền data vào dạng [{ChartId:key, ChartData: data}]
         var datachart = null;
 
-        // hàm này vẽ lần đầu (Hoặc vẽ khi quay lại tab)
-        var showForInitPage = function () {
-            let datatime = $('#sidebartime').find('.active').data("time");
-            if (datatime === "") { alert("Có lỗi sảy ra khi tạo báo cáo !"); return; }
-            if ($('#sidebartime').find('.active').hasClass('custom-day')) {
-                chossedaypicker();
-            }
-            else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
-                let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
-                inputVal = inputVal.split('đến');
-                chosseaboutdaypicker(inputVal[0], inputVal[1]);
-            } else {
-                paintingdocument(eval("data" + datatime))
-            }
-        }
+            // hàm này vẽ lần đầu (Hoặc vẽ khi quay lại tab)
+        /* var showForInitPage = function () {
+             let datatime = $('#sidebartime').find('.active').data("time");
+             if (datatime === "") { alert("Có lỗi sảy ra khi tạo báo cáo !"); return; }
+             if ($('#sidebartime').find('.active').hasClass('custom-day')) {
+                 chossedaypicker();
+             }
+             else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
+                 let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
+                 inputVal = inputVal.split('đến');
+                 chosseaboutdaypicker(inputVal[0], inputVal[1]);
+             } else {
+                 paintingdocument(eval("data" + datatime))
+             }
+         }
+*/
 
-
-        // vẽ bảng (document)
-        var paintingdocument = function (datapaint) {
+            // vẽ bảng (document)
+        /*var paintingdocument = function (datapaint) {
             if ($('#sidebartime').find('.active').hasClass('custom-day')) {
                 $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo ngày').toLowerCase());
                 $('#documenttime').text('Thời gian : ' + $('input[name=chossedaypicker]').val());
@@ -597,7 +622,7 @@
                 total += datapaint[index].TableData;
             }
             html += '<td style="text-align:center">' + NumberFormat(total) + '</td>';
-            
+
             html += '</tr>';
             for (let index = 0; index < datapaint.length; index++) {
                 html += '<tr><td style="text-align:center">' + GetObjectProperty(datapaint[index], 'TableId') + '</td>';
@@ -605,53 +630,53 @@
                 html += '</tr>';
             }
             $('#tabledocument').append(html);
-        }
+        }*/
 
 
-        var downloadExportFileExcel = async function () {
-            Loading.Show(2000);
+        /* var downloadExportFileExcel = async function () {
+             Loading.Show(2000);
 
-            let model = {
-                ListShopReport: []
-            };
-            let datatable = $('#tabledocument').find('tr');
-            for (let i = 1; i < datatable.length; i++) {
-                let datatablechild = $(datatable[i]).find('td');
-                model.ListShopReport.push({
-                    ReportTime: $(datatablechild[0]).text(),
-                    Revenue: $(datatablechild[1]).text(),
-                    Profit: $(datatablechild[1]).text(),
-                    NumberProduct: $(datatablechild[1]).text(),
-                    NameProduct: $(datatablechild[2]).text()
-                });
-            }
-            if (confirm("Xác nhận tải xuống !")) {
-                let rq = await fetch('/api/ShopReport/ExportFileExcelReport', {
-                    method: 'POST',
-                    headers: Enum.OptionHeaderDefault,
-                    body: JSON.stringify(model)
-                });
-                let rs = await rq.blob();
-                var fileName = "Bao-cao-ban-hang.xlsx";
-                if (window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveOrOpenBlob(rs, fileName);
-                } else {
-                    const a = document.createElement('a');
-                    document.body.appendChild(a);
-                    const url = window.URL.createObjectURL(rs);
-                    a.href = url;
-                    a.download = fileName;
-                    a.click();
-                    setTimeout(() => {
-                        window.URL.revokeObjectURL(url);
-                        document.body.removeChild(a);
-                    }, 0)
-                }
-                Loading.Hide();
-                alert("File của bạn đang được tải xuống !");
-            }
-            Loading.Hide();
-        }
+             let model = {
+                 ListShopReport: []
+             };
+             let datatable = $('#tabledocument').find('tr');
+             for (let i = 1; i < datatable.length; i++) {
+                 let datatablechild = $(datatable[i]).find('td');
+                 model.ListShopReport.push({
+                     ReportTime: $(datatablechild[0]).text(),
+                     Revenue: $(datatablechild[1]).text(),
+                     Profit: $(datatablechild[1]).text(),
+                     NumberProduct: $(datatablechild[1]).text(),
+                     NameProduct: $(datatablechild[2]).text()
+                 });
+             }
+             if (confirm("Xác nhận tải xuống !")) {
+                 let rq = await fetch('/api/ShopReport/ExportFileExcelReport', {
+                     method: 'POST',
+                     headers: Enum.OptionHeaderDefault,
+                     body: JSON.stringify(model)
+                 });
+                 let rs = await rq.blob();
+                 var fileName = "Bao-cao-ban-hang.xlsx";
+                 if (window.navigator.msSaveOrOpenBlob) {
+                     window.navigator.msSaveOrOpenBlob(rs, fileName);
+                 } else {
+                     const a = document.createElement('a');
+                     document.body.appendChild(a);
+                     const url = window.URL.createObjectURL(rs);
+                     a.href = url;
+                     a.download = fileName;
+                     a.click();
+                     setTimeout(() => {
+                         window.URL.revokeObjectURL(url);
+                         document.body.removeChild(a);
+                     }, 0)
+                 }
+                 Loading.Hide();
+                 alert("File của bạn đang được tải xuống !");
+             }
+             Loading.Hide();
+         }*/
     </script>
 
 }

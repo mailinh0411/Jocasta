@@ -267,8 +267,6 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-
-            if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
 
             var _index = searchModel.CurrentPage * parseInt(searchModel.RowPerPage) - searchModel.RowPerPage + 1;
@@ -372,7 +370,7 @@
                 headers: Enum.OptionHeaderDefault
             });
             let rs = await rq.json();
-            if (CheckErrorResponse(rs) === false) return;
+            if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
 
                 _listRoomCategory = rs.data;
