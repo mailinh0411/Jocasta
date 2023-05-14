@@ -146,6 +146,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminDayRoomController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminReportController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRoomController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminServiceController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\ApiAdminBaseController.cs" />

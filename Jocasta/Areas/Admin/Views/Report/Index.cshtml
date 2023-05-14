@@ -268,7 +268,7 @@
                 <div class="item-sidebar item-time">
                     <h3 class="header-item-sidebar">Thời gian</h3>
                     <div class="list-item-sidebar" id="sidebartime">
-                        <div class="item" onclick="showtype(this);" data-time="thisday">
+                        @*<div class="item" onclick="showtype(this);" data-time="thisday">
                             <div class="icon-check">
                                 <div class="circle-icon">
                                 </div>
@@ -281,7 +281,7 @@
                                 </div>
                             </div>
                             <div class="text">Hôm qua</div>
-                        </div>
+                        </div>*@
                         <div class="item active" onclick="showtype(this);" data-time="thismonth">
                             <div class="icon-check">
                                 <div class="circle-icon">
@@ -352,7 +352,7 @@
                         </table>
                     </div>
                     <div class="footer-document">
-                        Địa chỉ shop : ...
+                        The Jocasta Mai Linh Hotel
                     </div>
                 </div>
             </div>
@@ -420,6 +420,7 @@
             else if (!($(item).hasClass('custom-day') || $(item).hasClass('custom-time'))) {
                 let datatime = $('#sidebartime').find('.active').data("time");
                 if (datatime === "") { alert("Có lỗi xảy ra khi tạo báo cáo !"); return; }
+                console.log(datatime);
                 paintingdocument(eval("data" + datatime));
             }
         }
@@ -481,6 +482,8 @@
                     newTimeFormart += '-';
                 }
             }
+
+            console.log(newTimeFormart);
             newTimeFormart = ConvertTime(newTimeFormart);
             newTimeFormart = new Date(newTimeFormart);
             let dayPicker = newTimeFormart.getDate();
@@ -554,32 +557,17 @@
 
         // hàm này vẽ lần đầu (Hoặc vẽ khi quay lại tab)
         var showForInitPage = function () {
-            let dataitemtypeshow = $('#sidebardisplay').find('.active').data("display");
-            let dataclassify = $('#sidebarclassify').find('.active').data("item");
             let datatime = $('#sidebartime').find('.active').data("time");
-            if (dataclassify === "" || datatime === "") { alert("Có lỗi sảy ra khi tạo báo cáo !"); return; }
-            if (dataitemtypeshow === "chartshow") {
-                if ($('#sidebartime').find('.active').hasClass('custom-day')) {
-                    chossedaypicker();
-                }
-                else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
-                    let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
-                    inputVal = inputVal.split('đến');
-                    chosseaboutdaypicker(inputVal[0], inputVal[1]);
-                } else {
-                    paintingchart(eval("data" + dataclassify + datatime))
-                }
-            } else if (dataitemtypeshow === "documentshow") {
-                if ($('#sidebartime').find('.active').hasClass('custom-day')) {
-                    chossedaypicker();
-                }
-                else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
-                    let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
-                    inputVal = inputVal.split('đến');
-                    chosseaboutdaypicker(inputVal[0], inputVal[1]);
-                } else {
-                    paintingdocument(eval("data" + dataclassify + datatime))
-                }
+            if (datatime === "") { alert("Có lỗi sảy ra khi tạo báo cáo !"); return; }
+            if ($('#sidebartime').find('.active').hasClass('custom-day')) {
+                chossedaypicker();
+            }
+            else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
+                let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
+                inputVal = inputVal.split('đến');
+                chosseaboutdaypicker(inputVal[0], inputVal[1]);
+            } else {
+                paintingdocument(eval("data" + datatime))
             }
         }
 
