@@ -377,23 +377,23 @@
         prevYear.setFullYear(now.getFullYear() - 1);
 
         // Doanh thu
-        /*var datathismonth = {
-            Revenue = 0,
-            listDataThisMonth =[]
+        let datathismonth = {
+            Revenue: 0,
+            listDataThisMonth: []
         };
-        var dataprevmonth = {
-            Revenue = 0,
-            listDataPrevMonth =[]
+        let dataprevmonth = {
+            Revenue: 0,
+            listDataPrevMonth: []
         };
-        var datathisyear = {
-            Revenue = 0,
-            listDataThisYear =[]
+        let datathisyear = {
+            Revenue: 0,
+            listDataThisYear: []
         };
-        var dataprevyear = {
-            Revenue = 0,
-            listDataPrevYear =[]
+        let dataprevyear = {
+            Revenue: 0,
+            listDataPrevYear: []
         };
-*/
+
 
 
         const InitPage = async function () {
@@ -415,25 +415,50 @@
                 //Báo cáo tháng này
                 datathismonth.Revenue = reportThisMonth.TotalPrice;
                 for (let thismonth = 0; thismonth < reportThisMonth.ListAllReportDaily.length; thismonth++) {
-
+                    datathismonth.listDataThisMonth.push(
+                        {
+                            TableId: reportThisMonth.ListAllReportDaily[thismonth].Day + '-' + reportThisMonth.ListAllReportDaily[thismonth].Month + '-' + reportThisMonth.ListAllReportDaily[thismonth].Year,
+                            TableData: reportThisMonth.ListAllReportDaily[thismonth].TotalPrice
+                        });
                 }
 
                 //Báo cáo tháng trước
                 dataprevmonth.Revenue = reportPrevMonth.TotalPrice;
+                for (let prevmonth = 0; prevmonth < reportPrevMonth.ListAllReportDaily.length; prevmonth++) {
+                    dataprevmonth.listDataPrevMonth.push(
+                        {
+                            TableId: reportPrevMonth.ListAllReportDaily[prevmonth].Day + '-' + reportPrevMonth.ListAllReportDaily[prevmonth].Month + '-' + reportPrevMonth.ListAllReportDaily[prevmonth].Year,
+                            TableData: reportPrevMonth.ListAllReportDaily[prevmonth].TotalPrice
+                        });
+                }
 
                 //Báo cáo năm này
                 datathisyear.Revenue = reportThisYear.TotalPrice;
+                for (let thisyear = 0; thisyear < reportThisYear.ListAllReportMonth.length; thisyear++) {
+                    datathisyear.listDataThisYear.push(
+                        {
+                            TableId: 'Tháng ' + reportThisYear.ListAllReportMonth[thisyear].Month,
+                            TableData: reportThisYear.ListAllReportMonth[thisyear].TotalPrice
+                        });
+                }
 
                 //Báo cáo năm trước
                 dataprevyear.Revenue = reportPrevYear.TotalPrice;
+                for (let prevyear = 0; prevyear < reportPrevYear.ListAllReportMonth.length; prevyear++) {
+                    dataprevyear.listDataPrevYear.push(
+                        {
+                            TableId: 'Tháng ' + reportPrevYear.ListAllReportMonth[prevyear].Month,
+                            TableData: reportPrevYear.ListAllReportMonth[prevyear].TotalPrice
+                        });
+                }
             }
-           // showForInitPage();
+            showForInitPage();
         }
         InitPage();
 
 
         // chọn loại data hiển thị
-        /*var showtype = function (item) {
+        var showtype = function (item) {
             $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
             $(item).addClass('active');
             if ($('#sidebartime').find('.active').hasClass('custom-day')) {
@@ -451,10 +476,10 @@
                 console.log(datatime);
                 paintingdocument(eval("data" + datatime));
             }
-        }*/
+        }
 
         // hàm show ngày + click chọn ngày , khoảng ngày
-        /*$(function () {
+        $(function () {
             $('input[name="chossedaypicker"]').daterangepicker({
                 locale: {
                     format: 'YYYY-MM-DD'
@@ -486,10 +511,10 @@
                 chosseaboutdaypicker(from, to);
                 $(this).val(picker.startDate.format('YYYY-MM-DD') + ' đến ' + picker.endDate.format('YYYY-MM-DD'));
             });
-        });*/
+        });
 
         // vẽ theo ngày
-        /*var chosseday = function (item) {
+        var chosseday = function (item) {
             $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
             $(item).addClass('active');
             if($(item).hasClass('custom-day')) {
@@ -527,17 +552,17 @@
             }
             console.log(listDataRevenueHourDayPicker);
             paintingdocument(listDataRevenueHourDayPicker);
-        }*/
+        }
 
         // vẽ theo khoảng ngày
-        /*var chosseaboutday = function (item) {
+        var chosseaboutday = function (item) {
             $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
             $(item).addClass('active');
             if ($(item).hasClass('custom-time')) {
                 $(item).siblings('input[name="daterangepicker"]').click();
             }
-        }*/
-        /* var chosseaboutdaypicker = async function (from, to) {
+        }
+         var chosseaboutdaypicker = async function (from, to) {
              let urlData = '';
              let rq;
              let rs;
@@ -575,13 +600,13 @@
                      }
                  }
              }
-         }*/
+         }
 
         // vẽ khi truyền data vào dạng [{ChartId:key, ChartData: data}]
         var datachart = null;
 
-            // hàm này vẽ lần đầu (Hoặc vẽ khi quay lại tab)
-        /* var showForInitPage = function () {
+         // hàm này vẽ lần đầu (Hoặc vẽ khi quay lại tab)
+         var showForInitPage = function () {
              let datatime = $('#sidebartime').find('.active').data("time");
              if (datatime === "") { alert("Có lỗi sảy ra khi tạo báo cáo !"); return; }
              if ($('#sidebartime').find('.active').hasClass('custom-day')) {
@@ -595,10 +620,10 @@
                  paintingdocument(eval("data" + datatime))
              }
          }
-*/
+
 
             // vẽ bảng (document)
-        /*var paintingdocument = function (datapaint) {
+        var paintingdocument = function (datapaint) {
             if ($('#sidebartime').find('.active').hasClass('custom-day')) {
                 $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo ngày').toLowerCase());
                 $('#documenttime').text('Thời gian : ' + $('input[name=chossedaypicker]').val());
@@ -630,7 +655,7 @@
                 html += '</tr>';
             }
             $('#tabledocument').append(html);
-        }*/
+        }
 
 
         /* var downloadExportFileExcel = async function () {
