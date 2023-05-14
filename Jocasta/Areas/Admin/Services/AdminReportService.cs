@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Jocasta.Models;
+using Jocasta.Providers;
 using Jocasta.Services;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,29 @@ namespace Jocasta.Areas.Admin.Services
             int count = this._connection.Execute(query, new {price, id}, transaction);
             if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public object GetAllReportDaily(long fromDate, long toDate, IDbTransaction transaction = null)
+        {
+            string querySelect = "select * ";
+            string querySum = "select SUM(TotalPrice) ";
+            string query = "from [report_daily] where 1=1";
+            if(fromDate > 0 && toDate > 0)
+            {
+                DateTime from = HelperProvider.GetDateTime(fromDate);
+                DateTime to = HelperProvider.GetDateTime(toDate);
+
+                query += " and DATEFROMPARTS(Year, Month, Day) >= DATEFROMPARTS(" + from.Year + ", " + from.Month + ", " + from.Day + ")";
+                query += " and DATEFROMPARTS(Year, Month, Day) <= DATEFROMPARTS(" + to.Year + ", " + to.Month + ", " + to.Day + ")";
+            }
+
+            decimal? TotalAmount = this._connection.Query<decimal?>(querySum + query, new { fromDate, toDate }, transaction).FirstOrDefault();
+            List<ReportDaily> ListAllReportDaily = this._connection.Query<ReportDaily>(querySelect + query, new { fromDate, toDate }, transaction).ToList();
+            return new
+            {
+                ListAllReportDaily,
+                TotalAmount
+            };
+        }
         #endregion
 
         #region ReportMonthly
@@ -53,6 +77,28 @@ namespace Jocasta.Areas.Admin.Services
             string query = "update [dbo].[report_monthly] set [TotalPrice] = [TotalPrice] + @price where [ReportMonthlyId] = @id";
             int count = this._connection.Execute(query, new { price, id }, transaction);
             if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+        public object GetAllReportMonth(long fromDate, long toDate, IDbTransaction transaction = null)
+        {
+            string querySelect = "select * ";
+            string querySum = "select SUM(TotalPrice) ";
+            string query = "from [report_daily] where 1=1";
+            if (fromDate > 0 && toDate > 0)
+            {
+                DateTime from = HelperProvider.GetDateTime(fromDate);
+                DateTime to = HelperProvider.GetDateTime(toDate);
+
+                query += " and DATEFROMPARTS(Year, Month, 1) >= DATEFROMPARTS(" + from.Year + ", " + from.Month + ", 1)";
+                query += " and DATEFROMPARTS(Year, Month, Day) <= DATEFROMPARTS(" + to.Year + ", " + to.Month + ", " + to.Day + ")";
+            }
+
+            decimal? TotalAmount = this._connection.Query<decimal?>(querySum + query, new { fromDate, toDate }, transaction).FirstOrDefault();
+            List<ReportMonthly> ListAllReportMonth = this._connection.Query<ReportMonthly>(querySelect + query, new { fromDate, toDate }, transaction).ToList();
+            return new
+            {
+                ListAllReportMonth,
+                TotalAmount
+            };
         }
         #endregion
 
