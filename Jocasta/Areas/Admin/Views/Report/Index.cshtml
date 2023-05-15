@@ -155,24 +155,25 @@
                                 font-size: 15px;
                             }
 
-                                .main-report .content-report .document-report .content .body-document > table > tbody tr {
+                                .main-report .content-report .document-report .content .body-document > table > thead tr {
                                     border-bottom: 1px solid #d5d5d5;
+                                    background-color: #B2E8Fd;
                                 }
 
-                                    .main-report .content-report .document-report .content .body-document > table > tbody tr:first-child {
-                                        background-color: #B2E8Fd;
+                                    .main-report .content-report .document-report .content .body-document > table > thead tr th {
+                                        text-align:center;
                                     }
 
-                                    .main-report .content-report .document-report .content .body-document > table > tbody tr:nth-child(2) {
+                                    .main-report .content-report .document-report .content .body-document > table > tbody tr {
                                         background-color: #ffddb1;
                                         font-weight: 600;
                                     }
 
-                                        .main-report .content-report .document-report .content .body-document > table > tbody tr:nth-child(2) td {
+                                        .main-report .content-report .document-report .content .body-document > table > tbody tr td {
                                             padding: 12px 8px;
                                         }
 
-                                    .main-report .content-report .document-report .content .body-document > table > tbody tr:first-child th {
+                                    .main-report .content-report .document-report .content .body-document > table > thead tr th {
                                         padding: 10px 8px;
                                         border: 1px solid #d5d5d5;
                                         border-left: none;
@@ -246,6 +247,11 @@
 
             .main-report .sidebar-left .list-sidebar .item-sidebar .button-export-excel .text-export {
                 color: white;
+            }
+
+            .body-document .total-revenue{
+                font-size: 14px;
+                margin-top: 15px;
             }
     </style>
 }
@@ -323,9 +329,16 @@
                     </div>
                     <div class="body-document">
                         <table>
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Doanh thu</th>
+                                </tr>
+                            </thead>
                             <tbody id="tabledocument">
                             </tbody>
                         </table>
+                        <div class="total-revenue">Tổng doanh thu: <span id="total-revenue">0</span> VNĐ</div>
                     </div>
                     <div class="footer-document">
                         The Jocasta Mai Linh Hotel
@@ -355,23 +368,23 @@
         // Doanh thu
         let datathismonth = {
             Revenue: 0,
-            listDataThisMonth: []
+            listDataReport: []
         };
         let dataprevmonth = {
             Revenue: 0,
-            listDataPrevMonth: []
+            listDataReport: []
         };
         let datathisyear = {
             Revenue: 0,
-            listDataThisYear: []
+            listDataReport: []
         };
         let dataprevyear = {
             Revenue: 0,
-            listDataPrevYear: []
+            listDataReport: []
         };
         let dataabouttime = {
             Revenue: 0,
-            listDataAboutTime: []
+            listDataReport: []
         }
 
 
@@ -394,7 +407,7 @@
                 //Báo cáo tháng này
                 datathismonth.Revenue = reportThisMonth.TotalPrice;
                 for (let thismonth = 0; thismonth < reportThisMonth.ListAllReportDaily.length; thismonth++) {
-                    datathismonth.listDataThisMonth.push(
+                    datathismonth.listDataReport.push(
                         {
                             TableId: reportThisMonth.ListAllReportDaily[thismonth].Day + '-' + reportThisMonth.ListAllReportDaily[thismonth].Month + '-' + reportThisMonth.ListAllReportDaily[thismonth].Year,
                             TableData: reportThisMonth.ListAllReportDaily[thismonth].TotalPrice
@@ -404,7 +417,7 @@
                 //Báo cáo tháng trước
                 dataprevmonth.Revenue = reportPrevMonth.TotalPrice;
                 for (let prevmonth = 0; prevmonth < reportPrevMonth.ListAllReportDaily.length; prevmonth++) {
-                    dataprevmonth.listDataPrevMonth.push(
+                    dataprevmonth.listDataReport.push(
                         {
                             TableId: reportPrevMonth.ListAllReportDaily[prevmonth].Day + '-' + reportPrevMonth.ListAllReportDaily[prevmonth].Month + '-' + reportPrevMonth.ListAllReportDaily[prevmonth].Year,
                             TableData: reportPrevMonth.ListAllReportDaily[prevmonth].TotalPrice
@@ -414,7 +427,7 @@
                 //Báo cáo năm này
                 datathisyear.Revenue = reportThisYear.TotalPrice;
                 for (let thisyear = 0; thisyear < reportThisYear.ListAllReportMonth.length; thisyear++) {
-                    datathisyear.listDataThisYear.push(
+                    datathisyear.listDataReport.push(
                         {
                             TableId: 'Tháng ' + reportThisYear.ListAllReportMonth[thisyear].Month,
                             TableData: reportThisYear.ListAllReportMonth[thisyear].TotalPrice
@@ -424,7 +437,7 @@
                 //Báo cáo năm trước
                 dataprevyear.Revenue = reportPrevYear.TotalPrice;
                 for (let prevyear = 0; prevyear < reportPrevYear.ListAllReportMonth.length; prevyear++) {
-                    dataprevyear.listDataPrevYear.push(
+                    dataprevyear.listDataReport.push(
                         {
                             TableId: 'Tháng ' + reportPrevYear.ListAllReportMonth[prevyear].Month,
                             TableData: reportPrevYear.ListAllReportMonth[prevyear].TotalPrice
@@ -505,7 +518,7 @@
                      dataabouttime.Revenue = rs.data.TotalPrice;
                      for (let index = 0; index < rs.data.ListReportAboutTime.length; index++) {
                          let _item = rs.data.ListReportAboutTime[index];
-                         dataabouttime.listDataAboutTime.push(
+                         dataabouttime.listDataReport.push(
                              {
                                  TableId: _item.Day + '-' + _item.Month + '-' + _item.Year,
                                  TableData: _item.TotalPrice
@@ -545,24 +558,16 @@
             }
             $('#tabledocument').html('');
             let html = '';
-            html += '<tr>';
-            html += '<th style="text-align:center">Thời gian</th>';
-            html += '<th style="text-align:center">Doanh thu</th>';
-            html += '</tr>';
-            html += '<tr><td></td>';
-            let total = 0;
-            for (let index = 0; index < datapaint.length; index++) {
-                total += datapaint[index].TableData;
-            }
-            html += '<td style="text-align:center">' + NumberFormat(total) + '</td>';
-
-            html += '</tr>';
-            for (let index = 0; index < datapaint.length; index++) {
-                html += '<tr><td style="text-align:center">' + GetObjectProperty(datapaint[index], 'TableId') + '</td>';
-                html += '<td style="text-align:center">' + NumberFormat(datapaint[index].TableData) + '</td>';
+            
+            for (let index = 0; index < datapaint.listDataReport.length; index++) {
+                html += '<tr><td style="text-align:center">' + GetObjectProperty(datapaint.listDataReport[index], 'TableId') + '</td>';
+                html += '<td style="text-align:center">' + NumberFormat(datapaint.listDataReport[index].TableData) + '</td>';
                 html += '</tr>';
             }
             $('#tabledocument').append(html);
+
+            if (datapaint.Revenue === null) datapaint.Revenue = 0;
+            $('#total-revenue').text(NumberFormat(datapaint.Revenue));
         }
 
 
