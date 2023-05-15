@@ -37,5 +37,18 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult GetReportByAboutTime(long from, long to)
+        {
+            try
+            {
+                AdminReportService adminReportService = new AdminReportService();
+                return Success(adminReportService.GetReportByAboutTime(from, to));
+            }catch(Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

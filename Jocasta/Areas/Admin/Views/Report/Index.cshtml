@@ -267,21 +267,7 @@
 
                 <div class="item-sidebar item-time">
                     <h3 class="header-item-sidebar">Thời gian</h3>
-                    <div class="list-item-sidebar" id="sidebartime">
-                        @*<div class="item" onclick="showtype(this);" data-time="thisday">
-                                <div class="icon-check">
-                                    <div class="circle-icon">
-                                    </div>
-                                </div>
-                                <div class="text">Hôm nay</div>
-                            </div>
-                            <div class="item" onclick="showtype(this);" data-time="prevday">
-                                <div class="icon-check">
-                                    <div class="circle-icon">
-                                    </div>
-                                </div>
-                                <div class="text">Hôm qua</div>
-                            </div>*@
+                    <div class="list-item-sidebar" id="sidebartime">                       
                         <div class="item active" onclick="showtype(this);" data-time="thismonth">
                             <div class="icon-check">
                                 <div class="circle-icon">
@@ -310,16 +296,6 @@
                             </div>
                             <div class="text">Năm ngoái</div>
                         </div>
-                        <div class="item custom-day" onclick="chosseday(this);" data-time="chosseday">
-                            <div class="icon-check">
-                                <div class="circle-icon">
-                                </div>
-                            </div>
-                            <div class="text" style="width:max-content">
-                                Chọn ngày
-                            </div>
-                        </div>
-                        <input name="chossedaypicker" disabled />
                         <div class="item custom-time" onclick="chosseaboutday(this);" data-time="chosserange">
                             <div class="icon-check">
                                 <div class="circle-icon">
@@ -393,7 +369,10 @@
             Revenue: 0,
             listDataPrevYear: []
         };
-
+        let dataabouttime = {
+            Revenue: 0,
+            listDataAboutTime: []
+        }
 
 
         const InitPage = async function () {
@@ -461,10 +440,7 @@
         var showtype = function (item) {
             $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
             $(item).addClass('active');
-            if ($('#sidebartime').find('.active').hasClass('custom-day')) {
-                chossedaypicker();
-            }
-            else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
+            if ($('#sidebartime').find('.active').hasClass('custom-time')) {
                 let inputVal = $('#sidebartime').find('input[name="daterangepicker"]').val().replaceAll(' ', '');
                 inputVal = inputVal.split('đến');
                 chosseaboutdaypicker(inputVal[0], inputVal[1]);
@@ -478,82 +454,26 @@
             }
         }
 
-        // hàm show ngày + click chọn ngày , khoảng ngày
-        $(function () {
-            $('input[name="chossedaypicker"]').daterangepicker({
-                locale: {
-                    format: 'YYYY-MM-DD'
-                },
-                singleDatePicker: true,
-                showDropdowns: true,
-                minDate: new Date(2022, 11, 1),
-                minYear: 2022,
-                maxYear: parseInt(moment().format('YYYY'), 10)
-            });
-            $('input[name="chossedaypicker"]').on('apply.daterangepicker', function (ev, picker) {
-                chossedaypicker();
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-        });
+        // hàm show ngày + click chọn ngày , khoảng ngày        
         $(function () {
             $('input[name="daterangepicker"]').daterangepicker({
                 locale: {
-                    format: 'YYYY-MM-DD',
+                    format: 'DD-MM-YYYY',
                     separator: " đến "
                 },
                 opens: 'left',
             }, function (start, end, label) {});
             $('input[name="daterangepicker"]').on('apply.daterangepicker', function (ev, picker) {
-                let from = picker.startDate.format('YYYY-MM-DD');
-                let to = picker.endDate.format('YYYY-MM-DD');
+                let from = picker.startDate.format('DD-MM-YYYY');
+                let to = picker.endDate.format('DD-MM-YYYY');
                 console.log(from);
                 console.log(to);
                 chosseaboutdaypicker(from, to);
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' đến ' + picker.endDate.format('YYYY-MM-DD'));
+                $(this).val(picker.startDate.format('DD-MM-YYYY') + ' đến ' + picker.endDate.format('DD-MM-YYYY'));
             });
         });
 
-        // vẽ theo ngày
-        var chosseday = function (item) {
-            $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
-            $(item).addClass('active');
-            if($(item).hasClass('custom-day')) {
-                $(item).siblings('input[name="chossedaypicker"]').click();
-            }
-        }
-        var chossedaypicker = function () {
-            listDataRevenueHourDayPicker = [];
-            let time = $('input[name="chossedaypicker"]').val();
-            time = time.split('-');
-            let newTimeFormart = '';
-            for (let i = time.length; i > 0; i--) {
-                newTimeFormart += time[i - 1];
-                if (i > 1) {
-                    newTimeFormart += '-';
-                }
-            }
-
-            console.log(newTimeFormart);
-            newTimeFormart = ConvertTime(newTimeFormart);
-            newTimeFormart = new Date(newTimeFormart);
-            let dayPicker = newTimeFormart.getDate();
-            let monthPicker = newTimeFormart.getMonth() + 1;
-            for (let indexHour = 0; indexHour < listDataHour.length; indexHour++) {
-                if (listDataHour[indexHour].Day === dayPicker && listDataHour[indexHour].Month === monthPicker) {
-                    listDataRevenueHourDayPicker.push(
-                        {
-                            ChartId: listDataHour[indexHour].Hour + ' h',
-                            ChartData: listDataHour[indexHour].Revenue,
-                            TableId: listDataHour[indexHour].Hour + ' h',
-                            TableData: listDataHour[indexHour].Revenue
-                        });
-
-                }
-            }
-            console.log(listDataRevenueHourDayPicker);
-            paintingdocument(listDataRevenueHourDayPicker);
-        }
-
+       
         // vẽ theo khoảng ngày
         var chosseaboutday = function (item) {
             $(item).closest('.list-item-sidebar').find('.active').removeClass('active');
@@ -563,48 +483,40 @@
             }
         }
          var chosseaboutdaypicker = async function (from, to) {
-             let urlData = '';
-             let rq;
-             let rs;
-
+             
              $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo khoảng ngày').toLowerCase());
              if (from !== null && to !== null) {
-                 let item = $('#sidebarclassify').find('.active').data('item');
-                 if (item === "revenue" || item === "profit") {
-                     urlData = '/api/ShopReport/GetListShopReportByAboutTime?fromTime=' + from + '&toTime=' + to;
-                 } else if (item === "product") {
-                     urlData = '/api/ShopReport/GetListShopProductReportByAboutTime?fromTime=' + from + '&toTime=' + to;
-                 }
-                 rq = await fetch(urlData, {
+                 let fromTime = ConvertTime(from);
+                 let toTime = ConvertTime(to);
+                 console.log(from);
+                 console.log(to);
+                 console.log(fromTime);
+                 console.log(toTime);
+
+                 let rq = await fetch('/api/AdminReport/GetReportByAboutTime?from=' + fromTime + '&to=' + toTime, {
                      method: 'get',
-                     headers: Enum.OptionHeaderDefault
+                     headers: Enum.OptionAdminHeaderDefault
                  });
-                 rs = await rq.json();
+                 let rs = await rq.json();
+                 if (AdminCheckErrorResponse(rs) === false) return;
+
                  if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                     switch (item) {
-                         case "revenue":
-                             listDataRevenueAboutDayPicker = [];
-                             console.log(rs.data);
-                             for (let index = 0; index < rs.data.length; index++) {
-                                 let _item = rs.data[index];
-                                 listDataRevenueAboutDayPicker.push(
-                                     {
-                                         ChartId: _item.Day + '/' + _item.Month,
-                                         ChartData: _item.Revenue,
-                                         TableId: _item.Day + '-' + _item.Month + '-' + _item.Year,
-                                         TableData: _item.Revenue
-                                     });
-                             }
-                             paintingdocument(listDataRevenueAboutDayPicker);
-                             break;
+                     console.log(rs.data);
+                     dataabouttime.Revenue = rs.data.TotalPrice;
+                     for (let index = 0; index < rs.data.ListReportAboutTime.length; index++) {
+                         let _item = rs.data.ListReportAboutTime[index];
+                         dataabouttime.listDataAboutTime.push(
+                             {
+                                 TableId: _item.Day + '-' + _item.Month + '-' + _item.Year,
+                                 TableData: _item.TotalPrice
+                             });
                      }
+                     paintingdocument(dataabouttime);
                  }
              }
          }
 
-        // vẽ khi truyền data vào dạng [{ChartId:key, ChartData: data}]
-        var datachart = null;
-
+        
          // hàm này vẽ lần đầu (Hoặc vẽ khi quay lại tab)
          var showForInitPage = function () {
              let datatime = $('#sidebartime').find('.active').data("time");
@@ -624,11 +536,7 @@
 
             // vẽ bảng (document)
         var paintingdocument = function (datapaint) {
-            if ($('#sidebartime').find('.active').hasClass('custom-day')) {
-                $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo ngày').toLowerCase());
-                $('#documenttime').text('Thời gian : ' + $('input[name=chossedaypicker]').val());
-            }
-            else if ($('#sidebartime').find('.active').hasClass('custom-time')) {
+            if ($('#sidebartime').find('.active').hasClass('custom-time')) {
                 $('.header-document').find('.title').text('Báo cáo ' + ($('#sidebarclassify').find('.active').find('.text').text() + ' theo khoảng ngày').toLowerCase());
                 $('#documenttime').text('Thời gian : ' + $('input[name=daterangepicker]').val());
             } else {

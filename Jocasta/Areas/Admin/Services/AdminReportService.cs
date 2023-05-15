@@ -115,6 +115,30 @@ namespace Jocasta.Areas.Admin.Services
                 TotalPrice
             };
         }
+
+        public object GetReportByAboutTime(long from, long to, IDbTransaction transaction = null)
+        {
+            string querySelect = "select * ";
+            string querySum = "select SUM(TotalPrice) ";
+            string query = "from [report_daily] where 1=1";
+            if(from != null && to != null)
+            {
+                DateTime fromDate = HelperProvider.GetDateTime(from);
+                DateTime toDate = HelperProvider.GetDateTime(to);
+
+                query += " and DATEFROMPARTS(Year, Month, Day) >= DATEFROMPARTS(" + fromDate.Year + ", " + fromDate.Month + ", " + fromDate.Day + ")";
+                query += " and DATEFROMPARTS(Year, Month, Day) <= DATEFROMPARTS(" + toDate.Year + ", " + toDate.Month + ", " + toDate.Day + ")";
+            }
+
+            decimal? TotalPrice = this._connection.Query<decimal?>(querySum + query, new { from, to }, transaction).FirstOrDefault();
+            query += "  order by Year, Month, Day desc";
+            List<ReportDaily> ListReportAboutTime = this._connection.Query<ReportDaily>(querySelect + query, new { from, to }, transaction).ToList();
+            return new
+            {
+                ListReportAboutTime,
+                TotalPrice
+            };
+        }
         #endregion
     }
 }
