@@ -13,4 +13,18 @@ namespace Jocasta.Models
         public int Month { get; set; }
         public int Year { get; set; }
     }
+
+    public class ReportData
+    {
+        public string Time { get; set; }
+        public decimal Price { get; set; }
+    }
+
+
+    public class ReportModel
+    {
+        public List<ReportData> ListReportData { get; set; }
+        public decimal Revenue { get; set; }
+        public string TypeReport { get; set; }
+    }
 }
