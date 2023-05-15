@@ -592,24 +592,40 @@
                  TypeReport: ''
              };
              let datatable = $('#tabledocument').find('tr');
-             for (let i = 1; i < datatable.length; i++) {
+             for (let i = 0; i < datatable.length; i++) {
                  let datatablechild = $(datatable[i]).find('td');
-                 model.ListShopReport.push({
-                     ReportTime: $(datatablechild[0]).text(),
-                     Revenue: $(datatablechild[1]).text(),
-                     Profit: $(datatablechild[1]).text(),
-                     NumberProduct: $(datatablechild[1]).text(),
-                     NameProduct: $(datatablechild[2]).text()
+                 model.ListReportData.push({
+                     Time: $(datatablechild[0]).text(),
+                     Price: $(datatablechild[1]).text()
                  });
              }
+
+             model.Revenue = parseFloat($('#total-revenue').text());
+
+             let datatime = $('#sidebartime').find('.active').data("time");
+             switch (datatime) {
+                 case 'thismonth':
+                     model.TypeReport = "Tháng " + (now.getMonth() + 1) + " năm " + now.getFullYear();
+                     break;
+                 case 'prevmonth':
+                     model.TypeReport = "Tháng " + (prevMonth.getMonth() + 1) + " năm " + prevMonth.getFullYear();
+                     break;
+                 case 'thisyear':
+                     model.TypeReport = "Năm " + now.getFullYear();
+                     break;
+                 case 'prevyear':
+                     model.TypeReport = "Năm " + prevYear.getFullYear();
+                     break;
+             }
+
              if (confirm("Xác nhận tải xuống !")) {
-                 let rq = await fetch('/api/ShopReport/ExportFileExcelReport', {
+                 let rq = await fetch('/api/AdminReport/ExportFileExcelReport', {
                      method: 'POST',
-                     headers: Enum.OptionHeaderDefault,
+                     headers: Enum.OptionAdminHeaderDefault,
                      body: JSON.stringify(model)
                  });
                  let rs = await rq.blob();
-                 var fileName = "Bao-cao-ban-hang.xlsx";
+                 var fileName = "Báo cáo doanh thu " + model.TypeReport + ".xlsx";
                  if (window.navigator.msSaveOrOpenBlob) {
                      window.navigator.msSaveOrOpenBlob(rs, fileName);
                  } else {
@@ -624,10 +640,8 @@
                          document.body.removeChild(a);
                      }, 0)
                  }
-                 Loading.Hide();
                  alert("File của bạn đang được tải xuống !");
              }
-             Loading.Hide();
          }
     </script>
 
