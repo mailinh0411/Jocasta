@@ -167,6 +167,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminDayRoomController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminInvoiceController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminReportController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRoomController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminServiceController.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
     <Compile Include="Areas\Admin\Controllers\ServiceController.cs" />
     <Compile Include="Areas\Admin\Services\AdminDayRoomService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminInvoiceService.cs" />
     <Compile Include="Areas\Admin\Services\AdminNewService.cs" />
     <Compile Include="Areas\Admin\Services\AdminNotificationService.cs" />
     <Compile Include="Areas\Admin\Services\AdminOrderService.cs" />

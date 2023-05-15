@@ -6,73 +6,159 @@
 
 
 <div class="container-fluid">
-    <div class="row">
-        <h2>Chi tiết đơn hàng</h2>
-    </div>
     
     <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="list" aria-labelledby="list-tab">
-            <div class="tab-content" id="ListViewTabLinkContent">
-                <div class="tab-pane fade active show" id="all-status" aria-labelledby="boxed-all-status-tab">
-                    <div class="table-responsive card">
-                        <div class="table-responsive">
-                            <table class="table table-hover border-0 display mb-4 dataTablesCard booking-table table-responsive-lg " id="guestTable-all6">
-                                <thead>
-                                    <tr>
-                                        <th>STT</th>
-                                        <th>Mã đơn đặt</th>
-                                        <th>Người đặt</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Ngày check in</th>
-                                        <th>Ngày check out</th>
-                                        <th>Ngày tạo</th>
-                                        <th>Trạng thái</th>
-                                        <th class="bg-none"></th>
-                                    </tr>
-                                </thead>
-
-                                <tbody id="list-data">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <div class="order-detail">
+            <div class="name-hotel" style="margin-bottom: 20px;display: flex; align-items: center;">
+                <img style="width: 150px; height:100px;" src="/Content/img/logo.png" alt="logo">
+                <h3 style="padding-left: 40px;">THE JOCASTA MAI LINH HOTEL</h3>
+            </div>
+           
+            <div class="user-order">
+                <div>
+                    <h6>Họ và tên: <span>Bùi Mai Linh</span></h6>
+                    <h6>Số điện thoại: <span>0846076166</span></h6>
+                    <h6>Email: <span>builinh@gmail.com</span></h6>
+                </div>
+                <div>
+                    <h6>Mã hóa đơn: <span>FYGHYFGHFG</span></h6>
+                    <h6>Ngày đến: <span>23/05/2023</span></h6>
+                    <h6>Ngày đi: <span>23/05/2023</span></h6>
                 </div>
             </div>
-        </div>
+            <div class="room-order">
+                <h6>Các phòng đã đặt:</h6>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Loại phòng</th>
+                            <th>Số lượng</th>
+                        </tr>                        
+                    </thead>
+                    <tbody id="list-room-order">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="service-order">
+                <h6>Các dịch vụ đã đặt:</h6>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Dịch vụ</th>
+                            <th>Số lượng</th>
+                            <th>Ngày đặt</th>
+                        </tr>
+                    </thead>
+                    <tbody id="list-service-order">
+                    </tbody>
+                </table>
+            </div>
+        </div>        
     </div>
 </div>
 
-<div class="d-lg-flex justify-content-between" style="padding: 0 1.875rem 3rem 1.875rem;">
-    <div class="form-inline" id="dynamic-table_length">
-        <div class="d-lg-flex align-items-center">
-            <div style="width: 50px;">Hiển thị </div>
-            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchOrder();">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-            </select>
-            <div style="width: 100px;"> bản ghi </div>
-        </div>
-    </div>
-
-    <div class="">
-        <ul class="pagination pagination-circle mb-0" id="pagination">
-        </ul>
-    </div>
-</div>
 
 
 @section styles{
     <style>
+        .order-detail{
+            width: 60%;
+            margin: auto;
+            border: .5px solid black;
+            background-color: #ffffff;
+            padding: 30px;
+        }
+
+        .order-detail .user-order{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .order-detail .room-order{
+            margin-bottom: 20px;
+        }
+
+        .order-detail table{
+            width: 100%;
+
+        }
+
+        .order-detail table thead{
+            background-color: #f0dfca;
+        }
+
+        .order-detail table thead tr th{
+            text-align: center;
+        }
+
+        .order-detail table tbody tr td{
+            text-align: center;
+            padding: 10px 0;
+        }
     </style>
 }
 @section scripts{
     <script>
 
+        const orderId = "@ViewBag.OrderId";
 
-        const initPage = function () {
+        const getUserOrder = async function () {
 
+        }
+
+        const getListRoomOrder = async function () {
+            let rp = await fetch('/api/AdminInvoice/GetListRoomBooked?orderId=' + orderId, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            $('#list-room-order').html('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '';
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += '<tr>';
+                    html += `<td>${i + 1}</td>`;
+                    html += `<td>${rs.data[i].Name}</td>`;
+                    html += `<td>${rs.data[i].Quantity}</td>`;
+                    html += '</tr>';
+                }
+                $('#list-room-order').append(html);
+            }
+        }
+
+        const getListServiceOrder = async function () {
+            let rp = await fetch('/api/AdminInvoice/GetListServiceBooked?orderId=' + orderId, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            $('#list-service-order').html('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '';
+                if (rs.data.length === 0) $('.service-order').css('display', 'none');
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += '<tr>';
+                    html += `<td>${i + 1}</td>`;
+                    html += `<td>${rs.data[i].Name}</td>`;
+                    html += `<td>${rs.data[i].Quantity}</td>`;
+                    html += `<td>${DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) }</td>`;
+                    html += '</tr>';
+                }
+                $('#list-service-order').append(html);
+            }
+        }
+
+        const initPage = async function () {
+            await getListRoomOrder();
+            await getListServiceOrder();
         }
         initPage();
     </script>
