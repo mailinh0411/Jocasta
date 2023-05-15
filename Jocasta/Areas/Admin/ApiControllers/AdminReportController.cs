@@ -116,7 +116,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
 
         private Stream CreateExcelFileReport(ReportModel model, Stream stream = null)
         {
-            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
             using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
             {
                 excelPackage.Workbook.Properties.Author = "MaiLinhHotel";
