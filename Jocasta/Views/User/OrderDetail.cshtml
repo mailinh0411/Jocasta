@@ -270,7 +270,7 @@
         const orderId = "@ViewBag.Id";
 
         const getOrderById = async function () {
-            let rq = await fetch('/api/order/GetOrderById?id=' + orderId, {
+            let rq = await fetch('/api/order/GetOrderById?orderId=' + orderId, {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
             });
