@@ -33,6 +33,21 @@ namespace Jocasta.Areas.Admin.ApiControllers
         }
 
         [HttpGet]
+        public JsonResult GetOrderById(string id)
+        {
+            try
+            {
+                AdminOrderService adminOrderService = new AdminOrderService();
+                return Success(adminOrderService.GetOrderById(id));
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+
+        [HttpGet]
         public JsonResult SystemCancelOrder(string orderId)
         {
             try
