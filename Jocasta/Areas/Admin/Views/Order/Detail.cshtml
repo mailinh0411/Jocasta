@@ -16,14 +16,14 @@
            
             <div class="user-order">
                 <div>
-                    <h6>Họ và tên: <span>Bùi Mai Linh</span></h6>
-                    <h6>Số điện thoại: <span>0846076166</span></h6>
-                    <h6>Email: <span>builinh@gmail.com</span></h6>
+                    <h6>Họ và tên: <span class="user-name"></span></h6>
+                    <h6>Số điện thoại: <span class="user-phone"></span></h6>
+                    <h6>Email: <span class="user-email"></span></h6>
                 </div>
                 <div>
-                    <h6>Mã hóa đơn: <span>FYGHYFGHFG</span></h6>
-                    <h6>Ngày đến: <span>23/05/2023</span></h6>
-                    <h6>Ngày đi: <span>23/05/2023</span></h6>
+                    <h6>Mã hóa đơn: <span class="order-code"></span></h6>
+                    <h6>Ngày đến: <span class="order-checkin"></span></h6>
+                    <h6>Ngày đi: <span class="order-checkout"></span></h6>
                 </div>
             </div>
             <div class="room-order">
@@ -56,6 +56,7 @@
                     </tbody>
                 </table>
             </div>
+            <div class="order-price"><h4>Tổng tiền: <span class="total-price">0</span> VNĐ</h4></div>
         </div>        
     </div>
 </div>
@@ -79,6 +80,10 @@
         }
 
         .order-detail .room-order{
+            margin-bottom: 20px;
+        }
+
+        .order-detail .service-order{
             margin-bottom: 20px;
         }
 
@@ -107,7 +112,21 @@
         const orderId = "@ViewBag.OrderId";
 
         const getUserOrder = async function () {
-
+            let rp = await fetch('/api/AdminOrder/GetOrderById?id=' + orderId, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.user-order .user-name').html(GetObjectProperty(rs.data, 'Name'));
+                $('.user-order .user-phone').html(GetObjectProperty(rs.data, 'Phone'));
+                $('.user-order .user-email').html(GetObjectProperty(rs.data, 'Email'));
+                $('.user-order .order-code').html(GetObjectProperty(rs.data, 'Code'));
+                $('.user-order .order-checkin').html(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
+                $('.user-order .order-checkout').html(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
+                $('.order-price .total-price').html(NumberFormat(rs.data.TotalPrice));
+            }
         }
 
         const getListRoomOrder = async function () {
@@ -157,6 +176,7 @@
         }
 
         const initPage = async function () {
+            await getUserOrder();
             await getListRoomOrder();
             await getListServiceOrder();
         }
