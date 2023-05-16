@@ -201,5 +201,69 @@ namespace Jocasta.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult Insert()
+        {
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        UserService userService = new UserService(connect);
+
+                        for (int i = 1; i < 17; i++)
+                        {
+                            
+                            User user = new User();
+                            user.UserId = Guid.NewGuid().ToString();
+                            string index = i < 10 ? ('0' + i.ToString()) : i.ToString();                          
+                            
+                            string pass = "123";
+                            user.Password = SecurityProvider.EncodePassword(user.UserId, pass);
+                            user.Enable = true;
+                            DateTime now = DateTime.Now;
+                            user.CreateTime = HelperProvider.GetSeconds(now.AddDays(-i));
+
+                            string[] ho = { "Nguyễn", "Hoàng", "Trần", "Bùi", "Đinh", "Trịnh", "Hồ", "Trương", "Nông", "Vũ", "Võ", "Mai", "Phạm", "Đỗ", "Lê" };
+                            string[] dem = { "Văn", "Hưng", "Trọng", "Minh", "Ngọc", "Tiến", "Đức", "Việt", "Anh", "Quang", "Thành", "Trí", "Quốc", "Ánh", "Ngọc", "Thị", "Thanh", "Mỹ", "Khánh", "Linh", "Diễm", "Kim", "Tú", "Vân" };
+                            string[] ten = { "Anh", "An", "Bảo", "Bình", "Bằng", "Bích", "Châu", "Chi", "Cường", "Cương", "Công", "Cảnh", "Chính", "Chung", "Diệp", "Duyên", "Diễm", "Dung", "Dũng", "Danh", "Dương", "Chiến", "Chương", "Duy", "Định", "Đạt", "Đông", "Đức", "Giang", "Hường", "Huyền", "Hạnh", "Hà", "Hiền", "Hoài", "Hằng", "Hồng", "Kiên", "Khánh", "Khương", "Linh", "Lương", "Long", "Lĩnh", "Mạnh", "Minh", "Nam", "Nguyên", "Nghĩa", "Nhật", "Phan", "Phong", "Phát", "Phi", "Phú", "Phúc", "Phước", "Phương", "Quân", "Quang", "Quốc", "Thái", "Thành", "Thắng", "Thịnh", "Thông", "Tuấn", "Tùng", "Trung", "Thanh", "Thạch", "Trí", "Tiến", "Vinh" };
+
+                            Random rand = new Random();
+                            int randHo = rand.Next(0, ho.Length);
+                            int randDem = rand.Next(0, dem.Length);
+                            int randTen = rand.Next(0, ten.Length);
+                            string name = ho[randHo] + " " + dem[randDem] + " " + ten[randTen];
+
+                            user.Name = name;
+                            user.Account = HelperProvider.RemoveUnicode(dem[randDem]) + HelperProvider.RemoveUnicode(ten[randTen]);
+                            user.Email = HelperProvider.RemoveUnicode(ho[randHo]) + HelperProvider.RemoveUnicode(dem[randDem]) + HelperProvider.RemoveUnicode(ten[randTen]) + "@gmail.com";
+                            if (!userService.InsertNewUser(user, transaction)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+
+                            UserToken userToken = new UserToken();
+                            userToken.UserTokenId = Guid.NewGuid().ToString();
+                            userToken.UserId = user.UserId;
+                            userToken.CreateTime = HelperProvider.GetSeconds(now);
+                            userToken.ExpireTime = HelperProvider.GetSeconds(now.AddDays(2));
+                            if (!userService.InsertUserToken(userToken, transaction)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+
+                        }
+
+
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+
+        }
     }
 }
