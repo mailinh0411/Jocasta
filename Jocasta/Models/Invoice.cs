@@ -37,5 +37,26 @@ namespace Jocasta.Models
         public decimal TotalPrice { get; set; }
     }
 
+    public class RoomBooked
+    {
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+    }
+
+    public class ServiceBooked
+    {
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public long CreateTime { get; set; }
+    }
+
+    public class ExportUserOrder
+    {
+        public Order OrderInfo { get; set; }
+        public List<RoomBooked> ListRoomBookeds { get; set; }
+        public List<ServiceBooked> ListServiceBookeds { get; set;}
+    }
     
 }

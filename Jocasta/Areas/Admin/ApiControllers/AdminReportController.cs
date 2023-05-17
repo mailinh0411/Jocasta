@@ -72,7 +72,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 221, 177));
                 range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                //range.Style.Font.SetFromFont(new Font("Arial", 10));
+                range.Style.Font.SetFromFont("Arial", 10);
                 range.Style.Border.Bottom.Style = ExcelBorderStyle.Thick;
                 range.Style.Border.Bottom.Color.SetColor(Color.WhiteSmoke);
                 range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

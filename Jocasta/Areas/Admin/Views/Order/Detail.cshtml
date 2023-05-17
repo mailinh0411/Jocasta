@@ -60,7 +60,8 @@
         </div>   
         
         <div style="display:flex; justify-content: flex-end; margin-top: 20px;">
-            <button class="btn btn-info">In hóa đơn</button>
+            @*<button class="btn btn-info" onclick="ExportOrder();">In hóa đơn</button>*@
+            <button class="btn btn-info" onclick="ExportPdfOrder();">In hóa đơn</button>
         </div>
     </div>
 </div>
@@ -115,6 +116,18 @@
 
         const orderId = "@ViewBag.OrderId";
 
+        const orderinfo = {
+            Name: '',
+            Phone: '',
+            Email: '',
+            Code: '',
+            CheckIn: 0,
+            CheckOut: 0,
+            TotalPrice: 0
+        };
+        const listroombooked = [];
+        const listservicebooked = [];
+
         const getUserOrder = async function () {
             let rp = await fetch('/api/AdminOrder/GetOrderById?id=' + orderId, {
                 method: 'get',
@@ -130,6 +143,13 @@
                 $('.user-order .order-checkin').html(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
                 $('.user-order .order-checkout').html(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
                 $('.order-price .total-price').html(NumberFormat(rs.data.TotalPrice));
+                orderinfo.Name = rs.data.Name;
+                orderinfo.Phone = rs.data.Phone;
+                orderinfo.Email = rs.data.Email;
+                orderinfo.Code = rs.data.Code;
+                orderinfo.CheckIn = rs.data.CheckIn;
+                orderinfo.CheckOut = rs.data.CheckOut;
+                orderinfo.TotalPrice = rs.data.TotalPrice;
             }
         }
 
@@ -150,6 +170,7 @@
                     html += `<td>${rs.data[i].Name}</td>`;
                     html += `<td>${rs.data[i].Quantity}</td>`;
                     html += '</tr>';
+                    listroombooked.push(rs.data[i]);
                 }
                 $('#list-room-order').append(html);
             }
@@ -174,6 +195,7 @@
                     html += `<td>${rs.data[i].Quantity}</td>`;
                     html += `<td>${DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) }</td>`;
                     html += '</tr>';
+                    listservicebooked.push(rs.data[i]);
                 }
                 $('#list-service-order').append(html);
             }
@@ -185,6 +207,74 @@
             await getListServiceOrder();
         }
         initPage();
+
+        var ExportOrder = async function () {
+            
+            let model = {
+                OrderInfo: orderinfo,
+                ListRoomBookeds: listroombooked,
+                ListServiceBookeds: listservicebooked
+            };
+            
+            if (confirm("Xác nhận xuất hóa đơn !")) {
+                let rq = await fetch('/api/AdminInvoice/ExportFileExcelOrder', {
+                    method: 'POST',
+                    headers: Enum.OptionAdminHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rq.blob();
+                var fileName = "Thông tin hóa đơn mã " + model.OrderInfo.Code + ".xlsx";
+                if (window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(rs, fileName);
+                } else {
+                    const a = document.createElement('a');
+                    document.body.appendChild(a);
+                    const url = window.URL.createObjectURL(rs);
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    }, 0)
+                }
+                alert("Hóa đơn đang được tải xuống !");
+            }
+        }
+
+        const ExportPdfOrder = async function () {
+            let model = {
+                OrderInfo: orderinfo,
+                ListRoomBookeds: listroombooked,
+                ListServiceBookeds: listservicebooked
+            };
+
+            if (confirm("Xác nhận xuất hóa đơn !")) {
+                let rq = await fetch('/api/AdminInvoice/ExportFilePdfOrder', {
+                    method: 'POST',
+                    headers: Enum.OptionAdminHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rq.blob();
+                var fileName = "Thông tin hóa đơn mã " + model.OrderInfo.Code + ".pdf";
+                if (window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(rs, fileName);
+                } else {
+                    const a = document.createElement('a');
+                    document.body.appendChild(a);
+                    const url = window.URL.createObjectURL(rs);
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    }, 0)
+                }
+                alert("Hóa đơn đang được tải xuống !");
+               
+            }
+        }
     </script>
 
 }
