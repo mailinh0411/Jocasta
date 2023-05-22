@@ -64,10 +64,30 @@ namespace Jocasta.Areas.Admin.ApiControllers
         {
             worksheet.DefaultColWidth = 10;
             worksheet.Cells.Style.WrapText = true;
-            worksheet.Cells[1, 1].Value = "Số TT";
-            worksheet.Cells[1, 2].Value = "Thời gian";
-            worksheet.Cells[1, 3].Value = "Doanh thu";
+            worksheet.Cells[2, 1].Value = "Số TT";
+            worksheet.Cells[2, 2].Value = "Thời gian";
+            worksheet.Cells[2, 3].Value = "Doanh thu";
+            worksheet.Row(2).Height = 30;
+
+            //worksheet.Row(1).Merged = true;
+
+            worksheet.Cells["A1:C1"].Merge = true;
+            worksheet.Cells["A1:C1"].Value = "Báo cáo thống kê doanh thu " + model.TypeReport;
+            worksheet.Row(1).Height = 30;
             using (var range = worksheet.Cells["A1:C1"])
+            {
+               /* range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 221, 177));*/
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                range.Style.Font.SetFromFont("Arial", 10);
+                range.Style.Border.Bottom.Style = ExcelBorderStyle.Thick;
+                range.Style.Border.Bottom.Color.SetColor(Color.WhiteSmoke);
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                range.Style.Font.Bold = true;
+            }
+
+            using (var range = worksheet.Cells["A2:C2"])
             {
                 range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 221, 177));
@@ -77,41 +97,53 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 range.Style.Border.Bottom.Color.SetColor(Color.WhiteSmoke);
                 range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                range.Style.Font.Bold = true;
+                range.Style.Font.Bold = true;                
             }
-            using (var range = worksheet.Cells["A2:C2"])
+           /* using (var range = worksheet.Cells["A2:C2"])
             {
                 range.Style.Font.Bold = true;
                 range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            }
-            for (int i = 0; i < model.ListReportData.Count - 1; i++)
+            }*/
+            for (int i = 0; i < model.ListReportData.Count; i++)
             {
                 worksheet.Cells[i + 3, 1].Value = i + 1;
             }
+
             for (int i = 0; i < model.ListReportData.Count; i++)
             {
                 var item = model.ListReportData[i];
-                worksheet.Cells[i + 2, 2].Value = item.Time;
-                worksheet.Cells[i + 2, 3].Value = item.Price;
-                using (var range = worksheet.Cells["A" + (i + 1) + ":C" + i + 1])
+                worksheet.Cells[i + 3, 2].Value = item.Time;
+                worksheet.Cells[i + 3, 3].Value = item.Price;
+                using (var range = worksheet.Cells["A" + (i + 3) + ":C" + i + 3])
                 {
                     range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 }
-                worksheet.Row(i + 1).Height = 30;
+                worksheet.Row(i + 3).Height = 30;
             }
-            using (var range = worksheet.Cells["A" + (model.ListReportData.Count + 1) + ":C" + model.ListReportData.Count + 1])
+            using (var range = worksheet.Cells["A" + (model.ListReportData.Count + 2) + ":C" + model.ListReportData.Count + 2])
             {
                 range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                worksheet.Row(model.ListReportData.Count + 1).Height = 30;
+                worksheet.Row(model.ListReportData.Count + 2).Height = 30;
             }
             for (int i = 1; i <= worksheet.Dimension.End.Column; i++) { worksheet.Column(i).AutoFit(); }
-            worksheet.Cells[1, 1, model.ListReportData.Count + 10, 9].AutoFitColumns(20);
-            worksheet.Cells["A2:A" + model.ListReportData.Count + 1].AutoFitColumns(10);
-            worksheet.Cells["C2:C" + model.ListReportData.Count + 1].AutoFitColumns(40);
-            worksheet.Cells["C1:C1"].AutoFilter = true;
+            //worksheet.Cells[2, 2, model.ListReportData.Count + 10, 9].AutoFitColumns(20);
+            worksheet.Cells["A3:A" + model.ListReportData.Count + 2].AutoFitColumns(10);
+            worksheet.Cells["B3:B" + model.ListReportData.Count + 2].AutoFitColumns(20);
+            worksheet.Cells["C3:C" + model.ListReportData.Count + 2].AutoFitColumns(40);
+            worksheet.Cells["C2:C2"].AutoFilter = true;
+
+            worksheet.Cells["A" + (model.ListReportData.Count + 3) + ":C" + (model.ListReportData.Count + 3)].Merge = true;
+            worksheet.Cells["A" + (model.ListReportData.Count + 3) + ":C" + (model.ListReportData.Count + 3)].Value = "Tổng tiền: " + model.Revenue;
+            worksheet.Row(model.ListReportData.Count + 3).Height = 30;
+            using (var range = worksheet.Cells["A" + (model.ListReportData.Count + 3) + ":C" + (model.ListReportData.Count + 3)])
+            {
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                range.Style.Font.Bold = true;
+            }
         }
 
         private Stream CreateExcelFileReport(ReportModel model, Stream stream = null)
