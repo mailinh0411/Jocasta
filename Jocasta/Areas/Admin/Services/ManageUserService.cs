@@ -76,7 +76,7 @@ namespace Jocasta.Areas.Admin.Services
 
         public bool DeleteUser(string id, IDbTransaction transaction = null)
         {
-            string query = "DELETE FROM [user] WHERE UserId = @UserId";
+            string query = "DELETE FROM [user] WHERE UserId = @id";
             int status = this._connection.Execute(query, new { id }, transaction);
             return status > 0;
         }
