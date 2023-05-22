@@ -250,7 +250,7 @@
             };
 
             if (confirm("Xác nhận xuất hóa đơn !")) {
-                let rq = await fetch('/api/AdminInvoice/ExportFilePdfOrder', {
+                let rq = await fetch('/api/AdminInvoice/ExportPdf', {
                     method: 'POST',
                     headers: Enum.OptionAdminHeaderDefault,
                     body: JSON.stringify(model)

@@ -25,6 +25,8 @@ using System.Xml.Linq;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace Jocasta.Areas.Admin.ApiControllers
 {
@@ -243,70 +245,51 @@ namespace Jocasta.Areas.Admin.ApiControllers
             }
         }
 
-
-        private void BindingFormatForPdfOrder(ExportUserOrder model)
-        {
-            // Khởi tạo đối tượng PDF
-            PdfDocument document = new PdfDocument();
-            PdfPage page = document.AddPage();
-            XGraphics gfx = XGraphics.FromPdfPage(page);
-
-            // Thêm nội dung tài liệu PDF
-            XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
-            gfx.DrawString("HÓA ĐƠN", font, XBrushes.Black, new XRect(0, 0, page.Width.Point, 50), XStringFormats.Center);
-
-            // Thêm thông tin hóa đơn vào tài liệu PDF
-            XTextFormatter tf = new XTextFormatter(gfx);
-            tf.DrawString($"Mã hóa đơn: {model.OrderInfo.Code}", font, XBrushes.Black, new XRect(50, 100, page.Width.Point, 50), XStringFormats.TopLeft);
-            tf.DrawString($"Ngày xuất hóa đơn: {DateTime.Now}", font, XBrushes.Black, new XRect(50, 130, page.Width.Point, 50), XStringFormats.TopLeft);
-
-            XFont headerFont = new XFont("Arial", 12, XFontStyle.Bold);
-            XFont cellFont = new XFont("Arial", 10);
-
-            XRect rect = new XRect(50, 100, page.Width - 100, page.Height - 200);
-            int numberOfColumns = 3;
-            int numberOfRows = model.ListRoomBookeds.Count;
-            double columnWidth = rect.Width / numberOfColumns;
-            double rowHeight = 20;
-
-            // Vẽ tiêu đề
-            gfx.DrawString("STT", headerFont, XBrushes.Black, new XRect(rect.Left, rect.Top, columnWidth, rowHeight), XStringFormats.CenterLeft);
-            gfx.DrawString("Loại phòng", headerFont, XBrushes.Black, new XRect(rect.Left + columnWidth, rect.Top, columnWidth, rowHeight), XStringFormats.CenterLeft);
-            gfx.DrawString("Giá", headerFont, XBrushes.Black, new XRect(rect.Left + columnWidth * 2, rect.Top, columnWidth, rowHeight), XStringFormats.CenterLeft);
-
-            // Vẽ nội dung bảng
-            for (int i = 0; i < numberOfRows; i++)
-            {
-                double top = rect.Top + rowHeight * (i + 1);
-
-                gfx.DrawString((i + 1).ToString(), cellFont, XBrushes.Black, new XRect(rect.Left, top, columnWidth, rowHeight), XStringFormats.CenterLeft);
-                gfx.DrawString(model.ListRoomBookeds[i].Name.ToString(), cellFont, XBrushes.Black, new XRect(rect.Left + columnWidth, top, columnWidth, rowHeight), XStringFormats.CenterLeft);
-                gfx.DrawString(model.ListRoomBookeds[i].Price.ToString(), cellFont, XBrushes.Black, new XRect(rect.Left + columnWidth * 2, top, columnWidth, rowHeight), XStringFormats.CenterLeft);
-            }
-        }
-
-
         [HttpPost]
-        public HttpResponseMessage ExportFilePdfOrder(ExportUserOrder model)
+        public HttpResponseMessage ExportPdf(ExportUserOrder model)
         {
+            // Tạo một đối tượng Document mới
+            Document document = new Document();
+            MemoryStream stream = new MemoryStream();
+            PdfWriter writer = PdfWriter.GetInstance(document, stream);
 
-            using (var memoryStream = new MemoryStream())
-            {
-                BindingFormatForPdfOrder(model);
-                var nameFile = "";
-                var result = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new ByteArrayContent(memoryStream.ToArray())
-                };
-                nameFile = "HoaDonMa" + model.OrderInfo.Code;
-                result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = nameFile + ".pdf"
-                };
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
-                return result;
-            }
+            // Mở tài liệu
+            document.Open();
+
+            // Thêm các thông tin vào tài liệu, ví dụ như tiêu đề, dữ liệu hóa đơn, vv.
+            document.Add(new Paragraph("Invoice Details"));
+            document.Add(new Paragraph("Invoice Number: 001"));
+            document.Add(new Paragraph("Date: 2023-05-22"));
+            document.Add(new Paragraph("Customer Name: John Doe"));
+            document.Add(new Paragraph(""));
+
+            // Tạo một bảng để hiển thị các mặt hàng hóa đơn
+            PdfPTable table = new PdfPTable(3);
+            table.AddCell("Product");
+            table.AddCell("Quantity");
+            table.AddCell("Price");
+            table.AddCell("Product A");
+            table.AddCell("1");
+            table.AddCell("100.00");
+            table.AddCell("Product B");
+            table.AddCell("2");
+            table.AddCell("50.00");
+            table.AddCell("Product C");
+            table.AddCell("3");
+            table.AddCell("30.00");
+            document.Add(table);
+
+            // Đóng tài liệu
+            document.Close();
+
+            // Trả về tệp PDF dưới dạng phản hồi HTTP
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new ByteArrayContent(stream.ToArray());
+            response.Content.Headers.Add("Content-Type", "application/pdf");
+            response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+            response.Content.Headers.ContentDisposition.FileName = "invoice.pdf";
+            return response;
         }
-        
     }
+
 }
