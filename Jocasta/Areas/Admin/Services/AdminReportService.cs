@@ -90,7 +90,7 @@ namespace Jocasta.Areas.Admin.Services
 
             decimal? TotalPrice = this._connection.Query<decimal?>(querySum + query, new { month, year }, transaction).FirstOrDefault();
 
-            query += "  order by Year, Month, Day desc";
+            query += "  order by Year, Month, Day asc";
             List<ReportDaily> ListAllReportDaily = this._connection.Query<ReportDaily>(querySelect + query, new { month, year }, transaction).ToList();
             return new
             {
@@ -107,7 +107,7 @@ namespace Jocasta.Areas.Admin.Services
             
             decimal? TotalPrice = this._connection.Query<decimal?>(querySum + query, new { year }, transaction).FirstOrDefault();
 
-            query += " order by Year, Month desc";
+            query += " order by Year, Month asc";
             List<ReportMonthly> ListAllReportMonth = this._connection.Query<ReportMonthly>(querySelect + query, new { year }, transaction).ToList();
             return new
             {
@@ -131,7 +131,7 @@ namespace Jocasta.Areas.Admin.Services
             }
 
             decimal? TotalPrice = this._connection.Query<decimal?>(querySum + query, new { from, to }, transaction).FirstOrDefault();
-            query += "  order by Year, Month, Day desc";
+            query += "  order by Year, Month, Day asc";
             List<ReportDaily> ListReportAboutTime = this._connection.Query<ReportDaily>(querySelect + query, new { from, to }, transaction).ToList();
             return new
             {
