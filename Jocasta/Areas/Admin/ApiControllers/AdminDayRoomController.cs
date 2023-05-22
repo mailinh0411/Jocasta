@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using System.Web.UI;
 
 namespace Jocasta.Areas.Admin.ApiControllers
 {
@@ -22,6 +23,20 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Success(dayRoomService.GetListDayRoom(keyword, status, startDate, endDate, page, pageSize));
             }
             catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetListDayRoomByDay(string keyword, string status, long startDate, long endDate, int floor)
+        {
+            try
+            {
+                AdminDayRoomService dayRoomService = new AdminDayRoomService();
+                return Success(dayRoomService.GetListDayRoomByDay(keyword, status, startDate, endDate, floor));
+            }
+            catch(Exception ex)
             {
                 return Error(ex.Message);
             }
