@@ -20,7 +20,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a class="select" href="">Book Now</a>
+                        <a class="select" href="">Đặt phòng</a>
                     </li>
                 </ul>
             </div>
@@ -30,58 +30,57 @@
 <!-- Booking Search -->
 <section class="section-padding" data-scroll-index="1">
     <div class="container">
-        <div class="section-subtitle">Availabilitiy</div>
         <div class="section-title">Đặt Phòng</div>
         <div class="booking-inner clearfix">
             <div class="form1 clearfix">
                 <div class="col1 c1">
                     <div class="input1_wrapper">
-                        <label>Check in</label>
+                        <label>Ngày đến</label>
                         <div class="input1_inner">
                             @*<input type="text" class="form-control input datepicker" id="check-in" value="@ViewBag.CheckIn" placeholder="Check in">*@
-                            <input type="text" class="form-control input datepicker" id="check-in" value="" placeholder="Check in">
+                            <input type="text" class="form-control input datepicker" id="check-in" value="" placeholder="Ngày đến">
                         </div>
                     </div>
                 </div>
                 <div class="col1 c2">
                     <div class="input1_wrapper">
-                        <label>Check out</label>
+                        <label>Ngày đi</label>
                         <div class="input1_inner">
                             @*<input type="text" class="form-control input datepicker" id="check-out" value="@ViewBag.CheckOut" placeholder="Check out">*@
-                            <input type="text" class="form-control input datepicker" id="check-out" value="" placeholder="Check out">
+                            <input type="text" class="form-control input datepicker" id="check-out" value="" placeholder="Ngày đi">
                         </div>
                     </div>
                 </div>
                 <div class="col2 c3">
                     <div class="input1_wrapper">
-                        <label>Adults</label>
+                        <label>Người lớn</label>
                         <div class="input_inner">
-                            <input type="text" class="input" placeholder="Adults">
+                            <input type="text" class="input" placeholder="Người lớn">
                         </div>
                     </div>
                 </div>
                 <div class="col2 c4">
                     <div class="input1_wrapper">
-                        <label>Children(age <= 12)</label>
+                        <label>Trẻ em</label>
                         <div class="input_inner">
-                            <input type="text" class="input" placeholder="Children(age <= 12)">
+                            <input type="text" class="input" placeholder="Trẻ em">
                         </div>
                     </div>
                 </div>
                 <div class="col2 c5">
                     @*<input type="text" id="txtRoomCategoryId" value="@ViewBag.RoomCategory" hidden />*@
                     <div class="select_wrapper">
-                        <label>Room Category</label>
+                        <label>Loại phòng</label>
                         <div class="select_inner">
                             <select class="select2 select" id="select-room-category" style="width: 100%">
-                                <option value="">Room Category</option>
+                                <option value="">Loại phòng</option>
                             </select>
                         </div>
                     </div>
 
                 </div>
                 <div class="col3 c6">
-                    <button type="submit" class="btn-form1-submit" onclick="CheckNow_onclick();">Check Now</button>
+                    <button type="submit" class="btn-form1-submit" onclick="CheckNow_onclick();">Tìm kiếm</button>
                 </div>
             </div>
         </div>
@@ -190,7 +189,7 @@
             let html = '';
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                html += '<option class="option-room" value="">Room Category</option>'
+                html += '<option class="option-room" value="">Loại phòng</option>'
                 for (let i = 0; i < rs.data.length; i++) {
                     html += `<option class="option-room" value="${rs.data[i].RoomCategoryId}">${rs.data[i].Name}</option>`
                 }

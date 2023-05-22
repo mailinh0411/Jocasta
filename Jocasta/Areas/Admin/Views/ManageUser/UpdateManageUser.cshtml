@@ -50,7 +50,8 @@
                         <input type="text" class="form-control" id="Password" placeholder="Mật khẩu" required>
                     </div>
 
-                    <button type="button" onclick="Save_onClick();" class="create-button btn btn-success">Lưu</button>
+                    <button type="button" onclick="Save_onClick();" class="create-button btn btn-success">Cập nhật</button>
+                    <button type="button" onclick="Close_onClick();" class="create-button btn btn-danger">Đóng</button>
                 </div>
 
             </div>
@@ -94,8 +95,8 @@
                 $('#Name').val(rs.data.Name);
                 $('#Account').val(rs.data.Account);
                 $('#Email').val(rs.data.Email);
-                /*$('#Phone').val(rs.data.Phone);*/
-                $('#Phone').val('******' + rs.data.Phone.substr(rs.data.Phone.length - 4, 4));
+                $('#Phone').val(rs.data.Phone);
+                /*$('#Phone').val('******' + rs.data.Phone.substr(rs.data.Phone.length - 4, 4));*/
             }
 
         }
