@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-md-12 caption mt-90">
                     <h5>The Jocasta Mai Linh Hotel</h5>
-                    <h1>List Order</h1>
+                    <h1>Order Detail</h1>
                 </div>
             </div>
             <div class="row sub-banner">
@@ -21,7 +21,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a class="select" href="">List Order</a>
+                        <a class="select" href="">OrderDetail</a>
                     </li>
                 </ul>
             </div>
@@ -118,10 +118,10 @@
                 </div>
 
                 @*<div class="form-group col-md-12 mb-0">
-                    <label class="font-weight-semibold fs-16" for="request">Nội dung yêu cầu</label>
-                    <textarea class="form-control" aria-label="With textarea" style="resize:none;" placeholder="Nhập nội dung" rows="2" id="Request"></textarea>
-                </div>*@
-                
+                        <label class="font-weight-semibold fs-16" for="request">Nội dung yêu cầu</label>
+                        <textarea class="form-control" aria-label="With textarea" style="resize:none;" placeholder="Nhập nội dung" rows="2" id="Request"></textarea>
+                    </div>*@
+
             </div>
             <div><button class="btn btn-success" onclick="AddService_onClick();">Thêm</button></div>
             <div class="service-booked">
@@ -164,17 +164,17 @@
                 line-height: 3;
             }
 
-        .container {
+        /*.section-padding .container {
             width: 60% !important;
             margin: auto;
         }
-
+*/
         .list-room {
             margin-top: 20px;
         }
 
             .list-room table {
-                width: 80%;
+                width: 100%;
                 margin: auto;
             }
 
@@ -219,20 +219,20 @@
             outline: 0;
         }
 
-        #order-service .modal-content{
-            height: 700px;
-            width: 700px;
-            margin: auto;
-        }
+            #order-service .modal-content {
+                height: 700px;
+                width: 700px;
+                margin: auto;
+            }
 
-        .modal-body .service-booked{
+        .modal-body .service-booked {
             width: 100%;
             margin-top: 15px;
         }
 
-        .modal-body .service-booked table{
-            width: 100%;
-        }
+            .modal-body .service-booked table {
+                width: 100%;
+            }
 
         .modal-body #Quantity {
             display: block;
@@ -247,12 +247,12 @@
             border-radius: 0.25rem;
         }
 
-        .container .list-service{
+        .container .list-service {
             padding-top: 20px;
         }
 
         .list-service table {
-            width: 80%;
+            width: 100%;
             margin: auto;
         }
 
@@ -261,7 +261,6 @@
             display: flex;
             justify-content: flex-end;
         }
-
     </style>
 }
 
@@ -417,7 +416,7 @@
                 $('#list-service-booked').append(html);
                 $('#totalPriceServiceOrder').text(NumberFormat(totalPriceOrderService));
             }
-            else {                
+            else {
                 let service = modelService.findIndex((obj => obj.ServiceId == model.Service));
                 modelService[service].Quantity = parseInt(modelService[service].Quantity) + parseInt(model.Quantity);
                 totalPriceOrderService += parseInt(model.Quantity) * parseFloat(model.Price);
@@ -481,7 +480,7 @@
                 getListServiceBooked();
                 getOrderById();
             }
-            
+
         }
 
         const initPage = async function () {

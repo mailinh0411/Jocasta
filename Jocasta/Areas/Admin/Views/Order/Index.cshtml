@@ -246,20 +246,20 @@
                             html += `<button class="btn btn-sm btn-success" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckIn_onClick(this);">Check in</button>`;
                             html += `<button class="btn btn-sm btn-danger" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick="SystemCancel_onClick(this);">Hủy</button>`;
                             html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
-                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="ExportFileOrder(this);">In hóa đơn</button></td>`;
+                            html += `</td>`;
                             break;                        
                         case "CHECKED_IN":
                             html += `<td class="text-center"><span class="badge badge-lg light badge-info">Đã check in</span></td>`;
                             html += `<td>`;
                             html += `<button class="btn btn-sm btn-secondary" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckOut_onClick(this);">Check out</button>`;                            
                             html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
-                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="ExportFileOrder(this);">In hóa đơn</button></td>`;
+                            html += `</td>`;
                             break;
                         case "CHECKED_OUT":
                             html += `<td class="text-center"><span class="badge badge-lg light badge-primary">Đã check out</span></td>`;
                             html += `<td>`;
                             html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
-                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="ExportFileOrder(this);">In hóa đơn</button></td>`;
+                            html += `</td>`;
 
                             break;
                         case "USER_CANCEL":
