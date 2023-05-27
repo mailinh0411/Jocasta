@@ -17,10 +17,10 @@
         </div>
         <div class="form-head d-sm-flex align-items-center mt-2 mt-lg-0">
             @*<select class="form-control default-select style-1 border w-auto ml-0">
-                <option>Sort by Newest</option>
-                <option>Oldest</option>
-                <option>Newest</option>
-            </select>*@
+                    <option>Sort by Newest</option>
+                    <option>Oldest</option>
+                    <option>Newest</option>
+                </select>*@
             <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="AddRoomCategory_onClick();">Thêm mới</button>
         </div>
     </div>
@@ -105,7 +105,7 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-         
+
 
             if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
@@ -129,10 +129,10 @@
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</span></div></td>`;
                     html += `<td><div class="dropdown dropstart"><a href="" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>`;
                     html += `<div class="dropdown-menu">
-                        <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}" onclick="Update_onClick(this);">Edit</button>
-                        <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}" onclick="Delete_onClick(this);">Delete</button>
-                        <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}">Trạng thái</button>
-                    </div></div></td>`;
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}" onclick="Update_onClick(this);">Edit</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}" onclick="Delete_onClick(this);">Delete</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}">Trạng thái</button>
+                        </div></div></td>`;
                     html += `</tr>`;
 
                     _index++;

@@ -185,6 +185,7 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminServiceController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\ApiAdminBaseController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRoomCategoryController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\ManageUserAdminController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\ManageUserController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\DayRoomController.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Areas\Admin\Services\AdminServiceRoomService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemTransactionService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemWalletService.cs" />
+    <Compile Include="Areas\Admin\Services\ManageUserAdminService.cs" />
     <Compile Include="Areas\Admin\Services\ManageUserService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -2619,7 +2621,6 @@
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\datepicker.js" />
-    <Content Include="Content\js\helper.js" />
     <Content Include="Content\js\imagesloaded.pkgd.min.js" />
     <Content Include="Content\js\jquery-3.6.0.min.js" />
     <Content Include="Content\js\jquery-migrate-3.0.0.min.js" />

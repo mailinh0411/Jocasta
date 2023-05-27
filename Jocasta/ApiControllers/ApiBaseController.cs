@@ -26,5 +26,12 @@ namespace Jocasta.ApiControllers
             return new JsonResult { status = JsonResult.Status.UNAUTHORIZED, message = JsonResult.Message.TOKEN_EXPIRED };
         }
 
+
+        public JsonResult Unauthenticated()
+        {
+            return new JsonResult { status = JsonResult.Status.UNAUTHENTICATED, data = null, message = JsonResult.Message.TOKEN_EXPIRED };
+        }
+
+
     }
 }
