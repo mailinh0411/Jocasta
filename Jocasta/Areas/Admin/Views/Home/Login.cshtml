@@ -19,7 +19,7 @@
                                 <div>
                                     <div class="mb-3">
                                         <label class="mb-1"><strong>Tên đăng nhập</strong></label>
-                                        <input type="text" id="account" placeholder="Tên đăng nhập" class="form-control">
+                                        <input type="text" id="userName" placeholder="Tên đăng nhập" class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label class="mb-1"><strong>Password</strong></label>
@@ -82,7 +82,29 @@
         }
 
         const loginAdmin_onClick = async function () {
+            let model = {
+                Account: $('#userName').val(),
+                Password: $('#password').val()
+            };
 
+            /*if (GetObjectProperty(model, 'Account') === '') { alert('Tài khoản đăng nhập không được để trống'); return; }
+            if (GetObjectProperty(model, 'Password') === '') { alert('Mật khẩu không được để trống'); return; }
+            let rq = await fetch('/api/adminsystem/loginpost', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(model)
+            })
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) {
+                return;
+            }
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                SetCookie('UserAdminToken', rs.data);
+                window.location.href = '/admin';
+            }*/
         }
     </script>
 }
