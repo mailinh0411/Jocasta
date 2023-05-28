@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<div class="authincation h-100">
+    <div class="container h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+            <div class="col-md-6">
+                <div class="authincation-content">
+                    <div class="row no-gutters">
+                        <div class="col-xl-12">
+                            <div class="auth-form">
+                                <div class="text-center mb-3">
+                                    <img style="width: 60%; height:80%;" src="/Content/img/logo.png" alt="logo">
+                                </div>
+                                <h4 class="text-center mb-4">Đăng nhập</h4>
+                                <div>
+                                    <div class="mb-3">
+                                        <label class="mb-1"><strong>Tên đăng nhập</strong></label>
+                                        <input type="text" id="userName" placeholder="Tên đăng nhập" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="mb-1"><strong>Password</strong></label>
+                                        <div class="input-box">
+                                            <span class="icon" id="toggle" onclick="showPassword();"><i class="fas fa-eye-slash"></i></span>
+                                            <input type="password" id="password" placeholder="Mật khẩu" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary btn-block" onclick="loginAdmin_onClick()">Đăng nhập</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <style>
+
+        .input-box {
+            position: relative;
+            width: 100%;
+        }
+
+            .input-box input {
+            }
+
+            .input-box .icon {
+                position: absolute;
+                right: 8px;
+                font-size: 1.2em;
+                color: #162938;
+                line-height: 39px;
+                cursor: pointer;
+            }
+    </style>
+}
+@section scripts{
+    <script src="~/Content/js/helper.js"></script>
+    <script>
+        const password = document.getElementById('password');
+        const toggle = document.getElementById('toggle');
+
+        const showPassword = function () {
+            $('#toggle').html('');
+            let html = '';
+            if (password.type === 'password') {
+                password.setAttribute('type', 'text');
+                html = '<i class="fas fa-eye"></i>';
+            } else {
+                password.setAttribute('type', 'password');
+                html = '<i class="fas fa-eye-slash"></i>';
+            }
+            $('#toggle').append(html);
+        }
+
+        const loginAdmin_onClick = async function () {
+            let model = {
+                Account: $('#userName').val(),
+                Password: $('#password').val()
+            };
+
+            if (GetObjectProperty(model, 'Account') === '') { alert('Tài khoản đăng nhập không được để trống'); return; }
+            if (GetObjectProperty(model, 'Password') === '') { alert('Mật khẩu không được để trống'); return; }
+            let rq = await fetch('/api/ManageUserAdmin/LoginAdmin', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(model)
+            })
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) {
+                return;
+            }
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                SetCookie('UserAdminToken', rs.data);
+                window.location.href = '/admin';
+            }
+        }
+    </script>
+}
+
+
