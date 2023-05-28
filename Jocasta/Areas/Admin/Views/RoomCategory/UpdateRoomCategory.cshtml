@@ -73,7 +73,7 @@
 
             <div class="d-flex justify-content-end">
                 <button type="button" onclick="UpdateRoomCategory();" class="create-button btn btn-primary" style="margin-right: 10px;">Lưu</button>
-                <button type="button" onclick="UpdateRoomCategory();" class="create-button btn btn-danger">Đóng</button>
+                <button type="button" onclick="CloseForm();" class="create-button btn btn-danger">Đóng</button>
             </div>
             
         </div>
@@ -242,6 +242,10 @@
                 alert('Cập nhật sản phẩm thành công')
                 window.location.href = '/Admin/RoomCategory/';
             }
+        }
+
+        const CloseForm = function () {
+            window.location.href = '/Admin/RoomCategory/';
         }
 
         const initPage = async function () {

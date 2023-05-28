@@ -817,6 +817,25 @@
              }).datepicker('update', new Date());
          });*/
 
+        const GetAdminInfo = async () => {
+            let rq = await fetch('/api/ManageUserAdmin/GetAdminInfo', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            })
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                console.log(rs.data);
+                $('.logo-user-name p').text(rs.data.Name);
+                $('.logo-user-name span').text(rs.data.Account);
+            }
+        }
+
+        const initLayoutPage = async function () {
+            await GetAdminInfo();
+        }
+
+        initLayoutPage();
 
     </script>
     <script>

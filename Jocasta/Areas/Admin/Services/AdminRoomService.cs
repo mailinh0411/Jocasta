@@ -22,7 +22,7 @@ namespace Jocasta.Areas.Admin.Services
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(" ", "%") + "%";
-                query += " and (r.Name like @keyword or r.Floor like @keyword)";
+                query += " and (r.Name like @keyword)";
             }
             if (!string.IsNullOrEmpty(roomCategory))
             {
