@@ -9,7 +9,7 @@ using Jocasta.Models;
 
 namespace Jocasta.Areas.Admin.ApiControllers
 {
-    //[ApiAdminTokenRequire]
+    [ApiAdminTokenRequire]
     public class ApiBaseAdminController : ApiController
     {       
         public JsonResult Success(object data = null, string message = null)
