@@ -196,6 +196,7 @@
     <Compile Include="Areas\Admin\Controllers\RoomCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
     <Compile Include="Areas\Admin\Controllers\ServiceController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SystemController.cs" />
     <Compile Include="Areas\Admin\Services\AdminDayRoomService.cs" />
     <Compile Include="Areas\Admin\Services\AdminInvoiceService.cs" />
     <Compile Include="Areas\Admin\Services\AdminNewService.cs" />
@@ -2833,6 +2834,7 @@
     <Content Include="Areas\Admin\Views\Report\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Login.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutAuth.cshtml" />
+    <Content Include="Areas\Admin\Views\System\Login.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

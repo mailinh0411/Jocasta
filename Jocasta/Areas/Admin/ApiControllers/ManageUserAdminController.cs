@@ -15,24 +15,32 @@ namespace Jocasta.Areas.Admin.ApiControllers
     {
         [AllowAnonymous]
         [HttpPost]
-        public JsonResult LoginPost(UserAdminLogin model)
+        public JsonResult LoginAdmin(UserAdminLogin model)
         {
             try
             {
-                if (string.IsNullOrEmpty(model.Account)) return Error("Tài khoản không được để trống.");
-                if (string.IsNullOrEmpty(model.Password)) return Error("Mật khẩu không được để trống.");
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        if (string.IsNullOrEmpty(model.Account)) return Error("Tài khoản không được để trống.");
+                        if (string.IsNullOrEmpty(model.Password)) return Error("Mật khẩu không được để trống.");
 
-                ManageUserAdminService adminService = new ManageUserAdminService();
+                        ManageUserAdminService adminService = new ManageUserAdminService();
 
-                UserAdmin admin = adminService.GetUserAdminByAccount(model.Account);
-                if (admin == null) return Error("Sai tài khoản hoặc mật khẩu.");
+                        UserAdmin admin = adminService.GetUserAdminByAccount(model.Account);
+                        if (admin == null) return Error("Sai tài khoản hoặc mật khẩu.");
 
-                string password = SecurityProvider.EncodePassword(admin.UserAdminId, model.Password);
-                if (admin.Password != password) return Error("Sai tài khoản hoặc mật khẩu.");
+                        string password = SecurityProvider.EncodePassword(admin.UserAdminId, model.Password);
+                        if (admin.Password != password) return Error("Sai tài khoản hoặc mật khẩu.");
 
-                string token = SecurityProvider.CreateToken(admin.UserAdminId, admin.Password, admin.Account);
-                adminService.UpdateUserAdminToken(admin.UserAdminId, token);
-                return Success(token);
+                        string token = SecurityProvider.CreateToken(admin.UserAdminId, admin.Password, admin.Account);
+                        adminService.UpdateUserAdminToken(admin.UserAdminId, token);
+                        return Success(token);
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
