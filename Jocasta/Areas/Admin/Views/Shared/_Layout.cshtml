@@ -29,7 +29,16 @@
     <link href="/Content/admin/vendor/swiper/css/swiper-bundle.min.css" rel="stylesheet">
     <link href="/Content/admin/css/style.css" rel="stylesheet">
     @RenderSection("styles", false)
-
+    
+    <style>
+        .header-profile ul{
+            
+        }
+        .header-profile ul li{
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -677,13 +686,10 @@
                                     </div>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3">
-                                        <ul class="timeline">
-                                            <li>Thông tin cá nhân</li>
-                                            <li>Đăng xuất</li>
-                                        </ul>
-                                    </div>
-
+                                    <ul class="timeline">
+                                        <li>Thông tin cá nhân</li>
+                                        <li>Đăng xuất</li>
+                                    </ul>
                                 </div>
                             </li>
                         </ul>
