@@ -2621,6 +2621,7 @@
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\datepicker.js" />
+    <Content Include="Content\js\helper.js" />
     <Content Include="Content\js\imagesloaded.pkgd.min.js" />
     <Content Include="Content\js\jquery-3.6.0.min.js" />
     <Content Include="Content\js\jquery-migrate-3.0.0.min.js" />
