@@ -47,5 +47,58 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult GetAdminInfo()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                ManageUserAdminService useradminService = new ManageUserAdminService();
+                UserAdmin userAdmin = useradminService.GetUserAdminByToken(token);
+                if (userAdmin == null) return Unauthorized();
+
+                return Success(userAdmin);
+            }
+            catch (Exception ex)
+            {
+
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ChangeAdminPassword(UserAdminChangePass model)
+        {
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        string token = Request.Headers.Authorization.ToString();
+                        ManageUserAdminService useradminService = new ManageUserAdminService(connect);
+                        UserAdmin userAdmin = useradminService.GetUserAdminByToken(token, transaction);
+                        if (userAdmin == null) return Unauthorized();
+
+                        string password = SecurityProvider.EncodePassword(userAdmin.UserAdminId, model.Password);
+                        if (!userAdmin.Password.Equals(password)) return Error("Mật khẩu cũ không đúng");
+                        else
+                        {
+                            model.NewPassword = SecurityProvider.EncodePassword(userAdmin.UserAdminId, model.NewPassword);
+                            useradminService.UpdateUserAdminPassword(userAdmin.UserAdminId, model.NewPassword, transaction);
+
+                            transaction.Commit();
+                            return Success();
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return Error();
+            }
+        }
     }
 }
