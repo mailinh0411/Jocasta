@@ -10,10 +10,10 @@
     </div>
     <div class=" d-block d-lg-flex align-items-center justify-content-between mb-5">
         <div class="coin-tabs input-group search-area2 w-50">
-            <input id="keyword" type="text" class="form-control" placeholder="Search here" onkeypress="searchKeyPress(event);">
-            <span class="input-group-text">
-                <a href=""> <i class="fas fa-search"></i> </a>
-            </span>
+            <input id="keyword" type="text" class="form-control" placeholder="Tìm kiếm theo tên dịch vụ" onkeypress="searchKeyPress(event);">
+            <button class="input-group-text" onclick="searchService()">
+                <i class="fas fa-search"></i>
+            </button>
         </div>
         <div class="form-head d-sm-flex align-items-center mt-2 mt-lg-0">
             @*<select class="form-control default-select style-1 border w-auto ml-0">
@@ -56,7 +56,7 @@
     <div class="form-inline" id="dynamic-table_length">
         <div class="d-lg-flex align-items-center">
             <div style="width: 50px;">Hiển thị </div>
-            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchRoomCategory();">
+            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchService();">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -75,6 +75,9 @@
 
 @section styles{
     <style>
+        table > thead > tr > th {
+            text-align: center;
+        }
     </style>
 }
 @section scripts{
@@ -116,10 +119,10 @@
                     html += `<div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].Name}</h4></div> </div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${NumberFormat(rs.data.List[i].Price)} VNĐ</span></div></td>`;
                     html += `<td class="w-50"><div><h4 class="mb-0 mt-1 fs-16 font-w500">${description} ...</h4></div></td>`;
-                    html += `<td><div class="dropdown dropstart"><a href="" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>`;
+                    html += `<td><div class="dropdown dropstart"><button type="button" class="btn btn-primary light sharp" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>`;
                     html += `<div class="dropdown-menu">
-                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].ServiceId}" onclick="Update_onClick(this);">Edit</button>
-                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].ServiceId}" onclick="Delete_onClick(this);">Delete</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].ServiceId}" onclick="Update_onClick(this);">Sửa</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].ServiceId}" onclick="Delete_onClick(this);">Xóa</button>
                         </div></div></td>`;
                     html += `</tr>`;
                 }

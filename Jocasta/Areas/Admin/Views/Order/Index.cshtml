@@ -10,10 +10,10 @@
     </div>
     <div class=" d-block d-lg-flex align-items-center justify-content-between mb-5">
         <div class="coin-tabs input-group search-area2 w-50">
-            <input id="keyword" type="text" class="form-control" placeholder="Search here" onkeypress="searchKeyPress(event);">
-            <span class="input-group-text">
-                <a href=""> <i class="fas fa-search"></i> </a>
-            </span>
+            <input id="keyword" type="text" class="form-control" placeholder="Tìm kiếm theo mã code hóa đơn hoặc email hoặc số điện thoại" onkeypress="searchKeyPress(event);">
+            <button class="input-group-text" onclick="searchOrder()">
+                <i class="fas fa-search"></i>
+            </button>
         </div>
         <div class="form-head d-sm-flex align-items-center mt-2 mt-lg-0">
             @*<select class="form-control default-select style-1 border w-auto ml-0">
@@ -37,11 +37,14 @@
                                         <th>Mã đơn đặt</th>
                                         <th>Người đặt</th>
                                         <th>Tổng tiền</th>
-                                        <th>Ngày check in</th>
-                                        <th>Ngày check out</th>
+                                        <th>Ngày vào</th>
+                                        <th>Ngày ra</th>
                                         <th>Ngày tạo</th>
                                         <th>Trạng thái</th>
-                                        <th class="bg-none"></th>
+                                        @*<th class="bg-none">Thao tác</th>
+                                        <th class="bg-none"></th>*@
+                                        <th class="">Thao tác</th>
+                                        <th class="">Xem chi tiết</th>
                                     </tr>
                                 </thead>
 
@@ -76,7 +79,7 @@
     </div>
 </div>
 
-<div class="modal-export" onclick="closeModalExport();">
+@*<div class="modal-export" onclick="closeModalExport();">
     <div class="modal-container">
         <div class="order-detail">
             <input type="text" id="order-id" value="" hidden />
@@ -129,12 +132,12 @@
             <div class="order-price"><h4>Tổng tiền: <span class="total-price">0</span> VNĐ</h4></div>
         </div>
     </div>
-</div>
+</div>*@
 
 
 @section styles{
     <style>
-        .modal-export {
+        /*.modal-export {
             position: fixed;
             background-color: #00000060;
             top: 0;
@@ -157,11 +160,11 @@
             padding: 30px;
         }
 
-        .modal-export .modal-container .name-hotel{
+        .modal-export .modal-container .name-hotel{*/
             /*margin-bottom: 20px;
             display: flex; 
             align-items: center;*/
-        }
+        /*}
 
         .modal-export .modal-container .name-hotel img{
 
@@ -197,7 +200,7 @@
         .modal-export .modal-container .order-detail table tbody tr td{
             text-align: center;
             padding: 10px 0;
-        }
+        }*/
 
         
     </style>
@@ -232,47 +235,51 @@
                 let html = '';
                 for (let i = 0; i < rs.data.List.length; i++) {
                     html += '<tr>';
-                    html += '<td><span class="fs-15 font-w500 text-nowrap">' + (i + 1) + '</span></td>';
+                    html += '<td class="text-center"><span class="fs-15 font-w500 text-nowrap">' + (i + 1) + '</span></td>';
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${rs.data.List[i].Code}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${rs.data.List[i].Name}</span></div></td>`;
-                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${rs.data.List[i].TotalPrice}</span></div></td>`;
+                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${NumberFormat(rs.data.List[i].TotalPrice)}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CheckIn), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CheckOut), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
                     switch (rs.data.List[i].Status) {
                         case "BOOKED":
-                            html += `<td class="text-center"><span class="badge badge-lg light badge-success">Đã đặt</span></td>`;
+                            html += `<td><span class="badge badge-lg light badge-success">Đã đặt</span></td>`;
                             html += `<td>`;
                             html += `<button class="btn btn-sm btn-success" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckIn_onClick(this);">Check in</button>`;
                             html += `<button class="btn btn-sm btn-danger" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick="SystemCancel_onClick(this);">Hủy</button>`;
-                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
+                            //html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
                             html += `</td>`;
                             break;                        
                         case "CHECKED_IN":
-                            html += `<td class="text-center"><span class="badge badge-lg light badge-info">Đã check in</span></td>`;
+                            html += `<td><span class="badge badge-lg light badge-info">Đã check in</span></td>`;
                             html += `<td>`;
                             html += `<button class="btn btn-sm btn-secondary" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckOut_onClick(this);">Check out</button>`;                            
-                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
+                            //html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
                             html += `</td>`;
                             break;
                         case "CHECKED_OUT":
-                            html += `<td class="text-center"><span class="badge badge-lg light badge-primary">Đã check out</span></td>`;
+                            html += `<td><span class="badge badge-lg light badge-primary">Đã check out</span></td>`;
                             html += `<td>`;
-                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
+                            /*html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;*/
                             html += `</td>`;
 
                             break;
                         case "USER_CANCEL":
-                            html += `<td class="text-center"><span class="badge badge-lg light badge-danger" id="">Người dùng hủy</span></td>`;
+                            html += `<td><span class="badge badge-lg light badge-danger" id="">Người dùng hủy</span></td>`;
                             html += `<td>`;
-                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button><td>`;
+                            //html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
+                            html += `</td>`;
                             break;
                         case "SYSTEM_CANCEL":
-                            html += `<td class="text-center"><span class="badge badge-lg light badge-secondary">Hệ thống hủy</span></td>`;
+                            html += `<td><span class="badge badge-lg light badge-secondary">Hệ thống hủy</span></td>`;
                             html += `<td>`;
-                            html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button><td>`;
+                            /*html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;*/
+                            html += `<td>`;
                             break;
                     }
+
+                    html += `<td><button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Chi tiết</button></td>`
                     
                     html += `</tr>`;
                 }
@@ -329,6 +336,12 @@
             window.location.href = ('/admin/Order/Detail?id=' + id);
         }
 
+        const searchKeyPress = function (event) {
+            if (event.keyCode == 13) {
+                searchOrder();
+            }
+        }
+
         const initPage = function () {
             searchOrder();
         }
@@ -336,25 +349,8 @@
        
         initPage();
 
-        const closeModalExport = function () {
-            $('.modal-export').css('display', 'none');
-        }
-
-        const ExportFileOrder = async function (el) {
-            let id = $(el).data('id');
-            $('.order-detail #order-id').val(id);
-
-            $('#list-service-order').html('');
-            $('#list-room-order').html('');
-
-            await getUserOrder(id);
-            await getListRoomOrder(id);
-            await getListServiceOrder(id);
-
-            $('.modal-export').css('display', 'flex');
-            
-        }
-
+       
+/*
         const getUserOrder = async function (orderId) {
             let rp = await fetch('/api/AdminOrder/GetOrderById?id=' + orderId, {
                 method: 'get',
@@ -421,7 +417,7 @@
                 }
                 $('#list-service-order').append(html);
             }
-        }
+        }*/
     </script>
     
 

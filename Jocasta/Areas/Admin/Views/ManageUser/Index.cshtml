@@ -11,7 +11,7 @@
     <div class=" d-block d-lg-flex align-items-center justify-content-between mb-5">
         <div class="coin-tabs input-group search-area2 w-50">
             <input id="keyword" type="text" class="form-control" placeholder="Tìm kiếm theo tên đăng nhập, số điện thoại hoặc email" onkeypress="searchKeyPress(event);">
-            <button class="input-group-text">
+            <button class="input-group-text" onclick="searchUser()">
                 <i class="fas fa-search"></i>
             </button>
         </div>
@@ -58,7 +58,7 @@
     <div class="form-inline" id="dynamic-table_length">
         <div class="d-lg-flex align-items-center">
             <div style="width: 50px;">Hiển thị </div>
-            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchRoomCategory();">
+            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchUser();">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>

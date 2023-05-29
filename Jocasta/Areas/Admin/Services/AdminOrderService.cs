@@ -23,7 +23,7 @@ namespace Jocasta.Areas.Admin.Services
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(" ", "%") + "%";
-                query += " and (u.Email like @keyword or u.[Phone] like @keyword)";
+                query += " and (o.Code like @keyword or u.Email like @keyword or u.[Phone] like @keyword)";
             }
 
             ListOrderUserModel list = new ListOrderUserModel();
