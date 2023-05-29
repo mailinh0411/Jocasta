@@ -67,9 +67,9 @@
     <div class="d-block d-lg-flex align-items-center justify-content-between mb-5">
         <div class="coin-tabs input-group search-area2 w-25">
             <input id="keyword" type="text" class="form-control" placeholder="Tìm kiếm theo tên phòng" onkeypress="searchKeyPress(event);">
-            <span class="input-group-text">
-                <a href=""><i class="fas fa-search"></i></a>
-            </span>
+            <button class="input-group-text" onclick="searchDayRoom()">
+                <i class="fas fa-search"></i>
+            </button>
         </div>
         <div class="form-head d-inline-block d-sm-flex align-items-center mt-2 mt-lg-0">
             <select class="form-control default-select style-1 border w-auto" name="Status" onchange="Status_onChange();">
@@ -406,15 +406,15 @@
                 for (let i = 0; i < rs.data.length; i++) {
                     let x = rs.data[i];
                     if (x.Status === 'AVAILABLE') {
-                        html += `<div class="col-md-3" style="height: 75px; margin-bottom: 10px;"><div class="room-day d-flex">`;
+                        html += `<div class="col-md-3" style="height: 75px; margin-bottom: 10px;" onclick=""><div class="room-day d-flex">`;
                         html += `<div class="room-name room-available">Phòng <br/> ${x.RoomName} </div>`;
                         html += ` <div class="status-room">Phòng trống</div>`;
                         html += `</div></div>`;
                     }
                     else if (x.Status === 'BOOKED') {
-                        html += `<div class="col-md-3" style="height: 75px; margin-bottom: 10px;"><div class="room-day d-flex">`;
+                        html += `<div class="col-md-3" style="height: 75px; margin-bottom: 10px;" onclick=""><div class="room-day d-flex">`;
                         html += `<div class="room-name room-booked">Phòng <br/> ${x.RoomName} </div>`;
-                        html += ` <div class="status-room"><div>${x.Name}</div><div>${DateStringFormat({ stringDate: new Date(x.CheckIn), newFormat: 'dd-mm-yyyy' })} - ${DateStringFormat({ stringDate: new Date(x.CheckOut), newFormat: 'dd-mm-yyyy' })}</div></div>`;
+                        html += ` <div class="status-room"><div>${x.Name}</div><div>${DateStringFormat({ stringDate: new Date(x.CheckIn), newFormat: 'dd/mm/yyyy' })} - ${DateStringFormat({ stringDate: new Date(x.CheckOut), newFormat: 'dd/mm/yyyy' })}</div></div>`;
                         html += `</div></div>`;
                     }
                 }
