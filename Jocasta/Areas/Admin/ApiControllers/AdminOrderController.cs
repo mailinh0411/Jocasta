@@ -19,12 +19,13 @@ namespace Jocasta.Areas.Admin.ApiControllers
     {
         // GET: Admin/AdminRoom
         [HttpGet]
-        public JsonResult GetListOrder(string keyword, int page, int pageSize)
+        public JsonResult GetListOrder(string keyword, string status, int page, int pageSize)
         {
             try
             {
+                if (string.IsNullOrEmpty(status)) status = "";
                 AdminOrderService adminOrderService = new AdminOrderService();
-                return Success(adminOrderService.GetListOrder(keyword, page, pageSize));
+                return Success(adminOrderService.GetListOrder(keyword, status, page, pageSize));
             }
             catch (Exception ex)
             {

@@ -15,7 +15,7 @@ namespace Jocasta.Areas.Admin.Services
         public AdminOrderService(IDbConnection db) : base(db) { }
 
         #region Order
-        public ListOrderUserModel GetListOrder(string keyword, int page, int pageSize, IDbTransaction transaction = null)
+        public ListOrderUserModel GetListOrder(string keyword, string status, int page, int pageSize, IDbTransaction transaction = null)
         {
             string querySelect = "select o.*, u.Name as UserName";
             string queryCount = "select count(*)";
@@ -26,8 +26,13 @@ namespace Jocasta.Areas.Admin.Services
                 query += " and (o.Code like @keyword or u.Email like @keyword or u.[Phone] like @keyword)";
             }
 
+            if (!string.IsNullOrEmpty(status))
+            {
+                query += " and o.Status = @status";
+            }
+
             ListOrderUserModel list = new ListOrderUserModel();
-            int totalRow = this._connection.Query<int>(queryCount + query, new { keyword }, transaction).FirstOrDefault();
+            int totalRow = this._connection.Query<int>(queryCount + query, new { keyword, status }, transaction).FirstOrDefault();
 
             if (totalRow > 0)
             {
@@ -37,7 +42,7 @@ namespace Jocasta.Areas.Admin.Services
 
             query += " order by o.CreateTime desc OFFSET " + skip + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
             list.List = new List<OrderUserModel>();
-            list.List = this._connection.Query<OrderUserModel>(querySelect + query, new { keyword }, transaction).ToList();
+            list.List = this._connection.Query<OrderUserModel>(querySelect + query, new { keyword, status }, transaction).ToList();
             return list;
         }
 
