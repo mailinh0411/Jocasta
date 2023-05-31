@@ -125,7 +125,7 @@ namespace Jocasta.Providers
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
-        /*public static UserAdmin GetUserAdminByToken(HttpRequestMessage requestMessage, IDbConnection connection = null, IDbTransaction transaction = null)
+        public static UserAdmin GetUserAdminByToken(HttpRequestMessage requestMessage, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (requestMessage == null) return null;
             if (requestMessage.Headers == null) return null;
@@ -133,7 +133,7 @@ namespace Jocasta.Providers
             string token = requestMessage.Headers.Authorization.ToString();
             UserAdminService userService = new UserAdminService(connection);
             return userService.GetUserAdminByToken(token, transaction);
-        }*/
+        }
 
         public static User GetUserByToken(HttpRequestMessage requestMessage, IDbConnection connection = null, IDbTransaction transaction = null)
         {
