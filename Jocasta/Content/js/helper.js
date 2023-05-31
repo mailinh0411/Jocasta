@@ -355,3 +355,11 @@ const ENUM_VIEW_ROOM = {
     "LAKE_VIEW": "View nhìn ra hồ bơi"
 }
 
+const ENUM_STATUS_ORDER = {
+    "USER_CANCEL": "Người dùng hủy",
+    "SYSTEM_CANCEL": "Hệ thống hủy",
+    "BOOKED" : "Đã đặt",
+    "CHECKED_IN" : "Đã check in",
+    "CHECKED_OUT" : "Đã check out"
+}
+
