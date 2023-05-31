@@ -56,7 +56,7 @@ namespace Jocasta.Services
 
         public List<RoomCategory> GetAllByKeyword(string id, IDbTransaction transaction = null)
         {
-            string query = "select * from [room_category] where 1=1";
+            string query = "select * from [room_category] where Enable=1";
             if (!string.IsNullOrEmpty(id))
             {
                 query += " and RoomCategoryId = @id";

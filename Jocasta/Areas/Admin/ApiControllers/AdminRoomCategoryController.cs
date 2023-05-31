@@ -14,14 +14,14 @@ namespace Jocasta.Areas.Admin.ApiControllers
     {
         // GET: Admin/RoomCategory
         [HttpGet]
-        public JsonResult GetListRoomCategory(string keyword, int? page, int? pageSize)
+        public JsonResult GetListRoomCategory(string keyword, bool enable, int? page, int? pageSize)
         {
             try
             {
                 AdminRoomCategoryService roomCategoryService = new AdminRoomCategoryService();
                 if(!page.HasValue) { page = 0; }
                 if(!pageSize.HasValue) { pageSize = 25; }
-                return Success(roomCategoryService.GetListRoomCategory(keyword, page.Value, pageSize.Value));
+                return Success(roomCategoryService.GetListRoomCategory(keyword, enable, page.Value, pageSize.Value));
             }
             catch (Exception ex)
             {
