@@ -29,6 +29,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
             return new JsonResult { status = JsonResult.Status.UNAUTHORIZED, data = null, message = JsonResult.Message.NO_PERMISSION };
         }
 
+        
         [HttpGet]
         [AllowAnonymous]
         public JsonResult Unauthenticated()
