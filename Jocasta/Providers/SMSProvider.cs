@@ -22,11 +22,11 @@ namespace Jocasta.Providers
                 clientDetails.EnableSsl = true;
                 clientDetails.DeliveryMethod = SmtpDeliveryMethod.Network;
                 clientDetails.UseDefaultCredentials = false;
-                clientDetails.Credentials = new NetworkCredential("builinh04112001@gmail.com", "dwcciznlirnfjxmu");
+                clientDetails.Credentials = new NetworkCredential("hotelmailinh@gmail.com", "usnrpgjwngavepjx");
 
                 //Message Details
                 MailMessage mailDetails = new MailMessage();
-                mailDetails.From = new MailAddress("info@swayvn.com");
+                mailDetails.From = new MailAddress("hotelmailinh@gmail.com");
                 mailDetails.To.Add(email);
                 mailDetails.Subject = "[MaiLinhHotel] " + title;
                 mailDetails.IsBodyHtml = false;

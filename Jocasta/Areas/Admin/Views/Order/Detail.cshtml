@@ -140,8 +140,8 @@
                 $('.user-order .user-phone').html(GetObjectProperty(rs.data, 'Phone'));
                 $('.user-order .user-email').html(GetObjectProperty(rs.data, 'Email'));
                 $('.user-order .order-code').html(GetObjectProperty(rs.data, 'Code'));
-                $('.user-order .order-checkin').html(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'mm/dd/yyyy' }));
-                $('.user-order .order-checkout').html(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'mm/dd/yyyy' }));
+                $('.user-order .order-checkin').html(DateStringFormat({ stringDate: new Date(rs.data.CheckIn), newFormat: 'dd/mm/yyyy' }));
+                $('.user-order .order-checkout').html(DateStringFormat({ stringDate: new Date(rs.data.CheckOut), newFormat: 'dd/mm/yyyy' }));
                 $('.order-price .total-price').html(NumberFormat(rs.data.TotalPrice));
                 orderinfo.Name = rs.data.Name;
                 orderinfo.Phone = rs.data.Phone;
