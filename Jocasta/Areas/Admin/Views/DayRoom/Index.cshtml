@@ -490,7 +490,7 @@
             keyword = RemoveVietnameseTones(keyword);
             let rq = await fetch('/api/AdminRoomCategory/GetRoomCategories?keyword=' + keyword, {
                 method: 'get',
-                headers: Enum.OptionHeaderDefault
+                headers: Enum.OptionAdminHeaderDefault
             });
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
