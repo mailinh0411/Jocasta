@@ -17,6 +17,7 @@
         </div>
         <div class="form-head d-sm-flex align-items-center mt-2 mt-lg-0">
             <select class="form-control default-select style-1 border w-auto ml-0" name="Status" onchange="Status_onChange();">
+                <option value="">Chọn trạng thái</option>
             </select>
             <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="AddOrder_onClick();">Thêm mới</button>
         </div>
@@ -217,18 +218,20 @@
             CurrentPage: 1,
             PageSize: $('[name=dynamic-table_length]').val(),
             Keyword: $('#keyword').val(),
+            Status: $('[name=Status]').val(),
         };
 
         const searchOrder = function () {
             searchModel.CurrentPage = 1;
             searchModel.PageSize = $('[name=dynamic-table_length]').val();
             searchModel.Keyword = $('#keyword').val();
+            searchModel.Status = $('select[name=Status]').val();
 
             getdataListOrder(searchModel);
         }
 
         const getdataListOrder = async function (searchModel) {
-            let rq = await fetch('/api/AdminOrder/GetListOrder?keyword=' + searchModel.Keyword + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.PageSize, {
+            let rq = await fetch('/api/AdminOrder/GetListOrder?keyword=' + searchModel.Keyword + '&status=' + searchModel.Status + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.PageSize, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
@@ -335,6 +338,12 @@
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 window.location.reload();
             }
+        }
+
+        const Status_onChange = function () {
+            searchModel.Status = $('select[name=Status]').val();
+
+            searchOrder();
         }
 
         const OrderDetail_onClick = function (el) {
