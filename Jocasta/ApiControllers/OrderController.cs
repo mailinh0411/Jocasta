@@ -126,6 +126,11 @@ namespace Jocasta.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Dùng để tạo đơn đặt
+        /// </summary>
+        /// <param name="model">Các thông tin của đơn đặt</param>
+        /// <returns></returns>
 
         // Tao order dat phong
         [HttpPost]
@@ -251,6 +256,9 @@ namespace Jocasta.ApiControllers
                         notification.UserId = order.UserId;
                         notification.CreateTime = HelperProvider.GetSeconds(now);
                         notificationService.InsertNotification(notification, transaction);
+
+                        if (!string.IsNullOrEmpty(user.Email))
+                            SMSProvider.SendOTPViaEmail(user.Email, "", "[MAI LINH HOTEL] THÔNG BÁO ĐƠN ĐẶT", user.Name + " đã đặt phòng thành công, mã đơn đặt là: [" + order.Code + "].");
 
                         transaction.Commit();
                         return Success();

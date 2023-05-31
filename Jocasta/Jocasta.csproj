@@ -244,6 +244,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\HelperProvider.cs" />
     <Compile Include="Providers\SecurityProvider.cs" />
+    <Compile Include="Providers\SMSProvider.cs" />
     <Compile Include="Providers\UserProvider.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CartService.cs" />
