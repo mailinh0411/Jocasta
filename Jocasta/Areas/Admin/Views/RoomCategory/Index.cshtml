@@ -89,27 +89,26 @@
             CurrentPage: 1,
             PageSize: $('[name=dynamic-table_length]').val(),
             Keyword: $('#keyword').val(),
+            Enable: $('[name=Enable]').val(),
         };
 
         const searchRoomCategory = function () {
             searchModel.CurrentPage = 1;
             searchModel.PageSize = $('[name=dynamic-table_length]').val();
             searchModel.Keyword = $('#keyword').val();
+            searchModel.Enable = $('select[name=Enable]').val();
 
             getdataListRoomCategory(searchModel);
         }
 
         const getdataListRoomCategory = async function (searchModel) {
-            let rq = await fetch('/api/AdminRoomCategory/GetListRoomCategory?keyword=' + searchModel.Keyword + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.PageSize, {
+            let rq = await fetch('/api/AdminRoomCategory/GetListRoomCategory?keyword=' + searchModel.Keyword + '&enable=' + searchModel.Enable + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.PageSize, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-
-
-            if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
 
             var _index = searchModel.CurrentPage * parseInt(searchModel.PageSize) - searchModel.PageSize + 1;
@@ -142,6 +141,11 @@
                 $('#list-data').append(html);
                 Pagination(searchModel, rs.data.TotalPage, null, getdataListRoomCategory);
             }
+        }
+
+        const Enable_onChange = function () {
+            searchModel.Enable = $('[name=Enable]').val();
+            searchRoomCategory();
         }
 
         const Update_onClick = function (el) {

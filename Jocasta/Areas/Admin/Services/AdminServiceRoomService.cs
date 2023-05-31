@@ -14,11 +14,11 @@ namespace Jocasta.Areas.Admin.Services
         public AdminServiceRoomService() : base() { }
         public AdminServiceRoomService(IDbConnection db) : base(db) { }
 
-        public ListServiceView GetListService(string keyword, int page, int pageSize, IDbTransaction transaction = null)
+        public ListServiceView GetListService(string keyword, bool enable, int page, int pageSize, IDbTransaction transaction = null)
         {
             string querySelect = "select *";
             string queryCount = "select count(*)";
-            string query = " from [service] where 1=1";
+            string query = " from [service] where Enable=@enable";
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(" ", "%") + "%";
@@ -26,7 +26,7 @@ namespace Jocasta.Areas.Admin.Services
             }
 
             ListServiceView list = new ListServiceView();
-            int totalRow = this._connection.Query<int>(queryCount + query, new { keyword }, transaction).FirstOrDefault();
+            int totalRow = this._connection.Query<int>(queryCount + query, new { keyword, enable }, transaction).FirstOrDefault();
 
             if (totalRow > 0)
             {
@@ -36,7 +36,7 @@ namespace Jocasta.Areas.Admin.Services
 
             query += " order by CreateTime desc OFFSET " + skip + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
             list.List = new List<Service>();
-            list.List = this._connection.Query<Service>(querySelect + query, new { keyword }, transaction).ToList();
+            list.List = this._connection.Query<Service>(querySelect + query, new { keyword, enable }, transaction).ToList();
             return list;
         }
 
@@ -57,6 +57,13 @@ namespace Jocasta.Areas.Admin.Services
         {
             string query = "UPDATE [dbo].[service] SET [Name]=@Name,[Price]=@Price,[Image]=@Image,[Description]=@Description WHERE [ServiceId]=@ServiceId";
             int status = this._connection.Execute(query, model, transaction);
+            return status > 0;
+        }
+
+        public bool UpdateServiceEnable(string id, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[service] SET Enable=0 WHERE [ServiceId]=@id";
+            int status = this._connection.Execute(query, new {id}, transaction);
             return status > 0;
         }
 

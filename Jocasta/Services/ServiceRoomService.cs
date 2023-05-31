@@ -21,7 +21,7 @@ namespace Jocasta.Services
 
         public List<Service> GetListService(IDbTransaction transaction = null)
         {
-            string query = "select * from [service]";
+            string query = "select * from [service] where Enable=1";
             return this._connection.Query<Service>(query, transaction).ToList();
         }
     }

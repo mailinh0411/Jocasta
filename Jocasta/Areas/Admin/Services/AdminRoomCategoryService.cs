@@ -17,7 +17,7 @@ namespace Jocasta.Areas.Admin.Services
         #region RoomCategory
         public List<RoomCategory> GetRoomCategories(string keyword, IDbTransaction transaction = null)
         {
-            string query = "select * from [room_category] where 1=1";
+            string query = "select * from [room_category] where Enable=1";
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(" ", "%") + "%";
@@ -25,11 +25,11 @@ namespace Jocasta.Areas.Admin.Services
             }
             return this._connection.Query<RoomCategory>(query, new { keyword }, transaction).ToList();
         }
-        public ListRoomCategoryView GetListRoomCategory(string keyword, int page, int pageSize, IDbTransaction transaction = null)
+        public ListRoomCategoryView GetListRoomCategory(string keyword, bool enable, int page, int pageSize, IDbTransaction transaction = null)
         {
             string querySelect = "select *";
             string queryCount = "select count(*)";
-            string query = " from [room_category] where Enable = 1";
+            string query = " from [room_category] where Enable = @enable";
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(" ", "%") + "%";
@@ -37,7 +37,7 @@ namespace Jocasta.Areas.Admin.Services
             }
 
             ListRoomCategoryView list = new ListRoomCategoryView();
-            int totalRow = this._connection.Query<int>(queryCount + query, new { keyword }, transaction).FirstOrDefault();
+            int totalRow = this._connection.Query<int>(queryCount + query, new { keyword, enable }, transaction).FirstOrDefault();
 
             if (totalRow > 0)
             {
@@ -47,7 +47,7 @@ namespace Jocasta.Areas.Admin.Services
 
             query += " order by CreateTime desc OFFSET " + skip + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
             list.List = new List<RoomCategory>();
-            list.List = this._connection.Query<RoomCategory>(querySelect + query, new { keyword }, transaction).ToList();
+            list.List = this._connection.Query<RoomCategory>(querySelect + query, new { keyword, enable }, transaction).ToList();
             return list;
         }
 
@@ -81,7 +81,7 @@ namespace Jocasta.Areas.Admin.Services
 
         public bool UpdateRoomCategoryEnable(string id, IDbTransaction transaction = null)
         {
-            string query = "UPDATE [dbo].[room_category] SET Enable=false WHERE RoomCategoryId = @id";
+            string query = "UPDATE [dbo].[room_category] SET Enable=0 WHERE RoomCategoryId = @id";
             int status = this._connection.Execute(query, new { id }, transaction);
             return status > 0;
         }

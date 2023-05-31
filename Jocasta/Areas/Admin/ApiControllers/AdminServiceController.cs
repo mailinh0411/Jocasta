@@ -14,12 +14,12 @@ namespace Jocasta.Areas.Admin.ApiControllers
     {
         // GET: Admin/AdminService
         [HttpGet]
-        public JsonResult GetListService(string keyword, int page, int pageSize)
+        public JsonResult GetListService(string keyword, bool enable, int page, int pageSize)
         {
             try
             {
                 AdminServiceRoomService serviceRoomService = new AdminServiceRoomService();
-                return Success(serviceRoomService.GetListService(keyword, page, pageSize));
+                return Success(serviceRoomService.GetListService(keyword, enable, page, pageSize));
             }
             catch (Exception ex)
             {
@@ -135,11 +135,11 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         Service service = serviceRoomService.GetServiceById(id, transaction);
                         if(service == null) throw new Exception("Dịch vụ này không tồn tại.");
 
-                        if (!string.IsNullOrEmpty(service.Image))
+                        /*if (!string.IsNullOrEmpty(service.Image))
                         {
                             if (!HelperProvider.DeleteFile(service.Image)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
-                        }
-                        if (!serviceRoomService.DeleteService(id, transaction)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+                        }*/
+                        if (!serviceRoomService.UpdateServiceEnable(id, transaction)) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
 
                         transaction.Commit();
                         return Success();
