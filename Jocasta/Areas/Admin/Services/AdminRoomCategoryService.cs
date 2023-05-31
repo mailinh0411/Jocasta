@@ -29,7 +29,7 @@ namespace Jocasta.Areas.Admin.Services
         {
             string querySelect = "select *";
             string queryCount = "select count(*)";
-            string query = " from [room_category] where 1=1";
+            string query = " from [room_category] where Enable = 1";
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(" ", "%") + "%";
@@ -75,6 +75,13 @@ namespace Jocasta.Areas.Admin.Services
         public bool DeleteRoomCategory(string id, IDbTransaction transaction = null)
         {
             string query = "DELETE FROM [dbo].[room_category] WHERE RoomCategoryId = @id";
+            int status = this._connection.Execute(query, new { id }, transaction);
+            return status > 0;
+        }
+
+        public bool UpdateRoomCategoryEnable(string id, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[room_category] SET Enable=false WHERE RoomCategoryId = @id";
             int status = this._connection.Execute(query, new { id }, transaction);
             return status > 0;
         }

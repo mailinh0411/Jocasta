@@ -84,7 +84,7 @@
     <script>
         const searchModel = {
             CurrentPage: 1,
-            RowPerPage: $('[name=dynamic-table_length]').val(),
+            PageSize: $('[name=dynamic-table_length]').val(),
             Keyword: $('#keyword').val(),
         };
 
@@ -104,16 +104,16 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-       
-
-            if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
+
+            var _index = searchModel.CurrentPage * parseInt(searchModel.PageSize) - searchModel.PageSize + 1;
+
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 let html = '';
                 for (let i = 0; i < rs.data.List.length; i++) {
                     let description = (rs.data.List[i].Description === null) ? '' : rs.data.List[i].Description.slice(0, 200);
                     html += '<tr>';
-                    html += '<td class="text-center"><span class="fs-15 font-w500 text-nowrap">' + (i + 1) + '</span></td>';
+                    html += '<td class="text-center"><span class="fs-15 font-w500 text-nowrap">' + _index + '</span></td>';
                     html += '<td> <div class="guest-bx">';
                     html += `<img class="me-4" src="${rs.data.List[i].Image}" alt="">`;
                     html += `<div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].Name}</h4></div> </div></td>`;
