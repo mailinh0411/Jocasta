@@ -16,11 +16,10 @@
             </button>
         </div>
         <div class="form-head d-sm-flex align-items-center mt-2 mt-lg-0">
-            @*<select class="form-control default-select style-1 border w-auto ml-0">
-                    <option>Sort by Newest</option>
-                    <option>Oldest</option>
-                    <option>Newest</option>
-                </select>*@
+            <select class="form-control default-select style-1 border w-auto ml-0" name="Enable" onchange="Enable_onChange();">
+                <option value="true">Đang tồn tại</option>
+                <option value="false">Đã xóa</option>
+            </select>
             <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="AddRoomCategory_onClick();">Thêm mới</button>
         </div>
     </div>
@@ -79,7 +78,7 @@
 
 @section styles{
     <style>
-        table > thead > tr > th{
+        table > thead > tr > th {
             text-align: center;
         }
     </style>
@@ -88,7 +87,7 @@
     <script>
         const searchModel = {
             CurrentPage: 1,
-            RowPerPage: $('[name=dynamic-table_length]').val(),
+            PageSize: $('[name=dynamic-table_length]').val(),
             Keyword: $('#keyword').val(),
         };
 
@@ -113,7 +112,7 @@
             if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
 
-            var _index = searchModel.CurrentPage * parseInt(searchModel.RowPerPage) - searchModel.RowPerPage + 1;
+            var _index = searchModel.CurrentPage * parseInt(searchModel.PageSize) - searchModel.PageSize + 1;
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 let html = '';
@@ -132,9 +131,9 @@
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</span></div></td>`;
                     html += `<td><div class="dropdown dropstart"><button type="button" class="btn btn-primary light sharp" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>`;
                     html += `<div class="dropdown-menu">
-                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}" onclick="Update_onClick(this);">Sửa</button>
-                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}" onclick="Delete_onClick(this);">Xóa</button>
-                        </div></div></td>`;
+                                <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}" onclick="Update_onClick(this);">Sửa</button>
+                                <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomCategoryId}" onclick="Delete_onClick(this);">Xóa</button>
+                            </div></div></td>`;
                     html += `</tr>`;
 
                     _index++;

@@ -211,8 +211,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         RoomCategory roomCategory = roomCategoryService.GetRoomCategoryById(roomCategoryId, transaction);
                         if (roomCategory == null) return Error("Loại phòng này không tồn tại.");
 
-                        //xoá ảnh đại diện
-                        if (!string.IsNullOrEmpty(roomCategory.Image))
+                        /*if (!string.IsNullOrEmpty(roomCategory.Image))
                         {
                             if (!HelperProvider.DeleteFile(roomCategory.Image)) return Error(JsonResult.Message.ERROR_SYSTEM);
                         }
@@ -226,8 +225,8 @@ namespace Jocasta.Areas.Admin.ApiControllers
                                 if (!roomCategoryService.DeleteImageRoom(imageDelete.ImageRoomId, transaction)) return Error(JsonResult.Message.ERROR_SYSTEM);
                                 if (!HelperProvider.DeleteFile(imageDelete.LinkImage)) return Error(JsonResult.Message.ERROR_SYSTEM);
                             }
-                        }
-                        if (!roomCategoryService.DeleteRoomCategory(roomCategoryId, transaction)) return Error(JsonResult.Message.ERROR_SYSTEM);
+                        }*/
+                        if (!roomCategoryService.UpdateRoomCategoryEnable(roomCategoryId, transaction)) return Error(JsonResult.Message.ERROR_SYSTEM);
                         transaction.Commit();
                         return Success();
                     }
