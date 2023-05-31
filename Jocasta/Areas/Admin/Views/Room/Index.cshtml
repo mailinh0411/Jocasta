@@ -134,7 +134,7 @@
         var _isUpdate = false;
         const searchModel = {
             CurrentPage: 1,
-            RowPerPage: $('[name=dynamic-table_length]').val(),
+            PageSize: $('[name=dynamic-table_length]').val(),
             Keyword: $('#keyword').val(),
             Enable: $('[name=Enable]').val(),
             RoomCategory: $('[name=RoomCategory]').val()
@@ -163,7 +163,8 @@
             if (AdminCheckErrorResponse(rs) === false) return;
             $('#list-data').html('');
 
-            var _index = searchModel.CurrentPage * parseInt(searchModel.RowPerPage) - searchModel.RowPerPage + 1;
+            var _index = parseInt(searchModel.CurrentPage) * parseInt(searchModel.PageSize) - parseInt(searchModel.PageSize) + 1;
+            console.log(_index)
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 let html = '';
