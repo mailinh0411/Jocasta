@@ -259,6 +259,7 @@ namespace Jocasta.ApiControllers
                         notification.Content = "Bạn đã đặt phòng thành công, đơn đặt có mã [" + order.Code + "], ngày " + now.ToString();
                         notification.UserId = order.UserId;
                         notification.CreateTime = HelperProvider.GetSeconds(now);
+                        notification.IsRead = false;
                         notificationService.InsertNotification(notification, transaction);
 
                         if (!string.IsNullOrEmpty(user.Email))
@@ -358,10 +359,11 @@ namespace Jocasta.ApiControllers
                         // Thông báo tới người dùng
                         Notification notification = new Notification();
                         notification.NotificationId = Guid.NewGuid().ToString();
-                        notification.Title = "Bạn đã hủy đặt phòng thành công";
+                        notification.Title = "Bạn đã hủy đơn đặt phòng thành công";
                         notification.Content = "Bạn đã hủy thành công đơn đặt phòng có mã [" + order.Code + "], ngày " + now.ToString();
                         notification.UserId = order.UserId;
                         notification.CreateTime = HelperProvider.GetSeconds(now);
+                        notification.IsRead = false;
                         notificationService.InsertNotification(notification, transaction);
 
                         if (!string.IsNullOrEmpty(user.Email))
