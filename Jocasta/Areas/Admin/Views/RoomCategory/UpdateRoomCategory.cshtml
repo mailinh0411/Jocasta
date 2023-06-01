@@ -217,7 +217,7 @@
                 Description: editorDescription.getData(),
                 Image: $('#Image').val(),
                 ListImage: _lsImage,
-                ListImageDelete: [],
+                ListImageDelete: _lsDeleteImage,
             };
             if (GetObjectProperty(model, 'Name') === '') { alert('Tên loại phòng không được để trống.'); return; }
             if (GetObjectProperty(model, 'Square') === '') { alert('Diện tích phòng không được để trống.'); return; }
