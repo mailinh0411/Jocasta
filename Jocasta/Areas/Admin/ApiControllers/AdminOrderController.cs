@@ -95,6 +95,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         notification.Title = "Đơn đặt có mã [" + order.Code + "] đã bị hủy.";
                         notification.UserId = order.UserId;
                         notification.CreateTime = HelperProvider.GetSeconds(now);
+                        notification.IsRead = false;
                         adminNotificationService.InsertNotification(notification, transaction);
 
                         // Gửi mail thông báo cho người dùng
@@ -153,6 +154,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         notification.Content = "Đơn đặt có mã " + order.Code + " của bạn đã được check in ngày " + now.ToString();
                         notification.UserId = order.UserId;
                         notification.CreateTime = HelperProvider.GetSeconds(now);
+                        notification.IsRead = false;
                         adminNotificationService.InsertNotification(notification, transaction);
 
                         transaction.Commit();
@@ -263,6 +265,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         notification.Content = "Đơn đặt có mã " + order.Code + " của bạn đã được check out ngày " + now.ToString();
                         notification.UserId = order.UserId;
                         notification.CreateTime = HelperProvider.GetSeconds(now);
+                        notification.IsRead = false;
                         adminNotificationService.InsertNotification(notification, transaction);
 
 

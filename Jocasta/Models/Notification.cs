@@ -13,5 +13,6 @@ namespace Jocasta.Models
         public string UserId { get; set; }
         public string Link { get; set; }
         public long CreateTime { get; set; }
+        public bool IsRead { get; set; }
     }
 }

@@ -21,6 +21,48 @@
             letter-spacing: 0px;
             margin-left: 7px;
         }
+
+        .notification_dropdown i {
+            font-size: 20px !important;
+        }
+
+        .notification_dropdown .nav-action {
+            position: relative;
+        }
+
+        .notification_dropdown .rounded-circle {
+            position: absolute;
+            right: 6px;
+            top: 2px;
+            background-color: #aa8453;
+            height: 16px;
+            width: 16px;
+            text-align: right;
+        }
+
+        .notification_dropdown .list-notification {
+            width: 250px !important;
+            padding: 0;
+        }
+
+            .notification_dropdown .list-notification ul > li {
+                border-bottom: 1px solid #f4f4f4;
+                padding: 5px 10px;
+                box-sizing: border-box;
+            }
+
+        .list-notification .all-notification {
+            color: #0000009e;
+        }
+
+            .list-notification .all-notification:focus {
+                outline: none !important;
+                color: #aa8453;
+            }
+
+        .notification_dropdown .list-notification .notification-read {
+            background-color: #aa845342;
+        }
     </style>
 
     @RenderSection("styles", false)
@@ -62,34 +104,76 @@
 
                     <li class="nav-item"><a class="nav-link" href="new.html">New</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                    @*<li class="nav-item dropdown">
-                        <div class="nav-link d-flex">
-                            <div class="user-img">
-                                <img class="avatar-user" id="avatar-user" src="" alt="">
-                            </div>
 
-                            <div class="user-name">
-                                <h6 class="mb-0" id="user-name"></h6>
-                                <p class="mb-0" id="user-account" style="font-size:13px;"></p>
-                            </div>
-                        </div>
-
-
-                        <ul class="dropdown-menu last">
-                            <li class="dropdown-item">
-                                <a href="/dang-nhap">Thông tin cá nhân</a>
-                            </li>
-                            <li class="dropdown-item">
-                                <a href="" onclick="LogOut();">Đăng xuất</a>
-                            </li>
-                        </ul>
-                    </li>*@
                 </ul>
             </div>
 
             <!-- Navbar links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">                   
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link nav-action" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge light text-white rounded-circle" id="count-notification"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end list-notification">
+                            <div id="DZ_W_Notification1" class="widget-media dz-scroll" style="height:auto;">
+                                <ul class="timeline">
+                                    <li class="notification-read">
+                                        <div class="timeline-panel">
+                                            <div class="media-body">
+                                                <h6 class="mb-1">Dr sultads Send you Photo</h6>
+                                                <small class="d-block">29 July 2020 - 02:26 PM</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="timeline-panel">
+                                            <div class="media-body">
+                                                <h6 class="mb-1">Resport created successfully</h6>
+                                                <small class="d-block">29 July 2020 - 02:26 PM</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="timeline-panel">
+                                            <div class="media-body">
+                                                <h6 class="mb-1">Reminder : Treatment Time!</h6>
+                                                <small class="d-block">29 July 2020 - 02:26 PM</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="timeline-panel">
+                                            <div class="media-body">
+                                                <h6 class="mb-1">Dr sultads Send you Photo</h6>
+                                                <small class="d-block">29 July 2020 - 02:26 PM</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="timeline-panel">
+                                            <div class="media-body">
+                                                <h6 class="mb-1">Resport created successfully</h6>
+                                                <small class="d-block">29 July 2020 - 02:26 PM</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="timeline-panel">
+                                            <div class="media-body">
+                                                <h6 class="mb-1">Reminder : Treatment Time!</h6>
+                                                <small class="d-block">29 July 2020 - 02:26 PM</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="text-center pb-2">
+                                <button class="all-notification">Xem thêm</button>
+                            </div>
+                        </div>
+                    </li>
                     <li class="nav-item dropdown">
                         <div class="nav-link d-flex">
                             <div class="user-img">
@@ -103,15 +187,12 @@
                         </div>
 
 
-                        <ul class="dropdown-menu last">
+                        <ul class="dropdown-menu last" style="left:0 !important;">
                             <li class="dropdown-item">
                                 <a href="/user/user-info">Thông tin cá nhân</a>
                             </li>
                             <li class="dropdown-item">
                                 <a href="/user/list-order">Đơn đặt của bạn</a>
-                            </li>
-                            <li class="dropdown-item">
-                                <a href="/dang-nhap">Thông báo</a>
                             </li>
                             <li class="dropdown-item">
                                 <a href="" onclick="LogOut();">Đăng xuất</a>
@@ -208,22 +289,41 @@
                 $('#user-account').text(GetObjectProperty(rs.data, 'Account'));
             }
         }
-        GetUserLayoutInfo();
 
         const LogOut = async () => {
-            if (confirm('Bạn có chắc chắn muốn đăng xuất tài khoản khỏi hệ thống?')){
+            if (confirm('Bạn có chắc chắn muốn đăng xuất tài khoản khỏi hệ thống?')) {
                 let rq = await fetch('/api/user/logout', {
-                        method: 'get',
-                        headers: Enum.OptionHeaderDefault
-                    });
-                    let rs = await rq.json();
-                    if (CheckErrorResponse(rs) === false) return;
-                    EraseCookie('UserToken');
-                    EraseCookie('ExpiryTime');
-                    EraseCookie('Email');
-                    window.location.href = '/dang-nhap';
+                    method: 'get',
+                    headers: Enum.OptionHeaderDefault
+                });
+                let rs = await rq.json();
+                if (CheckErrorResponse(rs) === false) return;
+                EraseCookie('UserToken');
+                EraseCookie('ExpiryTime');
+                EraseCookie('Email');
+                window.location.href = '/dang-nhap';
             }
         }
+
+        // Đếm số thông báo chưa đọc của khách hàng
+        const CountNoReadNotification = async function () {
+            let rq = await fetch('/api/notification/GetCountNotificationNoRead', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#count-notification').text(rs.data);
+
+            }
+        }
+
+        const InitPageLayout = async function () {
+            await GetUserLayoutInfo();
+            await CountNoReadNotification();
+        }
+
+        InitPageLayout();
     </script>
 
     @RenderSection("scripts", false)
