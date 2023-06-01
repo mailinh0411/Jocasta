@@ -126,11 +126,7 @@ namespace Jocasta.ApiControllers
             }
         }
 
-        /// <summary>
-        /// Dùng để tạo đơn đặt
-        /// </summary>
-        /// <param name="model">Các thông tin của đơn đặt</param>
-        /// <returns></returns>
+        
 
         // Tao order dat phong
         [HttpPost]
@@ -151,6 +147,7 @@ namespace Jocasta.ApiControllers
                         RoomService roomService = new RoomService(connect);
                         DayRoomService dayRoomService = new DayRoomService(connect);
                         NotificationService notificationService = new NotificationService(connect); 
+                        OrderTransactionService orderTransactionService = new OrderTransactionService(connect);
 
                         User user = userService.GetUserByToken(token,transaction);
                         if (user == null) return Unauthorized();
@@ -248,11 +245,18 @@ namespace Jocasta.ApiControllers
                         cartService.DeleteCart(cart.CartId, transaction);
 
                         DateTime now = DateTime.Now;
+                        OrderTransaction orderTransaction = new OrderTransaction();
+                        orderTransaction.OrderTransactionId = Guid.NewGuid().ToString();
+                        orderTransaction.OrderId = order.OrderId;
+                        orderTransaction.Status = order.Status;
+                        orderTransaction.CreateTime = HelperProvider.GetSeconds(now);
+                        orderTransactionService.InsertOrderTransaction(orderTransaction, transaction);
+
                         // Tạo thông báo cho người dùng
                         Notification notification = new Notification();
                         notification.NotificationId = Guid.NewGuid().ToString();
-                        notification.Title = "Bạn đã đặt đơn thành công";
-                        notification.Content = "Bạn đã đặt thành công đơn hàng có mã " + order.Code + " ngày " + now.ToString();
+                        notification.Title = "Bạn đã đặt phòng thành công";
+                        notification.Content = "Bạn đã đặt phòng thành công, đơn đặt có mã [" + order.Code + "], ngày " + now.ToString();
                         notification.UserId = order.UserId;
                         notification.CreateTime = HelperProvider.GetSeconds(now);
                         notificationService.InsertNotification(notification, transaction);
@@ -318,9 +322,15 @@ namespace Jocasta.ApiControllers
                     {
                         OrderService orderService = new OrderService(connect);
                         DayRoomService dayRoomService = new DayRoomService(connect);    
+                        OrderTransactionService orderTransactionService = new OrderTransactionService(connect);
+                        NotificationService notificationService = new NotificationService(connect);
+                        UserService userService = new UserService(connect);
 
                         Order order = orderService.GetOrderById(orderId, transaction);
                         if (order == null) throw new Exception("Không có đơn đặt của đơn này.");
+
+                        User user = userService.GetUserById(order.UserId, transaction);
+                        if (user == null) throw new Exception("Khách hàng này không tồn tại.");
 
                         if (order.Status != Order.EnumStatus.BOOKED) throw new Exception("Bạn không thể hủy đơn đặt này.");
                         order.Status = Order.EnumStatus.USER_CANCEL;
@@ -336,6 +346,26 @@ namespace Jocasta.ApiControllers
                         {
                             dayRoomService.UpdateDayRoomByOrderDetail(index.OrderDetailId, DayRoom.EnumStatus.AVAILABLE, transaction);
                         }
+
+                        DateTime now = DateTime.Now;
+                        OrderTransaction orderTransaction = new OrderTransaction();
+                        orderTransaction.OrderTransactionId = Guid.NewGuid().ToString();
+                        orderTransaction.OrderId = orderId;
+                        orderTransaction.Status = order.Status;
+                        orderTransaction.CreateTime = HelperProvider.GetSeconds(now);
+                        orderTransactionService.InsertOrderTransaction(orderTransaction, transaction);
+
+                        // Thông báo tới người dùng
+                        Notification notification = new Notification();
+                        notification.NotificationId = Guid.NewGuid().ToString();
+                        notification.Title = "Bạn đã hủy đặt phòng thành công";
+                        notification.Content = "Bạn đã hủy thành công đơn đặt phòng có mã [" + order.Code + "], ngày " + now.ToString();
+                        notification.UserId = order.UserId;
+                        notification.CreateTime = HelperProvider.GetSeconds(now);
+                        notificationService.InsertNotification(notification, transaction);
+
+                        if (!string.IsNullOrEmpty(user.Email))
+                            SMSProvider.SendOTPViaEmail(user.Email, "", "[MAI LINH HOTEL] THÔNG BÁO HỦY ĐƠN ĐẶT", "Khách hàng " + user.Name + ", bạn đã hủy thành công đơn đặt phòng, mã đơn đặt là: [" + order.Code + "].");
 
                         transaction.Commit();
                         return Success();
