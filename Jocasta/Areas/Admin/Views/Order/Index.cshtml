@@ -39,10 +39,8 @@
                                         <th>Ngày ra</th>
                                         <th>Ngày tạo</th>
                                         <th>Trạng thái</th>
-                                        @*<th class="bg-none">Thao tác</th>
-                                            <th class="bg-none"></th>*@
-                                        <th class="">Thao tác</th>
-                                        <th class="">Xem chi tiết</th>
+                                        <th>Thao tác</th>
+                                        <th>Xem chi tiết</th>
                                     </tr>
                                 </thead>
 
@@ -77,130 +75,33 @@
     </div>
 </div>
 
-@*<div class="modal-export" onclick="closeModalExport();">
-        <div class="modal-container">
-            <div class="order-detail">
-                <input type="text" id="order-id" value="" hidden />
-                <div class="name-hotel" style="margin-bottom: 20px;display: flex; align-items: center;">
-                    <img style="width: 150px; height:100px;" src="/Content/img/logo.png" alt="logo">
-                    <h3 style="padding-left: 40px;">THE JOCASTA MAI LINH HOTEL</h3>
-                </div>
+<div class="modal contentCancel" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Lý do hủy</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CloseModal_onClick();">
+                </button>
+            </div>
+            <div class="modal-body">
+                <input id="OrderId" value="" type="hidden" />
 
-                <div class="user-order">
-                    <div>
-                        <h6>Họ và tên: <span class="user-name"></span></h6>
-                        <h6>Số điện thoại: <span class="user-phone"></span></h6>
-                        <h6>Email: <span class="user-email"></span></h6>
-                    </div>
-                    <div>
-                        <h6>Mã hóa đơn: <span class="order-code"></span></h6>
-                        <h6>Ngày đến: <span class="order-checkin"></span></h6>
-                        <h6>Ngày đi: <span class="order-checkout"></span></h6>
-                    </div>
+                <div class="form-group">
+                    <label class="font-weight-semibold fs-16" for="content">Lý do</label>
+                    <textarea class="form-control" aria-label="With textarea" style="resize:none; width: 400px;" placeholder="Nhập lý do hủy" rows="5" id="Content"></textarea>
                 </div>
-                <div class="room-order">
-                    <h6>Các phòng đã đặt:</h6>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>STT</th>
-                                <th>Loại phòng</th>
-                                <th>Số lượng</th>
-                            </tr>
-                        </thead>
-                        <tbody id="list-room-order">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="service-order">
-                    <h6>Các dịch vụ đã đặt:</h6>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>STT</th>
-                                <th>Dịch vụ</th>
-                                <th>Số lượng</th>
-                                <th>Ngày đặt</th>
-                            </tr>
-                        </thead>
-                        <tbody id="list-service-order">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="order-price"><h4>Tổng tiền: <span class="total-price">0</span> VNĐ</h4></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal" onclick="CloseModal_onClick();">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="SaveContentCancel_onClick();">Hủy đơn đặt</button>
             </div>
         </div>
-    </div>*@
+    </div>
+</div>
 
 
 @section styles{
     <style>
-        /*.modal-export {
-            position: fixed;
-            background-color: #00000060;
-            top: 0;
-            left: 0;
-            z-index: 1055;
-            display: none;
-            width: 100%;
-            height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
-            outline: 0;
-        }
-
-        .modal-export .modal-container{
-            position: relative;
-            width: 50%;
-            background-color: white;
-            height: auto;
-            margin: auto;
-            padding: 30px;
-        }
-
-        .modal-export .modal-container .name-hotel{*/
-        /*margin-bottom: 20px;
-            display: flex;
-            align-items: center;*/
-        /*}
-
-        .modal-export .modal-container .name-hotel img{
-
-        }
-
-        .modal-export .modal-container .order-detail .user-order{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .modal-export .modal-container .order-detail .room-order{
-            margin-bottom: 20px;
-        }
-
-        .modal-export .modal-container .order-detail .service-order{
-            margin-bottom: 20px;
-        }
-
-        .modal-export .modal-container .order-detail table{
-            width: 100%;
-
-        }
-
-        .modal-export .modal-container .order-detail table thead{
-            background-color: #f0dfca;
-        }
-
-        .modal-export .modal-container .order-detail table thead tr th{
-            text-align: center;
-        }
-
-        .modal-export .modal-container .order-detail table tbody tr td{
-            text-align: center;
-            padding: 10px 0;
-        }*/
-
-
     </style>
 }
 @section scripts{
@@ -257,33 +158,28 @@
                             html += `<td>`;
                             html += `<button class="btn btn-sm btn-success" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckIn_onClick(this);">Check in</button>`;
                             html += `<button class="btn btn-sm btn-danger" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick="SystemCancel_onClick(this);">Hủy</button>`;
-                            //html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
                             html += `</td>`;
                             break;
                         case "CHECKED_IN":
                             html += `<td><span class="badge badge-lg light badge-info">Đã check in</span></td>`;
                             html += `<td>`;
                             html += `<button class="btn btn-sm btn-secondary" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckOut_onClick(this);">Check out</button>`;
-                            //html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
                             html += `</td>`;
                             break;
                         case "CHECKED_OUT":
                             html += `<td><span class="badge badge-lg light badge-primary">Đã check out</span></td>`;
                             html += `<td>`;
-                            /*html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;*/
                             html += `</td>`;
 
                             break;
                         case "USER_CANCEL":
                             html += `<td><span class="badge badge-lg light badge-danger" id="">Người dùng hủy</span></td>`;
                             html += `<td>`;
-                            //html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;
                             html += `</td>`;
                             break;
                         case "SYSTEM_CANCEL":
                             html += `<td><span class="badge badge-lg light badge-secondary">Hệ thống hủy</span></td>`;
                             html += `<td>`;
-                            /*html += `<button class="btn btn-sm btn-primary" data-id="${rs.data.List[i].OrderId}" onclick="OrderDetail_onClick(this);">Xem chi tiết</button>`;*/
                             html += `<td>`;
                             break;
                     }
@@ -300,14 +196,37 @@
 
         const SystemCancel_onClick = async function (el) {
             var id = $(el).data('id');
-            let rq = await fetch('/api/AdminOrder/SystemCancelOrder?orderId=' + id, {
-                method: 'get',
-                headers: Enum.OptionAdminHeaderDefault
+
+            $('.contentCancel').css('display', 'flex');
+
+            $('.contentCancel #OrderId').val(id);
+
+            
+        }
+
+        const CloseModal_onClick = function () {
+            $('.contentCancel').css('display', 'none');
+
+            $('.contentCancel #Content').val ('');
+        }
+
+        const SaveContentCancel_onClick = async function () {
+            let model = {
+                OrderId: $('.contentCancel #OrderId').val(),
+                Content: $('.contentCancel #Content').val()
+            }
+
+            let rq = await fetch('/api/AdminOrder/SystemCancelOrder', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
             });
+
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                //CloseModal_onClick();
                 window.location.reload();
             }
         }

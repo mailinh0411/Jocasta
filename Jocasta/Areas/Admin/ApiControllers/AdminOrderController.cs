@@ -48,8 +48,8 @@ namespace Jocasta.Areas.Admin.ApiControllers
         }
 
 
-        [HttpGet]
-        public JsonResult SystemCancelOrder(string orderId)
+        [HttpPost]
+        public JsonResult SystemCancelOrder(SystemCancelOrder model)
         {
             try
             {
@@ -58,16 +58,49 @@ namespace Jocasta.Areas.Admin.ApiControllers
                     connect.Open();
                     using(var transaction = connect.BeginTransaction())
                     {
-                        AdminOrderService adminOrderService = new AdminOrderService(connect);
+                        UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
+                        if (userAdmin == null) return Unauthorized();
 
-                        Order order = adminOrderService.GetOrderById(orderId, transaction);
+                        AdminOrderService adminOrderService = new AdminOrderService(connect);
+                        ManageUserService manageUserService = new ManageUserService(connect);
+                        AdminOrderTransactionService adminOrderTransactionService = new AdminOrderTransactionService(connect);
+                        AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
+
+                        Order order = adminOrderService.GetOrderById(model.OrderId, transaction);
                         if (order == null) throw new Exception("Hóa đơn này không tồn tại.");
+
+                        User user = manageUserService.GetUserById(order.UserId, transaction);
+                        if (user == null) throw new Exception("Khách hàng này không tồn tại");
 
                         if (order.Status != Order.EnumStatus.BOOKED) throw new Exception("Bạn không thể chuyển trạng thái cho đơn đặt này.");
 
                         order.Status = Order.EnumStatus.SYSTEM_CANCEL;
-
                         adminOrderService.UpdateStatusOrder(order.OrderId, order.Status, transaction);
+
+                        DateTime now = DateTime.Now;
+
+                        OrderTransaction orderTransaction = new OrderTransaction();
+                        orderTransaction.OrderTransactionId = Guid.NewGuid().ToString();
+                        orderTransaction.OrderId = model.OrderId;
+                        orderTransaction.UserAdminId = userAdmin.UserAdminId;
+                        orderTransaction.Status = order.Status;
+                        orderTransaction.Content = model.Content;
+                        orderTransaction.CreateTime = HelperProvider.GetSeconds(now);
+                        adminOrderTransactionService.InsertOrderTransaction(orderTransaction, transaction);
+
+                        // Thông báo cho người dùng
+                        Notification notification = new Notification();
+                        notification.NotificationId = Guid.NewGuid().ToString();
+                        notification.Content = model.Content;
+                        notification.Title = "Đơn đặt có mã [" + order.Code + "] đã bị hủy.";
+                        notification.UserId = order.UserId;
+                        notification.CreateTime = HelperProvider.GetSeconds(now);
+                        adminNotificationService.InsertNotification(notification, transaction);
+
+                        // Gửi mail thông báo cho người dùng
+                        if (!string.IsNullOrEmpty(user.Email))
+                            SMSProvider.SendOTPViaEmail(user.Email, "", "[MAI LINH HOTEL] THÔNG BÁO HỦY ĐƠN ĐẶT", "Thông báo tới khách hàng " + user.Name + " đơn đặt của bạn có mã là: [" + order.Code + "] đã bị hệ thống hủy. Lý do: " + model.Content);
+
 
                         transaction.Commit();
                         return Success();

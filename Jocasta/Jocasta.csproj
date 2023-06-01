@@ -202,6 +202,7 @@
     <Compile Include="Areas\Admin\Services\AdminNewService.cs" />
     <Compile Include="Areas\Admin\Services\AdminNotificationService.cs" />
     <Compile Include="Areas\Admin\Services\AdminOrderService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminOrderTransactionService.cs" />
     <Compile Include="Areas\Admin\Services\AdminReportService.cs" />
     <Compile Include="Areas\Admin\Services\AdminRoomCategoryService.cs" />
     <Compile Include="Areas\Admin\Services\AdminRoomService.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartDetail.cs" />
     <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\OrderTransaction.cs" />
     <Compile Include="Models\ReportDaily.cs" />
     <Compile Include="Models\ReportMonthly.cs" />
     <Compile Include="Models\ReportYearly.cs" />
@@ -252,6 +254,7 @@
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\OrderTransactionService.cs" />
     <Compile Include="Services\RoomCategoryService.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\ServiceRoomService.cs" />

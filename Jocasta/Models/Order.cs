@@ -56,5 +56,11 @@ namespace Jocasta.Models
         public string Email { get; set; }
         public string RequestContent { get; set; }
     }
+
+    public class SystemCancelOrder
+    {
+        public string OrderId { get; set; }
+        public string Content { get; set; }
+    }
     
 }
