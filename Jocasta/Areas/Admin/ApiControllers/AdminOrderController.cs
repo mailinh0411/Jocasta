@@ -122,8 +122,12 @@ namespace Jocasta.Areas.Admin.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
+                        UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
+                        if (userAdmin == null) return Unauthorized();
+
                         AdminOrderService adminOrderService = new AdminOrderService(connect);
                         AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
+                        AdminOrderTransactionService adminOrderTransactionService = new AdminOrderTransactionService(connect);
 
                         Order order = adminOrderService.GetOrderById(orderId, transaction);
                         if (order == null) throw new Exception("Hóa đơn này không tồn tại.");
@@ -134,6 +138,13 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         adminOrderService.UpdateStatusOrder(order.OrderId, order.Status, transaction);
 
                         DateTime now = DateTime.Now;
+                        OrderTransaction orderTransaction = new OrderTransaction();
+                        orderTransaction.OrderTransactionId = Guid.NewGuid().ToString();
+                        orderTransaction.OrderId = orderId;
+                        orderTransaction.UserAdminId = userAdmin.UserAdminId;
+                        orderTransaction.Status = order.Status;
+                        orderTransaction.CreateTime = HelperProvider.GetSeconds(now);
+                        adminOrderTransactionService.InsertOrderTransaction(orderTransaction, transaction);
 
                         // Tạo thông báo cho người dùng
                         Notification notification = new Notification();
@@ -165,11 +176,15 @@ namespace Jocasta.Areas.Admin.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
+                        UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
+                        if (userAdmin == null) return Unauthorized();
+
                         AdminOrderService adminOrderService = new AdminOrderService(connect);
                         AdminSystemWalletService adminSystemWalletService = new AdminSystemWalletService(connect);
                         AdminSystemTransactionService adminSystemTransactionService = new AdminSystemTransactionService(connect);
                         AdminReportService adminReportService = new AdminReportService(connect);
                         AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
+                        AdminOrderTransactionService adminOrderTransactionService = new AdminOrderTransactionService(connect);
 
                         Order order = adminOrderService.GetOrderById(orderId, transaction);
                         if (order == null) throw new Exception("Hóa đơn này không tồn tại.");
@@ -179,6 +194,14 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         adminOrderService.UpdateStatusOrder(order.OrderId, order.Status, transaction);
 
                         DateTime now = DateTime.Now;
+                        OrderTransaction orderTransaction = new OrderTransaction();
+                        orderTransaction.OrderTransactionId = Guid.NewGuid().ToString();
+                        orderTransaction.OrderId = orderId;
+                        orderTransaction.UserAdminId = userAdmin.UserAdminId;
+                        orderTransaction.Status = order.Status;
+                        orderTransaction.CreateTime = HelperProvider.GetSeconds(now);
+                        adminOrderTransactionService.InsertOrderTransaction(orderTransaction, transaction);
+
                         // Cộng tiền thu của hóa đơn vào trong ví khách sạn, và báo cáo
                         adminSystemWalletService.UpdateRevenueSystem(order.TotalPrice, transaction);
 
