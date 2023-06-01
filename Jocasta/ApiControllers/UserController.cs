@@ -102,12 +102,14 @@ namespace Jocasta.ApiControllers
                         if (string.IsNullOrEmpty(model.Account) || userService.CheckDuplicateUser(model.Account, transaction) != null) throw new Exception("Tên đăng nhập không được để trống.");
                         if (string.IsNullOrEmpty(model.Email) || userService.CheckDuplicateUser(model.Email, transaction) != null) throw new Exception("Email không được để trống.");
                         if (string.IsNullOrEmpty(model.Password)) throw new Exception("Password không được để trống.");
+                        if (string.IsNullOrEmpty(model.Phone)) throw new Exception("Số điện thoại không được để trống.");
 
                         User user = new User();
                         user.UserId = Guid.NewGuid().ToString();
                         user.Name = model.Name;
                         user.Account = model.Account;
                         user.Email = model.Email;
+                        user.Phone = model.Phone;
                         user.Password = SecurityProvider.EncodePassword(user.UserId, model.Password);
                         user.Enable = true;
                         DateTime now = DateTime.Now;
