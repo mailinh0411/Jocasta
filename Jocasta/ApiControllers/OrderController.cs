@@ -154,10 +154,10 @@ namespace Jocasta.ApiControllers
 
                         Cart cart = cartService.GetCartByUserId(user.UserId, transaction);
 
-                        if (cart == null) throw new Exception("Người dùng này chưa chọn phòng để đặt");
+                        //if (cart == null) throw new Exception("Người dùng này chưa chọn phòng để đặt");
 
                         List<CartDetailModel> cartDetail = cartService.GetListRoomBookedByCart(cart.CartId, transaction);
-                        if (cartDetail.Count == 0) throw new Exception("Người dùng này chưa chọn phòng để đặt");
+                        //if (cartDetail.Count == 0) throw new Exception("Người dùng này chưa chọn phòng để đặt");
 
                         // Tạo order 
                         Order order = new Order();
