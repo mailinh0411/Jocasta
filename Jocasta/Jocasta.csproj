@@ -213,6 +213,7 @@
     <Compile Include="Areas\Admin\Services\ManageUserAdminService.cs" />
     <Compile Include="Areas\Admin\Services\ManageUserService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RoomCategoryController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -2869,6 +2870,7 @@
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\ListOrder.cshtml" />
     <Content Include="Views\User\OrderDetail.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
