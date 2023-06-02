@@ -61,7 +61,7 @@ namespace Jocasta.Areas.Admin.Services
         public object GetListDayRoomByDay(string keyword, string status, long dayTime, int floor, IDbTransaction transaction = null)
         {
             string querySelect = "select dr.DayRoomId, dr.RoomId, dr.OrderDetailId, dr.Status, dr.DayTime, r.Name as RoomName, r.Floor, o.CheckIn, o.CheckOut, o.Name";            
-            string query = " from [day_room] dr left join [room] r on dr.RoomId = r.RoomId left join [order_detail] od on dr.OrderDetailId = od.OrderDetailId left join [order] o on od.OrderId = o.OrderId where r.Floor = @floor";
+            string query = " from [day_room] dr left join [room] r on dr.RoomId = r.RoomId left join [order_detail] od on dr.OrderDetailId = od.OrderDetailId left join [order] o on od.OrderId = o.OrderId where r.Floor = @floor and r.Enable=1";
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(" ", "%") + "%";

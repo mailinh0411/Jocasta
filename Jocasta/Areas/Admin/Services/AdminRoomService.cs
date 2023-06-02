@@ -94,5 +94,11 @@ namespace Jocasta.Areas.Admin.Services
             int status = this._connection.Execute(query, new { id, enable }, transaction);
             return status > 0;
         }
+
+        public List<int> GetListFloor(IDbTransaction transaction = null)
+        {
+            string query = "select DISTINCT Floor from [room]";
+            return this._connection.Query<int>(query, transaction).ToList();
+        }
     }
 }
