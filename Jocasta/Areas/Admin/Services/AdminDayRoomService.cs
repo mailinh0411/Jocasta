@@ -130,5 +130,12 @@ namespace Jocasta.Areas.Admin.Services
             string query = "select DISTINCT r.RoomId, r.Name from [day_room] dr left join [room] r on dr.RoomId = r.RoomId where dr.OrderDetailId = @orderDetailId";
             return this._connection.Query<Room>(query, new { orderDetailId }, transaction).ToList();
         }
+
+        public void UpdateDayRoomByOrderDetail(string orderDetailId, string status, IDbTransaction transaction = null)
+        {
+            string query = "update [day_room] set [OrderDetailId]=NULL, [Status]=@status where [OrderDetailId]=@orderDetailId";
+            int count = this._connection.Execute(query, new { orderDetailId, status }, transaction);
+            if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
     }
 }
