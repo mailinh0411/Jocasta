@@ -85,6 +85,9 @@ namespace Jocasta.Areas.Admin.ApiControllers
                     {
                         AdminRoomService roomService = new AdminRoomService(connect);
 
+                        if (string.IsNullOrEmpty(model.Name)) throw new Exception("Tên phòng không được để trống.");
+                        if (roomService.CheckDuplicateRoom(model.Name, transaction) != null) throw new Exception("Tên phòng đã bị trùng.");
+
                         Room room = new Room();
                         room.RoomId = Guid.NewGuid().ToString();    
                         room.Name = model.Name;
@@ -121,6 +124,9 @@ namespace Jocasta.Areas.Admin.ApiControllers
 
                         Room room = roomService.GetRoomById(model.RoomId, transaction);
                         if (room == null) throw new Exception("Phòng này không tồn tại.");
+
+                        if (string.IsNullOrEmpty(model.Name)) throw new Exception("Tên phòng không được để trống.");
+                        if (roomService.CheckNameExist(model.Name, model.RoomId, transaction)) throw new Exception("Tên phòng đã bị trùng.");
 
                         room.Name = model.Name;
                         room.RoomCategoryId = model.RoomCategoryId;

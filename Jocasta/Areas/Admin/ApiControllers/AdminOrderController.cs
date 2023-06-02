@@ -143,12 +143,15 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         Order order = adminOrderService.GetOrderById(orderId, transaction);
                         if (order == null) throw new Exception("Hóa đơn này không tồn tại.");
 
+                        DateTime now = DateTime.Now;
+                        if (HelperProvider.GetSeconds(now) < order.CheckIn) throw new Exception("Đơn đặt phòng chưa đến ngày check in.");
+                        
+
                         if (order.Status != Order.EnumStatus.BOOKED) throw new Exception("Bạn không thể chuyển trạng thái cho đơn đặt này.");
                         order.Status = Order.EnumStatus.CHECKED_IN;
 
                         adminOrderService.UpdateStatusOrder(order.OrderId, order.Status, transaction);
 
-                        DateTime now = DateTime.Now;
                         OrderTransaction orderTransaction = new OrderTransaction();
                         orderTransaction.OrderTransactionId = Guid.NewGuid().ToString();
                         orderTransaction.OrderId = orderId;

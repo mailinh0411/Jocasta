@@ -100,5 +100,18 @@ namespace Jocasta.Areas.Admin.Services
             string query = "select DISTINCT Floor from [room]";
             return this._connection.Query<int>(query, transaction).ToList();
         }
+
+        public bool CheckNameExist(string name, string roomId, IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [room] where Name = @name and Name <> '' and RoomId <> @roomId";
+            int count = this._connection.Query<int>(query, new { name = name, roomId = roomId }, transaction).FirstOrDefault();
+            return count > 0;
+        }
+
+        public string CheckDuplicateRoom(string keyword, IDbTransaction transaction = null)
+        {
+            string query = "select * from [room] where Name = @keyword";
+            return this._connection.Query<string>(query, new { keyword }, transaction).FirstOrDefault();
+        }
     }
 }
