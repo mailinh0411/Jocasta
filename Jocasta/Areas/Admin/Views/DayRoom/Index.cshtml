@@ -59,6 +59,26 @@
     </div>
 </div>
 
+@*<div class="modal UpdateDayRoom" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Cập nhật phòng ngày</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CloseInsert_onClick();">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal" onclick="CloseInsert_onClick();">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="InsertDayRoom_onClick();">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
 
 <div class="container-fluid">
     <div class="row">
@@ -80,8 +100,7 @@
             <div class="date-create form-group mb-0">
                 @*<label class="font-weight-semibold">Từ ngày</label>*@
                 <div class="date-pick">
-                    <input class="form-control" id="start-date" placeholder="Từ ngày" />
-                    <input class="form-control" id="end-date" placeholder="đến ngày" />
+                    <input class="form-control" id="day-time" placeholder="Chọn ngày" onchange="DayTime_onChange()" />
                 </div>
             </div>
 
@@ -137,49 +156,7 @@
                 </div>
             </div>
         </div>
-        @* <div class="tab-pane fade show active" id="list" aria-labelledby="list-tab">
-                <div class="tab-content" id="ListViewTabLinkContent">
-                    <div class="tab-pane fade active show" id="all-status" aria-labelledby="boxed-all-status-tab">
-                        <div class="table-responsive card">
-                            <div class="table-responsive">
-                                <table class="table table-hover border-0 display mb-4 dataTablesCard booking-table table-responsive-lg " id="guestTable-all6">
-                                    <thead>
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>Tên phòng</th>
-                                            <th>Hóa đơn</th>
-                                            <th>Thời gian</th>
-                                            <th>Trạng thái</th>
-                                            <th class="bg-none"></th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="list-data">
-                                        <tr>
-                                            <td class="text-center"><span class="fs-15 font-w500 text-nowrap">1</span></td>
-                                            <td><div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">404 Brrom Str, Fl2</h4></div></td>
-                                            <td><div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">404 Brrom Str, Fl2</h4></div></td>
-                                            <td><div><span class="fs-15 font-w500 text-nowrap">22/02/2023</span></div></td>
-                                            <td><div><span class="badge light badge-danger">LOCKED</span></div></td>
-                                            <td>
-                                                <div class="dropdown dropstart">
-                                                    <a href="" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
-                                                    <div class="dropdown-menu">
-                                                        <button class="dropdown-item fs-15">Edit</button>
-                                                        <button class="dropdown-item fs-15">Delete</button>
-                                                        <button class="dropdown-item fs-15">Trạng thái</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-
+        
     </div>
 </div>
 
@@ -221,7 +198,7 @@
             }
 
                 .date-create .date-pick input {
-                    width: 45%;
+                    width: 85%;
                 }
 
         .modal-dialog {
@@ -284,7 +261,7 @@
         }
 
         .list-room-day .room-booked {
-            background-color: #d34b4b;
+            background-color: #ee7f17;
             height: 100%;
             color: white;
             text-align: center;
@@ -300,20 +277,22 @@
             padding: 10px;
             border-radius: 10px 0 0 10px;
         }
+
+        .room-day .room-name .button-func > button{
+            background-color: none !important;
+            border: none;
+            margin: 0 4px;
+        }
     </style>
 }
 @section scripts{
     <script>
 
-        $('#start-date').datepicker({
+        $('#day-time').datepicker({
             autoclose: true,
             format: 'dd-mm-yyyy'
         });
 
-        $('#end-date').datepicker({
-            autoclose: true,
-            format: 'dd-mm-yyyy'
-        });
 
         $('#start-date-insert').datepicker({
             autoclose: true,
@@ -330,8 +309,7 @@
             Floor: $('[name=dynamic-table_length]').val(),
             Keyword: $('#keyword').val(),
             Status: $('[name=Status]').val(),
-            StartDate: $('#start-date').val(),
-            EndDate: $('#end-date').val()
+            DayTime: $('#day-time').val()
         };
 
         const searchDayRoom = function () {
@@ -339,60 +317,15 @@
             searchModel.Floor = $('[name=dynamic-table_length]').val();
             searchModel.Keyword = $('#keyword').val();
             searchModel.Status = $('[name=Status]').val();
-            let start= $('#start-date').val();
-            searchModel.StartDate = ConvertTime(start);
-            let end = $('#end-date').val();
-            searchModel.EndDate = ConvertTime(end);
+            let time = $('#day-time').val();
+            searchModel.DayTime = ConvertTime(time);
 
             getdataListDayRoom(searchModel);
         }
 
-        /*const getdataListDayRoom = async function (searchModel) {
-            let rq = await fetch('/api/AdminDayRoom/GetListDayRoom?keyword=' + searchModel.Keyword + '&status=' + searchModel.Status + '&startDate=' + searchModel.StartDate + '&endDate=' + searchModel.EndDate + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.PageSize, {
-                method: 'get',
-                headers: Enum.OptionAdminHeaderDefault
-            });
-            let rs = await rq.json();
-            if (AdminCheckErrorResponse(rs) === false) return;
-
-            $('#list-data').html('');
-
-            var _index = searchModel.CurrentPage * parseInt(searchModel.RowPerPage) - searchModel.RowPerPage + 1;
-
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                let html = '';
-                for (let i = 0; i < rs.data.List.length; i++) {
-                    html += '<tr>';
-                    html += '<td><span class="fs-15 font-w500 text-nowrap">' + _index + '</span></td>';
-                    html += `<td><div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${rs.data.List[i].RoomName}</h4></div></td>`;
-                    html += `<td><div><h4 class="mb-0 mt-1 fs-16 font-w500 text-nowrap">${(rs.data.List[i].OrderDetailId !== null ? rs.data.List[i].OrderDetailId : '')}</div></td>`;
-
-                    html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].DayTime), newFormat: 'mm-dd-yyyy' })}</span></div></td>`;
-                    if (rs.data.List[i].Status === 'AVAILABLE') {
-                        html += '<td><div><span class="badge badge-lg light badge-success">Còn trống</span></div></td>';
-                    } else if (rs.data.List[i].Status === 'BOOKED') {
-                        html += '<td><div><span class="badge badge-lg light badge-danger">Đã đặt</span></div></td>';
-                    }
-                    html += `<td><div class="dropdown dropstart"><a href="" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>`;
-                    html += `<div class="dropdown-menu">
-                                                                <button class="dropdown-item fs-15" data-id="${rs.data.List[i].DayRoomId}" onclick="Update_onClick(this);">Edit</button>
-                                                                <button class="dropdown-item fs-15" data-id="${rs.data.List[i].DayRoomId}" onclick="Delete_onClick(this);">Delete</button>
-                                                                <button class="dropdown-item fs-15" data-id="${rs.data.List[i].DayRoomId}" onclick="TrangThai_onClick(this);">Trạng thái</button>
-                                                            </div></div></td>`;
-                    html += `</tr>`;
-
-                    _index++;
-                }
-
-
-                $('#list-data').append(html);
-                Pagination(searchModel, rs.data.TotalPage, null, getdataListDayRoom);
-            }
-        }
-*/
-
+        
         const getdataListDayRoom = async function (searchModel) {
-            let rq = await fetch('/api/AdminDayRoom/GetListDayRoomByDay?keyword=' + searchModel.Keyword + '&status=' + searchModel.Status + '&startDate=' + searchModel.StartDate + '&endDate=' + searchModel.EndDate + '&floor=' + searchModel.Floor, {
+            let rq = await fetch('/api/AdminDayRoom/GetListDayRoomByDay?keyword=' + searchModel.Keyword + '&status=' + searchModel.Status + '&dayTime=' + searchModel.DayTime + '&floor=' + searchModel.Floor, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
@@ -407,13 +340,19 @@
                     let x = rs.data[i];
                     if (x.Status === 'AVAILABLE') {
                         html += `<div class="col-md-3" style="height: 75px; margin-bottom: 10px;" onclick=""><div class="room-day d-flex">`;
-                        html += `<div class="room-name room-available">Phòng <br/> ${x.RoomName} </div>`;
+                        html += `<div class="room-name room-available">`;
+                        html += `<div>Phòng <br/> ${x.RoomName} </div>`;
+                        html += `<div class="button-func"><button class="btn btn-danger shadow btn-xs sharp" data-id="${x.DayRoomId}" onclick="DeleteDayRoom(this)"><i class="fa fa-trash"></i></button>`;
+                        html += `<button class="btn btn-warning shadow btn-xs sharp me-1" data-id="${x.DayRoomId}" onclick="UpdateDayRoom(this)"><i class="fa fa-pencil"></i></button></div></div>`;
                         html += ` <div class="status-room">Phòng trống</div>`;
                         html += `</div></div>`;
                     }
                     else if (x.Status === 'BOOKED') {
                         html += `<div class="col-md-3" style="height: 75px; margin-bottom: 10px;" onclick=""><div class="room-day d-flex">`;
-                        html += `<div class="room-name room-booked">Phòng <br/> ${x.RoomName} </div>`;
+                        html += `<div class="room-name room-booked">`;
+                        html += `<div>Phòng <br/> ${x.RoomName} </div>`;
+                        html += `<div class="button-func"><button class="btn btn-danger shadow btn-xs sharp" data-id="${x.DayRoomId}" onclick="DeleteDayRoom(this)"><i class="fa fa-trash"></i></button>`;
+                        html += `<button class="btn btn-warning shadow btn-xs sharp me-1" data-id="${x.DayRoomId}" onclick="UpdateDayRoom(this)"><i class="fa fa-pencil"></i></button></div></div>`;
                         html += ` <div class="status-room"><div>${x.Name}</div><div>${DateStringFormat({ stringDate: new Date(x.CheckIn), newFormat: 'dd/mm/yyyy' })} - ${DateStringFormat({ stringDate: new Date(x.CheckOut), newFormat: 'dd/mm/yyyy' })}</div></div>`;
                         html += `</div></div>`;
                     }
@@ -422,6 +361,41 @@
 
                 $('#list-room-day').append(html);
                 Pagination(searchModel, rs.data.TotalPage, null, getdataListDayRoom);
+            }
+        }
+
+        const UpdateDayRoom = async function (el) {
+            _isUpdate = true;
+            $('#exampleModalCenter').css('display', 'block');
+            const id = $(el).data('id');
+            let rq = await fetch('/api/AdminDayRoom/GetDayRoomById?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            console.log(rs);
+            var date = DateStringFormat({ stringDate: new Date(rs.data.DayTime), newFormat: 'mm-dd-yyyy' });
+            console.log(date);
+            if (AdminCheckErrorResponse(rs) == false) return;
+            $('#DayRoomId').val(rs.data.DayRoomId);
+            $('[name=Room]').val(rs.data.RoomId);
+            $('[name=DayTimeRoom]').val(date);
+        }
+
+        const DeleteDayRoom = async function (el) {
+            if (confirm('Bạn có chắc muốn xóa phòng ngày này không?') === false) return;
+            const id = $(el).data('id');
+
+            let rq = await fetch('/api/AdminDayRoom/DeleteDayRoom?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Xóa phòng ngày thành công.')
+                searchDayRoom();
             }
         }
 
@@ -550,6 +524,16 @@
             $('#list-room').html('');
             $('#start-date-insert').val();
             $('#end-date-insert').val();
+        }
+
+        const DayTime_onChange = function () {
+            searchModel.DayTime = $('[name=DayTime]').val();
+            searchDayRoom();
+        }
+
+        const Status_onChange = function () {
+            searchModel.Status = $('[name=Status]').val();
+            searchDayRoom();
         }
 
         /*const listRoom = async function () {
@@ -712,20 +696,12 @@
             var curDate = new Date();
             console.log(curDate);
 
-
-
-            /*$('#start-date').val(curDate);
-            $('#end-date').val(curDate);*/
             var curDay = curDate.getDate();
             var curMonth = curDate.getMonth() + 1;
             var curYear = curDate.getFullYear();
             var dayTime = (curDay > 9 ? curDay : '0' + curDay) + '-' + (curMonth > 9 ? curMonth : '0' + curMonth) + '-' + curYear;
 
-            $('#start-date').val(dayTime);
-            $('#end-date').val(dayTime);
-            /*searchModel.DayTime = dayTime;
-            console.log(searchModel.DayTime);
-            await listRoom();*/
+            $('#day-time').val(dayTime);
             await searchDayRoom();
         }
         initPage();
