@@ -50,7 +50,8 @@
                         <tr>
                             <th>STT</th>
                             <th>Dịch vụ</th>
-                            <th>Số lượng</th>
+                            <th>Phòng</th>
+                            <th>Giá dịch vụ</th>
                             <th>Ngày đặt</th>
                         </tr>
                     </thead>
@@ -62,7 +63,6 @@
         </div>   
         
         <div style="display:flex; justify-content: flex-end; margin-top: 20px;">
-            @*<button class="btn btn-info" onclick="ExportOrder();">In hóa đơn</button>*@
             <button class="btn btn-info" onclick="ExportPdfOrder();">In hóa đơn</button>
         </div>
     </div>
@@ -195,8 +195,9 @@
                 for (let i = 0; i < rs.data.length; i++) {
                     html += '<tr>';
                     html += `<td>${i + 1}</td>`;
-                    html += `<td>${rs.data[i].Name}</td>`;
-                    html += `<td>${rs.data[i].Quantity}</td>`;
+                    html += `<td>${rs.data[i].ServiceName}</td>`;
+                    html += `<td>${rs.data[i].RoomName}</td>`;
+                    html += `<td>${NumberFormat(rs.data[i].Price) }</td>`;
                     html += `<td>${DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) }</td>`;
                     html += '</tr>';
                     listservicebooked.push(rs.data[i]);
@@ -210,41 +211,7 @@
             await getListRoomOrder();
             await getListServiceOrder();
         }
-        initPage();
-
-        var ExportOrder = async function () {
-            
-            let model = {
-                OrderInfo: orderinfo,
-                ListRoomBookeds: listroombooked,
-                ListServiceBookeds: listservicebooked
-            };
-            
-            if (confirm("Xác nhận xuất hóa đơn !")) {
-                let rq = await fetch('/api/AdminInvoice/ExportFileExcelOrder', {
-                    method: 'POST',
-                    headers: Enum.OptionAdminHeaderDefault,
-                    body: JSON.stringify(model)
-                });
-                let rs = await rq.blob();
-                var fileName = "Thông tin hóa đơn mã " + model.OrderInfo.Code + ".xlsx";
-                if (window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveOrOpenBlob(rs, fileName);
-                } else {
-                    const a = document.createElement('a');
-                    document.body.appendChild(a);
-                    const url = window.URL.createObjectURL(rs);
-                    a.href = url;
-                    a.download = fileName;
-                    a.click();
-                    setTimeout(() => {
-                        window.URL.revokeObjectURL(url);
-                        document.body.removeChild(a);
-                    }, 0)
-                }
-                alert("Hóa đơn đang được tải xuống !");
-            }
-        }
+        initPage();        
 
         const ExportPdfOrder = async function () {
             let model = {

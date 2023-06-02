@@ -77,7 +77,7 @@
                 <thead>
                     <tr>
                         <th>Dịch vụ</th>
-                        <th>Số lượng</th>
+                        <th>Phòng</th>
                         <th>Tiền dịch vụ</th>
                         <th>Ngày đặt</th>
                     </tr>
@@ -113,14 +113,22 @@
                 </div>
 
                 <div class="form-group col-md-6 mb-0">
-                    <label class="font-weight-semibold fs-16" for="quantity">Số lượng</label>
-                    <input type="text" class="form-control" id="Quantity" placeholder="Nhập số lượng" onkeyup="ValidateInputOnlyNumber(event,this)" required>
+                    <label class="font-weight-semibold fs-16" for="room">Tên phòng</label>
+                    <select class="form-control" id="RoomName" name="RoomName">
+                        <option value="">Chọn phòng</option>
+                    </select>
+                    
                 </div>
 
+                @*<div class="form-group col-md-6 mb-0">
+            <label class="font-weight-semibold fs-16" for="quantity">Số lượng</label>
+            <input type="text" class="form-control" id="Quantity" placeholder="Nhập số lượng" onkeyup="ValidateInputOnlyNumber(event,this)" required>
+        </div>*@
+
                 @*<div class="form-group col-md-12 mb-0">
-                        <label class="font-weight-semibold fs-16" for="request">Nội dung yêu cầu</label>
-                        <textarea class="form-control" aria-label="With textarea" style="resize:none;" placeholder="Nhập nội dung" rows="2" id="Request"></textarea>
-                    </div>*@
+            <label class="font-weight-semibold fs-16" for="request">Nội dung yêu cầu</label>
+            <textarea class="form-control" aria-label="With textarea" style="resize:none;" placeholder="Nhập nội dung" rows="2" id="Request"></textarea>
+        </div>*@
 
             </div>
             <div><button class="btn btn-success" onclick="AddService_onClick();">Thêm</button></div>
@@ -129,7 +137,8 @@
                     <thead>
                         <tr>
                             <th style="width: 30%;">Dịch vụ</th>
-                            <th>Số lượng</th>
+                            @*<th>Số lượng</th>*@
+                            <th>Tên phòng</th>
                             <th>Tiền dịch vụ</th>
                             @* <th style="width: 45%;">Nội dung yêu cầu</th>*@
                             <th style="width: 7%;"></th>
@@ -332,9 +341,9 @@
                 let html = '';
                 for (let i = 0; i < rs.data.length; i++) {
                     html += `<tr>`;
-                    html += `<td>${GetObjectProperty(rs.data[i], 'Name')}</td>`;
+                    html += `<td>${GetObjectProperty(rs.data[i], 'ServiceName')}</td>`;
+                    html += `<td>${GetObjectProperty(rs.data[i], 'RoomName')}</td>`;
                     html += `<td>${(NumberFormat(rs.data[i].Price))} VNĐ</td>`;
-                    html += `<td>${GetObjectProperty(rs.data[i], 'Quantity')}</td>`;
                     html += `<td>${DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) }</td>`;
                     html += `</tr>`;
                 }
@@ -379,6 +388,25 @@
             $('[name=Service]').append(html);
         }
 
+        const getListRoomName = async function () {
+            let rq = await fetch('/api/order/GetListRoomNameBooked?orderId=' + orderId, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+
+            $('[name=RoomName]').html('');
+            let html = '<option value="">Chọn phòng</option>';
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<option value="${rs.data[i].RoomId}" data-price="${rs.data[i].Price}">${rs.data[i].Name}</option>`;
+                }
+            }
+
+            $('[name=RoomName]').append(html);
+        }
+
         /* Đặt dịch vụ */
         let modelService = [];
         let totalPriceOrderService = 0;
@@ -387,29 +415,32 @@
             let model = {
                 Service: $('select[name=Service]').val(),
                 ServiceName: $('#Service').find(':selected').text(),
-                Quantity: $('#Quantity').val(),
+                Room: $('select[name=RoomName]').val(),
+                RoomName: $('#RoomName').find(':selected').text(),
                 Price: $('#Service').find(':selected').data('price')
             }
 
             console.log(model);
 
-            if (GetObjectProperty(model,'Service') === '') { alert('Bạn chưa chọn dịch vụ.'); return; }
-            if (GetObjectProperty(model, 'Quantity') === '') { alert('Số lượng không được để trống'); return; }
+            if (GetObjectProperty(model, 'Service') === '') { alert('Bạn chưa chọn dịch vụ.'); return; }
+            if (GetObjectProperty(model,'Room') === '') { alert('Bạn chưa chọn phòng.'); return; }
 
             // Kiểm tra xem có service này chưa
-            let checkService = modelService.some(s => s.ServiceId === model.Service);
+            let checkService = modelService.some(s => s.ServiceId === model.Service && s.RoomId === model.Room);
             console.log(checkService);
+            // Kiểm tra xem có phòng này chưa
             let serviceOrder = {
                 ServiceId: model.Service,
-                Quantity: parseInt(model.Quantity),
+                RoomId: model.Room,
+                //Quantity: parseInt(model.Quantity),
                 Price: parseFloat(model.Price)
             }
             if (checkService === false) {
                 modelService.push(serviceOrder);
-                totalPriceOrderService += parseInt(model.Quantity) * parseFloat(model.Price);
-                let html = `<tr class="item-service item-id-${model.Service}" data-id="${model.Service}" onclick="ServiceOrder_onClick();">`;
+                totalPriceOrderService += parseFloat(model.Price);
+                let html = `<tr class="item-service item-id-${model.Service}" data-id="${model.Service}" data-room="${model.Room}" onclick="ServiceOrder_onClick();">`;
                 html += '<td><input value="' + model.Service + '" hidden />' + model.ServiceName + '</td>';
-                html += '<td>' + model.Quantity + '</td>';
+                html += '<td><input value="' + model.Room + '" hidden />' + model.RoomName + '</td>';
                 html += '<td>' + NumberFormat(model.Price) + '</td>';
                 html += '<td class="text-center" style="width:100px;"><input type="hidden" name="serviceid"/><button onclick="DeleteService(this);" class="btn btn-outline-danger btn-xs"><i class="fas fa-trash"></i></button></td>';
 
@@ -417,17 +448,8 @@
                 $('#totalPriceServiceOrder').text(NumberFormat(totalPriceOrderService));
             }
             else {
-                let service = modelService.findIndex((obj => obj.ServiceId == model.Service));
-                modelService[service].Quantity = parseInt(modelService[service].Quantity) + parseInt(model.Quantity);
-                totalPriceOrderService += parseInt(model.Quantity) * parseFloat(model.Price);
-                $(`.item-id-${model.Service}`).replaceWith(`
-                    <tr class="item-service item-id-${model.Service}" data-id="${model.Service}" onclick="ServiceOrder_onClick();">
-                      <td><input value="${model.Service}" hidden /> ${model.ServiceName} </td>
-                      <td> ${modelService[service].Quantity} </td>
-                      <td> ${NumberFormat(model.Price)}</td>';
-                      <td class="text-center" style="width:100px;"><input type="hidden" name="serviceid"/><button onclick="DeleteService(this);" class="btn btn-outline-danger btn-xs"><i class="fas fa-trash"></i></button></td>
-                    </tr>`);
-                $('#totalPriceServiceOrder').text(NumberFormat(totalPriceOrderService));
+                alert("Bạn đã đặt dịch vụ này cho phòng bạn đã chọn.");
+                return;
             }
 
             console.log(modelService);
@@ -440,9 +462,10 @@
         const DeleteService = function (el) {
             $(el).closest('tr').remove();
             var id = $(el).closest('tr').data("id");
-            let service = modelService.findIndex((obj => obj.ServiceId == id));
+            var room = $(el).closest('tr').data("room");
+            let service = modelService.findIndex((obj => obj.ServiceId == id && obj.RoomId == room));
             console.log(modelService[service])
-            totalPriceOrderService -= parseInt(modelService[service].Quantity) * parseFloat(modelService[service].Price);
+            totalPriceOrderService -= parseFloat(modelService[service].Price);
             modelService = modelService.filter(item => item !== modelService[service]);
             $('#totalPriceServiceOrder').text(NumberFormat(totalPriceOrderService));
             console.log(modelService);
@@ -488,6 +511,7 @@
             await getListRoomBooked();
             await getListServiceBooked();
             await getListService();
+            await getListRoomName();
         }
 
         initPage();

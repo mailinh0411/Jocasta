@@ -382,5 +382,36 @@ namespace Jocasta.ApiControllers
             }
         }
 
+        //Lấy ra danh sách phòng đã đặt
+        [HttpGet]
+        public JsonResult GetListRoomNameBooked(string orderId)
+        {
+            try
+            {
+                DayRoomService dayRoomService = new DayRoomService();
+
+                OrderService orderService = new OrderService();
+
+                Order order = orderService.GetOrderById(orderId);
+                if (order == null) throw new Exception("Đơn đặt phòng này không tồn tại.");
+
+                // Lấy ra danh sách chi tiết đơn đặt của đơn đặt
+                List<OrderDetailBooking> list = orderService.GetListOrderDetailByOrder(orderId);
+
+                List<Room> roomList = new List<Room>();
+                // Lấy thêm danh sách của phòng
+                foreach (OrderDetailBooking item in list)
+                {
+                    List<Room> listRoom = dayRoomService.GetListRoomByOrder(item.OrderDetailId);
+                    roomList.AddRange(listRoom);
+                }
+
+                return Success(roomList);
+            }
+            catch(Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }
