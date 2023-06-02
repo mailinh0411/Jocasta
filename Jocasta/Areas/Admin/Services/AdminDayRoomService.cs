@@ -143,5 +143,12 @@ namespace Jocasta.Areas.Admin.Services
             string query = "select * from day_room where RoomId=@roomId and DayTime = @day";
             return this._connection.Query<DayRoom>(query, new {roomId, day}, transaction).FirstOrDefault();
         }
+
+        public void DeleteAllDayRoom(long day, IDbTransaction transaction = null)
+        {
+            string query = "delete from [day_room] where [DayTime]=@day";
+            int count = this._connection.Execute(query, new { day }, transaction);
+            if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
     }
 }
