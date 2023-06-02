@@ -191,6 +191,7 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\DayRoomController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ManageUserAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReportController.cs" />
@@ -2841,6 +2842,7 @@
     <Content Include="Areas\Admin\Views\Home\Login.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutAuth.cshtml" />
     <Content Include="Areas\Admin\Views\System\Login.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageUserAdmin\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

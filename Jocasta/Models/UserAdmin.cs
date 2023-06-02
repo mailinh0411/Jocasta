@@ -30,4 +30,9 @@ namespace Jocasta.Models
         public string Password { get; set; }
         public string NewPassword { get; set; }
     }
+
+    public class ListUserAdminView : BaseListModel
+    {
+        public List<UserAdmin> List { get; set; }
+    }
 }

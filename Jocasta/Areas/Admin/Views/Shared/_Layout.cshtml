@@ -38,6 +38,14 @@
             padding: 5px 15px;
             cursor: pointer;
         }
+
+        .img-logo-user img {
+            height: 40px;
+            width: 40px;
+            border: 0.5px solid #aa8453;
+            border-radius: 50%;
+        }
+
     </style>
 </head>
 <body>
@@ -595,79 +603,6 @@
                                     <i class="fas fa-bell"></i>
                                     <span class="badge light text-white bg-primary rounded-circle"></span>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3" style="height:380px;">
-                                        <ul class="timeline">
-                                            <li>
-                                                <div class="timeline-panel">
-                                                    <div class="media me-2">
-                                                        <img alt="image" width="50" src="images/avatar/1.jpg">
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                                                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="timeline-panel">
-                                                    <div class="media me-2 media-info">
-                                                        KG
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1">Resport created successfully</h6>
-                                                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="timeline-panel">
-                                                    <div class="media me-2 media-success">
-                                                        <i class="fa fa-home"></i>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                                                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="timeline-panel">
-                                                    <div class="media me-2">
-                                                        <img alt="image" width="50" src="images/avatar/1.jpg">
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                                                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="timeline-panel">
-                                                    <div class="media me-2 media-danger">
-                                                        KG
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1">Resport created successfully</h6>
-                                                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="timeline-panel">
-                                                    <div class="media me-2 media-primary">
-                                                        <i class="fa fa-home"></i>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                                                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <a class="all-notification" href="javascript:void(0);">See all notifications <i class="ti-arrow-end"></i></a>
-                                </div>
                             </li>
                             <li class="nav-item dropdown notification_dropdown">
                                 <a class="nav-link bell-link nav-action " href="javascript:void(0);">
@@ -678,7 +613,7 @@
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link nav-action" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
                                     <div class="img-logo-user">
-                                        <img style="border-radius: 50% !important;" src="~/Content/img/team/2.jpg" alt="Alternate Text" />
+                                        <img style="border-radius: 50% !important;" src="" alt="Alternate Text" />
                                     </div>
                                     <div class="logo-user-name" style="margin: 25px 10px;">
                                         <p style="margin:0;">Admin</p>
@@ -688,7 +623,7 @@
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <ul class="timeline">
                                         <li>Thông tin cá nhân</li>
-                                        <li>Đăng xuất</li>
+                                        <li onclick="LogOut();">Đăng xuất</li>
                                     </ul>
                                 </div>
                             </li>
@@ -712,6 +647,12 @@
                         <a class="" href="/Admin/Home/Index" aria-expanded="false">
                             <i class="fas fa-tachometer-alt"></i>
                             <span class="nav-text">Tổng quan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="" href="/Admin/ManageUserAdmin/Index" aria-expanded="false">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <span class="nav-text">Quản lý tài khoản</span>
                         </a>
                     </li>
                     <li>
@@ -835,6 +776,22 @@
                 console.log(rs.data);
                 $('.logo-user-name p').text(rs.data.Name);
                 $('.logo-user-name span').text(rs.data.Account);
+                $('.img-logo-user img').attr('src', GetObjectProperty(rs.data, 'Avatar'));
+            }
+        }
+
+        const LogOut = async function () {
+            if (confirm('Bạn có chắc muốn đăng xuất khỏi hệ thống') === false) return;
+
+            let rq = await fetch('/api/ManageUserAdmin/LogOut', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            })
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                EraseCookie('UserAdminToken');
+                window.location.href = '/admin/home/login';
             }
         }
 
