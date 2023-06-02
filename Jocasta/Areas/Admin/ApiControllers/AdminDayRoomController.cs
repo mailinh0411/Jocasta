@@ -29,12 +29,12 @@ namespace Jocasta.Areas.Admin.ApiControllers
         }
 
         [HttpGet]
-        public JsonResult GetListDayRoomByDay(string keyword, string status, long startDate, long endDate, int floor)
+        public JsonResult GetListDayRoomByDay(string keyword, string status, long dayTime, int floor)
         {
             try
             {
                 AdminDayRoomService dayRoomService = new AdminDayRoomService();
-                return Success(dayRoomService.GetListDayRoomByDay(keyword, status, startDate, endDate, floor));
+                return Success(dayRoomService.GetListDayRoomByDay(keyword, status, dayTime, floor));
             }
             catch(Exception ex)
             {
