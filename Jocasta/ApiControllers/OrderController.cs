@@ -171,6 +171,7 @@ namespace Jocasta.ApiControllers
                         order.Email = model.Email;
                         order.Phone = model.Phone;
                         order.Name = model.Name;
+                        order.RequestContent = model.RequestContent;
                         order.CreateTime = HelperProvider.GetSeconds();
                         orderService.InsertOrder(order, transaction);
 
@@ -197,6 +198,7 @@ namespace Jocasta.ApiControllers
                             orderDetail.OrderId = order.OrderId;
                             orderDetail.RoomCategoryId = item.RoomCategoryId;
                             orderDetail.NumberOfRoom = item.Quantity;
+                            orderDetail.Price = item.Price;
                             orderService.InsertOrderDetail(orderDetail, transaction);
 
                             InvoiceDetail invoiceDetail = new InvoiceDetail();

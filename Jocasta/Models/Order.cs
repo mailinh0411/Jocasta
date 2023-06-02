@@ -18,6 +18,7 @@ namespace Jocasta.Models
         public string Phone { get; set; }   
         public string Name { get; set; }
         public long CreateTime { get; set; }
+        public string RequestContent { get; set; }  
         public class EnumStatus
         {
             public const string USER_CANCEL = "USER_CANCEL";

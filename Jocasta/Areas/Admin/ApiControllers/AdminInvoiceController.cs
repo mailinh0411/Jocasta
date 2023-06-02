@@ -30,11 +30,44 @@ namespace Jocasta.Areas.Admin.ApiControllers
         {
             try
             {
-                AdminInvoiceService adminInvoiceService = new AdminInvoiceService();
+                /*AdminInvoiceService adminInvoiceService = new AdminInvoiceService();
+                AdminOrderService adminOrderService = new AdminOrderService();
+
                 Invoice invoice = adminInvoiceService.GetInvoiceBooking(orderId);
                 if (invoice == null) throw new Exception("Không có hóa đơn đặt phòng của đơn này.");
 
-                return Success(adminInvoiceService.GetListBookingService(invoice.InvoiceId));
+                return Success(adminInvoiceService.GetListBookingService(invoice.InvoiceId));*/
+
+                AdminOrderService adminOrderService = new AdminOrderService();
+                AdminDayRoomService adminDayRoomService = new AdminDayRoomService();
+
+                Order order = adminOrderService.GetOrderById(orderId);
+                if (order == null) throw new Exception("Đơn đặt phòng này không tồn tại.");
+
+                // Lấy ra danh sách chi tiết đơn đặt của đơn đặt
+                List<OrderDetailBooking> list = adminOrderService.GetListOrderDetailByOrder(orderId);
+
+                // Lấy thêm danh sách của phòng
+                foreach(OrderDetailBooking item in list)
+                {
+                    string listRoomName = "";
+                    List<Room> listRoom = adminDayRoomService.GetListRoomByOrder(item.OrderDetailId);
+                    for(int i = 0; i < listRoom.Count; i++)
+                    {
+                        if(i == (listRoom.Count-1))
+                        {
+                            listRoomName += listRoom[i].Name;
+                        }
+                        else
+                        {
+                            listRoomName += listRoom[i].Name + ", ";
+                        }
+                    }
+
+                    item.ListRoom = listRoomName;
+                }
+
+                return Success(list);
             }
             catch (Exception ex)
             {

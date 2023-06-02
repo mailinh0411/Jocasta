@@ -118,5 +118,17 @@ namespace Jocasta.Areas.Admin.Services
             int dem = this._connection.Execute(query, new { id, status }, transaction);
             return dem > 0;
         }
+
+        public List<DayRoomModel> GetListDayRoomByDetail(string orderDetailId, IDbTransaction transaction = null)
+        {
+            string query = "select dr.*, r.Name as RoomName from [day_room] dr left join [room] r on dr.RoomId = r.RoomId where dr.OrderDetailId = @orderDetailId";
+            return this._connection.Query<DayRoomModel>(query, new { orderDetailId }, transaction).ToList();
+        }
+
+        public List<Room> GetListRoomByOrder(string orderDetailId, IDbTransaction transaction = null)
+        {
+            string query = "select DISTINCT r.RoomId, r.Name from [day_room] dr left join [room] r on dr.RoomId = r.RoomId where dr.OrderDetailId = @orderDetailId";
+            return this._connection.Query<Room>(query, new { orderDetailId }, transaction).ToList();
+        }
     }
 }
