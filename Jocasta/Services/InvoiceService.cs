@@ -38,7 +38,7 @@ namespace Jocasta.Services
         #region InvoiceDetail
         public void InsertInvoiceDetail(InvoiceDetail invoiceDetail, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[invoice_detail] ([InvoiceDetailId],[InvoiceId],[RoomCategoryId],[ServiceId],[Quantity],[Price]) VALUES (@InvoiceDetailId,@InvoiceId,@RoomCategoryId,@ServiceId,@Quantity,@Price)";
+            string query = "INSERT INTO [dbo].[invoice_detail] ([InvoiceDetailId],[InvoiceId],[RoomCategoryId],[ServiceId],[Quantity],[Price],[RoomId]) VALUES (@InvoiceDetailId,@InvoiceId,@RoomCategoryId,@ServiceId,@Quantity,@Price,@RoomId)";
             int status = this._connection.Execute(query, invoiceDetail, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }

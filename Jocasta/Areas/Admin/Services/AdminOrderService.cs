@@ -62,6 +62,12 @@ namespace Jocasta.Areas.Admin.Services
 
         #region OrderDetail
 
+        public List<OrderDetailBooking> GetListOrderDetailByOrder(string orderId, IDbTransaction transaction = null)
+        {
+            string query = "select od.*, rc.Name from [order_detail] od left join [room_category] rc on od.RoomCategoryId = rc.RoomCategoryId where od.OrderId = @orderId";
+            return this._connection.Query<OrderDetailBooking>(query, new { orderId }, transaction).ToList();
+        }
+
         #endregion
     }
 }

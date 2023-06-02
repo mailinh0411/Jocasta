@@ -34,6 +34,8 @@
                             <th>STT</th>
                             <th>Loại phòng</th>
                             <th>Số lượng</th>
+                            <th>Giá phòng</th>
+                            <th>Số phòng</th>
                         </tr>                        
                     </thead>
                     <tbody id="list-room-order">
@@ -168,7 +170,9 @@
                     html += '<tr>';
                     html += `<td>${i + 1}</td>`;
                     html += `<td>${rs.data[i].Name}</td>`;
-                    html += `<td>${rs.data[i].Quantity}</td>`;
+                    html += `<td>${rs.data[i].NumberOfRoom}</td>`;
+                    html += `<td>${NumberFormat(rs.data[i].Price)}</td>`;
+                    html += `<td>${rs.data[i].ListRoom}</td>`;
                     html += '</tr>';
                     listroombooked.push(rs.data[i]);
                 }
