@@ -59,25 +59,6 @@
     </div>
 </div>
 
-@*<div class="modal UpdateDayRoom" id="exampleModalCenter">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Cập nhật phòng ngày</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CloseInsert_onClick();">
-                </button>
-            </div>
-
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal" onclick="CloseInsert_onClick();">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="InsertDayRoom_onClick();">Lưu</button>
-            </div>
-        </div>
-    </div>
-</div>*@
 
 
 <div class="container-fluid">
@@ -104,7 +85,7 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="searchDayRoom();">Tìm kiếm</button>
+            <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="DeleteAllDayRoom();">Xóa dữ liệu</button>
 
             <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="AddDayRoom_onClick();">Thêm mới</button>
         </div>
@@ -360,7 +341,7 @@
                         html += `<div class="room-name room-available">`;
                         html += `<div>Phòng <br/> ${x.RoomName} </div>`;
                         html += `<div class="button-func"><button class="btn btn-danger shadow btn-xs sharp" data-id="${x.DayRoomId}" onclick="DeleteDayRoom(this)"><i class="fa fa-trash"></i></button>`;
-                        html += `<button class="btn btn-warning shadow btn-xs sharp me-1" data-id="${x.DayRoomId}" onclick="UpdateDayRoom(this)"><i class="fa fa-pencil"></i></button></div></div>`;
+                        html += `</div></div>`;
                         html += ` <div class="status-room">Phòng trống</div>`;
                         html += `</div></div>`;
                     }
@@ -369,7 +350,7 @@
                         html += `<div class="room-name room-booked">`;
                         html += `<div>Phòng <br/> ${x.RoomName} </div>`;
                         html += `<div class="button-func"><button class="btn btn-danger shadow btn-xs sharp" data-id="${x.DayRoomId}" onclick="DeleteDayRoom(this)"><i class="fa fa-trash"></i></button>`;
-                        html += `<button class="btn btn-warning shadow btn-xs sharp me-1" data-id="${x.DayRoomId}" onclick="UpdateDayRoom(this)"><i class="fa fa-pencil"></i></button></div></div>`;
+                        html += `</div></div>`;
                         html += ` <div class="status-room"><div>${x.Name}</div><div>${DateStringFormat({ stringDate: new Date(x.CheckIn), newFormat: 'dd/mm/yyyy' })} - ${DateStringFormat({ stringDate: new Date(x.CheckOut), newFormat: 'dd/mm/yyyy' })}</div></div>`;
                         html += `</div></div>`;
                     }
@@ -559,64 +540,11 @@
             searchDayRoom();
         }
 
-        /*const listRoom = async function () {
-            let rq = await fetch('/api/AdminRoom/GetRooms', {
-                method: 'get',
-                headers: Enum.OptionAdminHeaderDefault
-            });
-            let rs = await rq.json();
-            if (AdminCheckErrorResponse(rs) === false) return;
-
-            console.log(rs);
-
-            if (AdminCheckErrorResponse(rs) === false) return;
-            $('[name=Room]').html('');
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                for (let i = 0; i < rs.data.length; i++) {
-                    html += `<option value="${rs.data[i].RoomId}">${rs.data[i].Name}</option>`;
-                }
-            }
-            console.log(html);
-            $('[name=Room]').append(html);
-        }*/
-
-        /*const DayTime_onChange = function () {
-            searchModel.DayTime = $('[name=DayTime]').val();
-            searchDayRoom();
-        }
-
-        const Status_onChange = function () {
-            searchModel.Status = $('[name=Status]').val();
-            searchDayRoom();
-        }*/
-
-        /*const AddDayRoom_onClick = function () {
-            _isUpdate = false;
-            $('#exampleModalCenter').css('display', 'block');
-        }
-
-        const Update_onClick = async function (el) {
-            _isUpdate = true;
-            $('#exampleModalCenter').css('display', 'block');
-            const id = $(el).data('id');
-            let rq = await fetch('/api/AdminDayRoom/GetDayRoomById?id=' + id, {
-                method: 'get',
-                headers: Enum.OptionAdminHeaderDefault
-            });
-            let rs = await rq.json();
-            console.log(rs);
-            var date = DateStringFormat({ stringDate: new Date(rs.data.DayTime), newFormat: 'mm-dd-yyyy' });
-            console.log(date);
-            if (AdminCheckErrorResponse(rs) == false) return;
-            $('#DayRoomId').val(rs.data.DayRoomId);
-            $('[name=Room]').val(rs.data.RoomId);
-            $('[name=DayTimeRoom]').val(date);
-        }
-
-        const Delete_onClick = async function (el) {
-            if (confirm('Bạn có chắc muốn xóa phòng ngày này không?') === false) return;
-            const id = $(el).data('id');
-            let rq = await fetch('/api/AdminDayRoom/DeleteDayRoom?id=' + id, {
+        const DeleteAllDayRoom = async function () {
+            if (confirm('Bạn có chắc muốn xóa tất cả dữ liệu của ngày này không?') === false) return;
+            let time = $('#day-time').val();
+            var DayTime = ConvertTime(time);
+            let rq = await fetch('/api/AdminDayRoom/DeleteAllDayRoom?day=' + DayTime, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
@@ -624,96 +552,9 @@
             if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 alert('Xóa phòng ngày thành công.');
-                searchRoom();
+                searchDayRoom();
             }
         }
-
-        const TrangThai_onClick = async function (el) {
-            if (confirm('Bạn có chắc muốn thay đổi trạng thái phòng ngày này không?') === false) return;
-            const id = $(el).data('id');
-            let rq = await fetch('/api/AdminDayRoom/ChangeStatusDayRoom?id=' + id, {
-                method: 'get',
-                headers: Enum.OptionAdminHeaderDefault
-            });
-            let rs = await rq.json();
-            if (AdminCheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                alert('Thay đổi trạng thái phòng ngày thành công.');
-                searchRoom();
-            }
-        }
-
-        const CloseModal_onClick = function () {
-            $('#exampleModalCenter').css('display', 'none');
-            ResetModal();
-        }
-
-        const SaveModal_onClick = function () {
-            if (_isUpdate === true) {
-                UpdateDayRoom();
-            } else {
-                InsertDayRoom();
-            }
-            window.location.href = '/Admin/DayRoom/';
-        }
-
-        const UpdateDayRoom = async function () {
-            if (confirm('Bạn có chắc muốn cập nhật phòng ngày không?') === false) return;
-            let model = {
-                DayRoomId: $('#DayRoomId').val(),
-                RoomId: $('[name=Room]').val(),
-                CreateTime: $('#DayTimeRoom').val()
-            }
-            console.log(model);
-            if (GetObjectProperty(model, 'RoomId') === '') { alert('Tên phòng không được để trống.'); return; }
-            if (GetObjectProperty(model, 'DayTime') === '') { alert('Ngày không được để trống.'); return; }
-
-            let url = '/api/AdminDayRoom/UpdateDayRoom';
-            if (GetObjectProperty(model, 'RoomId') === '') url = '/api/AdminDayRoom/InsertDayRoom';
-
-            const rp = await fetch(url, {
-                method: 'post',
-                headers: Enum.OptionAdminHeaderDefault,
-                body: JSON.stringify(model)
-            });
-            let rs = await rp.json();
-            if (AdminCheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                alert('Cập nhật phòng ngày thành công.');
-                CloseModal_onClick();
-            }
-        }
-
-        const InsertDayRoom = async function () {
-            let model = {
-                RoomId: $('[name=Room]').val(),
-                CreateTime: $('[name=DayTimeRoom]').val()
-            };
-            console.log(model);
-            if (GetObjectProperty(model, 'RoomId') === '') { alert('Tên phòng không được để trống.'); return; }
-            if (GetObjectProperty(model, 'CreateTime') === '') { alert('Ngày không được để trống.'); return; }
-
-            const rp = await fetch('/api/AdminDayRoom/InsertDayRoom', {
-                method: 'post',
-                headers: Enum.OptionAdminHeaderDefault,
-                body: JSON.stringify(model)
-            });
-            let rs = await rp.json();
-
-            if (AdminCheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                alert('Thêm phòng ngày thành công');
-                CloseModal_onClick();
-            }
-        }
-
-        const ResetModal = function () {
-            $('[name=Room]').val('');
-            $('#DayTimeRoom').val('');
-        }*/
-
-
 
         const initPage = async function () {
             await GetListFloor();

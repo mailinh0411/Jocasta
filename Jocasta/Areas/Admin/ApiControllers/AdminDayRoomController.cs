@@ -234,5 +234,29 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult DeleteAllDayRoom(long day)
+        {
+            try
+            {
+                using(var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        AdminDayRoomService adminDayRoomService = new AdminDayRoomService(connect);
+
+                        adminDayRoomService.DeleteAllDayRoom(day, transaction);
+
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+            }catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }
