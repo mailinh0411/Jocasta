@@ -27,7 +27,7 @@ namespace Jocasta.ApiControllers
 
                 Cart cart = cartService.GetCartByUserId(user.UserId);
 
-                if (cart == null) throw new Exception("Người dùng này chưa chọn phòng để đặt");
+                //if (cart == null) throw new Exception("Người dùng này chưa chọn phòng để đặt");
 
                 return Success(cart);
             }

@@ -80,7 +80,7 @@
         <div class="container">
             <div class="booking-inner clearfix">
                 <div class="form1 clearfix d-flex justify-content-center">
-                    <div class="col1 c1">
+                    @*<div class="col1 c1">
                         <div class="input1_wrapper">
                             <label>Check in</label>
                             <div class="input1_inner">
@@ -95,7 +95,7 @@
                                 <input class="form-control input datepicker" id="check-out" placeholder="Check out">
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     @*<div class="col2 c3">
                         <div class="input1_wrapper">
                             <label>Adults</label>
@@ -437,8 +437,8 @@
         }
 
         const CheckNow = async function () {
-            
-            let model = {
+            window.location.href = ('/check-now'); 
+            /*let model = {
                 CheckIn: $('#check-in').val(),
                 CheckOut: $('#check-out').val()
             }
@@ -462,7 +462,7 @@
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 window.location.href = ('/check-now'); 
-            }
+            }*/
         }
 
         const initPage = function () {
