@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section slider{
+    <!-- Header Banner -->
+    <div class="banner-header section-padding valign bg-img bg-fixed" data-overlay-dark="4" data-background="/Content/img/slider/1.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 caption mt-90">
+                    <h5>The Jocasta Mai Linh Hotel</h5>
+                    <h1>Thông báo</h1>
+                </div>
+            </div>
+            <div class="row sub-banner">
+                <ul>
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a class="select" href="">Notification</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+
+<!-- Booking Search -->
+<section class="section-padding" data-scroll-index="1">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <div class="section-title">Thông báo</div>
+            <div><button class="btn btn-primary" onclick="deleteAllNotification()">Xóa tất cả</button></div>
+        </div>
+        
+        <div class="booking-inner clearfix">
+            <ul id="list-notification">
+                <li>
+                    <div class="timeline-panel d-flex justify-content-between align-items-center notification-read">
+                        <div class="media-body">
+                            <h6 class="mb-1">Resport created successfully</h6>
+                            <span>tryewuioqpjsvbcndskjfvbhjfkdhudjfhjdf ijfthsiakdhcujdgfwuskhfg cỵdx</span>
+                            <small class="d-block">29 July 2020 - 02:26 PM</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-panel d-flex justify-content-between align-items-center">
+                        <div class="media-body">
+                            <h6 class="mb-1">Resport created successfully</h6>
+                            <span>tryewuioqpjsvbcndskjfvbhjfkdhudjfhjdf ijfthsiakdhcujdgfwuskhfg cỵdx</span>
+                            <small class="d-block">29 July 2020 - 02:26 PM</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-panel d-flex justify-content-between align-items-center">
+                        <div class="media-body">
+                            <h6 class="mb-1">Resport created successfully</h6>
+                            <span>tryewuioqpjsvbcndskjfvbhjfkdhudjfhjdf ijfthsiakdhcujdgfwuskhfg cỵdx</span>
+                            <small class="d-block">29 July 2020 - 02:26 PM</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+@section styles{
+    <style>
+        .booking-inner ul > li {
+            border-bottom: 1px solid #f4f4f4;
+            padding: 5px 10px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+            .booking-inner ul > li .timeline-panel{
+                padding: 10px;
+            }
+
+            .booking-inner .notification-read {
+                background-color: #aa845342;
+            }
+    </style>
+}
+
+@section scripts{
+    <script>
+        const getListAllNotification = async function () {
+            let rq = await fetch('/api/notification/GetListNotificationByUserId', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '';
+                $('#list-notification').html('');
+                for (let i = 0; i < rs.data.length; i++) {
+                    if (rs.data[i].IsRead === false) {
+                        html += `<li>
+                    <div class="timeline-panel d-flex justify-content-between align-items-center notification-read">
+                        <div class="media-body" data-id="${rs.data[i].NotificationId}" onclick="SeeThisNotification(this)">
+                            <h6 class="mb-1">${rs.data[i].Title}</h6>
+                            <span>${rs.data[i].Content} </span>
+                            <small class="d-block">${DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" data-id="${rs.data[i].NotificationId}" onclick="DeleteThisNotifi(this)"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </li>`;
+                    }
+                    else {
+                        html += `<li>
+                    <div class="timeline-panel d-flex justify-content-between align-items-center">
+                        <div class="media-body">
+                             <h6 class="mb-1">${rs.data[i].Title}</h6>
+                            <span>${rs.data[i].Content} </span>
+                            <small class="d-block">${DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" data-id="${rs.data[i].NotificationId}" onclick="DeleteThisNotifi(this)"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </li>`;
+                    }
+                }
+                $('#list-notification').append(html);
+            }
+        }
+
+        const SeeThisNotification = async function (el) {
+            var id = $(el).data('id');
+            let rq = await fetch('/api/notification/UpdateNotificationRead?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.reload();
+            }
+        }
+
+        const DeleteThisNotifi = async function (el) {
+            var id = $(el).data('id');
+            let rq = await fetch('/api/notification/DeleteNoficationById?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.reload();
+            }
+        }
+
+        const deleteAllNotification = async function () {
+            let rq = await fetch('/api/notification/DeleteAllNotification', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.reload();
+            }
+        }
+
+       
+
+        const initPage = function () {
+            getListAllNotification();
+        }
+
+        initPage();
+    </script>
+    }

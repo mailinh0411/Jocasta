@@ -1,4 +1,5 @@
-﻿using Jocasta.Models;
+﻿using Jocasta.Filters;
+using Jocasta.Models;
 using Jocasta.Providers;
 using Jocasta.Services;
 using System;
@@ -21,6 +22,7 @@ namespace Jocasta.ApiControllers
         }
 
         [HttpGet]
+        [ApiTokenRequire]
         public JsonResult GetInforUser()
         {
             try

@@ -49,6 +49,7 @@
                 border-bottom: 1px solid #f4f4f4;
                 padding: 5px 10px;
                 box-sizing: border-box;
+                cursor: pointer;
             }
 
         .list-notification .all-notification {
@@ -118,7 +119,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end list-notification">
                             <div id="DZ_W_Notification1" class="widget-media dz-scroll" style="height:auto;">
-                                <ul class="timeline">
+                                <ul class="timeline" id="listNotifi">
                                     <li class="notification-read">
                                         <div class="timeline-panel">
                                             <div class="media-body">
@@ -170,7 +171,7 @@
                                 </ul>
                             </div>
                             <div class="text-center pb-2">
-                                <button class="all-notification">Xem thêm</button>
+                                <a class="all-notification" href="/notification">Xem thêm</a>
                             </div>
                         </div>
                     </li>
@@ -313,14 +314,69 @@
             });
             let rs = await rq.json();
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('#count-notification').text(rs.data);
+                if (rs.data > 0) {
+                    $('#count-notification').text(rs.data);
+                    $('#count-notification').css('display', 'block');
+                }
+                else {
+                    $('#count-notification').css('display', 'none');
+                }
+            }
+        }
 
+        // Hiện thông báo
+        const ListNotification = async function () {
+            let rq = await fetch('/api/notification/GetListNotificationByUserId', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '';
+                $('#listNotifi').html('');
+                rs.data.length = rs.data.length > 6 ? 6 : rs.data.length;
+                for (let i = 0; i < rs.data.length; i++) {
+                    if (rs.data[i].IsRead === false) {
+                        html += `<li class="notification-read" data-id="${rs.data[i].NotificationId}" onclick="SeeNotification(this)">
+                                        <div class="timeline-panel">
+                                            <div class="media-body">
+                                                <h6 class="mb-1">${rs.data[i].Title}</h6>
+                                                <small class="d-block">${DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</small>
+                                            </div>
+                                        </div>
+                                    </li>`;
+                    }
+                    else {
+                        html += `<li>
+                                        <div class="timeline-panel">
+                                            <div class="media-body">
+                                                <h6 class="mb-1">${rs.data[i].Title}</h6>
+                                                <small class="d-block">${DateStringFormat({ stringDate: new Date(rs.data[i].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</small>
+                                            </div>
+                                        </div>
+                                    </li>`;
+                    }
+                }
+                $('#listNotifi').append(html);
+            }
+        }
+
+        const SeeNotification = async function (el) {
+            var id = $(el).data('id');
+            let rq = await fetch('/api/notification/UpdateNotificationRead?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.reload();
             }
         }
 
         const InitPageLayout = async function () {
             await GetUserLayoutInfo();
             await CountNoReadNotification();
+            await ListNotification();
         }
 
         InitPageLayout();
