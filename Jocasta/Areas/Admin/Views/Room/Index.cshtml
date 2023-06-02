@@ -183,7 +183,6 @@
                     html += `<td><div class="dropdown dropstart"><button type="button" class="btn btn-primary light sharp" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>`;
                     html += `<div class="dropdown-menu">
                                     <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomId}" onclick="Update_onClick(this);">Sửa</button>
-                                    <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomId}" onclick="Delete_onClick(this);">Xóa</button>
                                     <button class="dropdown-item fs-15" data-id="${rs.data.List[i].RoomId}" onclick="TrangThai_onClick(this);">Đổi trạng thái</button>
                                 </div></div></td>`;
                     html += `</tr>`;
@@ -204,8 +203,6 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
 
-
-            if (AdminCheckErrorResponse(rs) === false) return;
             $('[name=RoomCategory]').html('');
             $('[name=RoomCategoryId]').html('');
             let html = '<option value="">Loại phòng</option>';

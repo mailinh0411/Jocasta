@@ -86,7 +86,7 @@
     </div>
     <div class="d-block d-lg-flex align-items-center justify-content-between mb-5">
         <div class="coin-tabs input-group search-area2 w-25">
-            <input id="keyword" type="text" class="form-control" placeholder="Tìm kiếm theo tên phòng" onkeypress="searchKeyPress(event);">
+            <input id="keywordDayRoom" type="text" class="form-control" placeholder="Tìm kiếm theo tên phòng" onkeypress="searchKeyPress(event);">
             <button class="input-group-text" onclick="searchDayRoom()">
                 <i class="fas fa-search"></i>
             </button>
@@ -165,13 +165,13 @@
         <div class="d-lg-flex align-items-center">
             <div style="width: 50px;">Hiển thị </div>
             <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchDayRoom();">
-                <option value="1">1</option>
+                @*<option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
                 <option value="6">6</option>
-                <option value="7">7</option>
+                <option value="7">7</option>*@
             </select>
             <div style="width: 100px;"> tầng </div>
         </div>
@@ -288,6 +288,23 @@
 @section scripts{
     <script>
 
+        const GetListFloor = async function () {
+            let rq = await fetch('/api/AdminRoom/GetListFloor', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            $('select[name=dynamic-table_length]').html('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<option value="${rs.data[i]}">${rs.data[i]}</option>`;
+                }
+            }
+            $('select[name=dynamic-table_length]').append(html);
+        }
+
         $('#day-time').datepicker({
             autoclose: true,
             format: 'dd-mm-yyyy'
@@ -307,7 +324,7 @@
         const searchModel = {
             CurrentPage: 1,
             Floor: $('[name=dynamic-table_length]').val(),
-            Keyword: $('#keyword').val(),
+            Keyword: $('#keywordDayRoom').val(),
             Status: $('[name=Status]').val(),
             DayTime: $('#day-time').val()
         };
@@ -315,11 +332,11 @@
         const searchDayRoom = function () {
             searchModel.CurrentPage = 1;
             searchModel.Floor = $('[name=dynamic-table_length]').val();
-            searchModel.Keyword = $('#keyword').val();
+            searchModel.Keyword = $('#keywordDayRoom').val();
             searchModel.Status = $('[name=Status]').val();
             let time = $('#day-time').val();
             searchModel.DayTime = ConvertTime(time);
-
+            console.log($('#keywordDayRoom').val());
             getdataListDayRoom(searchModel);
         }
 
@@ -395,6 +412,12 @@
             if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 alert('Xóa phòng ngày thành công.')
+                searchDayRoom();
+            }
+        }
+
+        const searchKeyPress = function (event) {
+            if (event.keyCode == 13) {
                 searchDayRoom();
             }
         }
@@ -693,6 +716,7 @@
 
 
         const initPage = async function () {
+            await GetListFloor();
             var curDate = new Date();
             console.log(curDate);
 
@@ -703,6 +727,7 @@
 
             $('#day-time').val(dayTime);
             await searchDayRoom();
+            
         }
         initPage();
     </script>

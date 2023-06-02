@@ -30,7 +30,7 @@ namespace Jocasta.Services
             string queryRoomCategory = "select * from [room_category] where RoomCategoryId = @roomCategoryId";
             categoryRoomAvaiable.Category = this._connection.Query<RoomCategory>(queryRoomCategory, new { roomCategoryId }, transaction).FirstOrDefault();
 
-            string queryRoom = "select * from [room] where [RoomCategoryId] = @roomCategoryId";
+            string queryRoom = "select * from [room] where [RoomCategoryId] = @roomCategoryId and [Enable] = 1";
             List<Room> rooms = this._connection.Query<Room>(queryRoom, new { roomCategoryId }, transaction).ToList();
 
             categoryRoomAvaiable.ListRoom = new List<Room>();
