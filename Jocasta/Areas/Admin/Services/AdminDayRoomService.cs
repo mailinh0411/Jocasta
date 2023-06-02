@@ -137,5 +137,11 @@ namespace Jocasta.Areas.Admin.Services
             int count = this._connection.Execute(query, new { orderDetailId, status }, transaction);
             if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public DayRoom GetDayRoomByDayAndRoom(string roomId, long day, IDbTransaction transaction = null)
+        {
+            string query = "select * from day_room where RoomId=@roomId and DayTime = @day";
+            return this._connection.Query<DayRoom>(query, new {roomId, day}, transaction).FirstOrDefault();
+        }
     }
 }

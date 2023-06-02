@@ -112,10 +112,15 @@ namespace Jocasta.Areas.Admin.ApiControllers
 
                             while (startDate <= endDate)
                             {
-                                DayRoom dayRoom = new DayRoom();
+                                long dayTime = HelperProvider.GetSeconds(startDate);
+
+                                DayRoom dayRoom = dayRoomService.GetDayRoomByDayAndRoom(model.ListRoomId[i], dayTime, transaction);
+                                if (dayRoom != null) throw new Exception("Đã tồn tại giá trị phòng ngày.");
+
+                                dayRoom = new DayRoom();
                                 dayRoom.DayRoomId = Guid.NewGuid().ToString();
                                 dayRoom.RoomId = model.ListRoomId[i];
-                                long dayTime = HelperProvider.GetSeconds(startDate);
+                                
                                 dayRoom.DayTime = dayTime;
                                 dayRoom.Status = DayRoom.EnumStatus.AVAILABLE;
 
