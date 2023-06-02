@@ -66,6 +66,7 @@ namespace Jocasta.ApiControllers
                         if (modelSerive.Invoices.Count <= 0) throw new Exception("Bạn cần chọn dịch vụ.");
                         OrderService orderService = new OrderService(connect);
                         InvoiceService invoiceService = new InvoiceService(connect);
+                        NotificationService notificationService = new NotificationService(connect);
 
                         Order order = orderService.GetOrderById(modelSerive.OrderId, transaction);
                         if (order == null) throw new Exception("Đơn đặt không tồn tại.");
@@ -88,15 +89,24 @@ namespace Jocasta.ApiControllers
                             invoiceDetail.InvoiceDetailId = Guid.NewGuid().ToString();
                             invoiceDetail.InvoiceId = invoice.InvoiceId;
                             invoiceDetail.ServiceId = item.ServiceId;
-                            invoiceDetail.Quantity = item.Quantity;
+                            invoiceDetail.RoomId = item.RoomId;
                             invoiceDetail.Price = item.Price;
 
                             invoiceService.InsertInvoiceDetail(invoiceDetail, transaction);
                         }
 
                         // Cập nhật tổng tiền trong order
-                        orderService.UpdateTotalPriceOrder(order.OrderId, modelSerive.TotalPrice, transaction);                       
+                        orderService.UpdateTotalPriceOrder(order.OrderId, modelSerive.TotalPrice, transaction);
 
+                        //Thông báo cho người dùng
+                        Notification notification = new Notification();
+                        notification.NotificationId = Guid.NewGuid().ToString();
+                        notification.Title = "Bạn đã đặt dịch vụ thành công";
+                        notification.Content = "Bạn đã đặt dịch vụ thành công của đơn đặt [" + order.Code + "].";
+                        notification.UserId = order.UserId;
+                        notification.CreateTime = HelperProvider.GetSeconds(now);
+                        notification.IsRead = false;
+                        notificationService.InsertNotification(notification, transaction);
 
                         transaction.Commit();
                         return Success();

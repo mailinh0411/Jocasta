@@ -25,7 +25,7 @@ namespace Jocasta.Models
     public class ServiceOrder
     {
         public string ServiceId { get; set; }
-        public int Quantity { get; set; }
+        public string RoomId { get; set; }
         public decimal Price { get; set; }
     }
 
@@ -33,7 +33,6 @@ namespace Jocasta.Models
     {
         public List<ServiceOrder> Invoices { get; set;}
         public string OrderId { get; set; }
-
         public decimal TotalPrice { get; set; }
     }
 

@@ -51,7 +51,7 @@ namespace Jocasta.Services
 
         public List<object> GetListServiceBooked(string invoiceId, IDbTransaction transaction = null)
         {
-            string query = "select ind.*, inv.CreateTime, s.Name from [invoice] inv left join [invoice_detail] ind on inv.InvoiceId = ind.InvoiceId left join [service] s on ind.ServiceId = s.ServiceId where inv.InvoiceId = @invoiceId order by inv.CreateTime desc";
+            string query = "select ind.*, inv.CreateTime, s.Name as ServiceName, r.Name as RoomName from [invoice] inv left join [invoice_detail] ind on inv.InvoiceId = ind.InvoiceId left join [service] s on ind.ServiceId = s.ServiceId left join [room] r on ind.RoomId = r.RoomId where inv.InvoiceId = @invoiceId order by inv.CreateTime desc";
             return this._connection.Query<object>(query, new {invoiceId}, transaction).ToList();
         }
 
