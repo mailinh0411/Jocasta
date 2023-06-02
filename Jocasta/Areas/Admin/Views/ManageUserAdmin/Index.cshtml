@@ -6,12 +6,12 @@
 
 <div class="container-fluid">
     <div class="row">
-        <h2>Quản lý khách hàng</h2>
+        <h2>Quản lý tài khoản</h2>
     </div>
     <div class=" d-block d-lg-flex align-items-center justify-content-between mb-5">
         <div class="coin-tabs input-group search-area2 w-50">
             <input id="keyword" type="text" class="form-control" placeholder="Tìm kiếm theo tên đăng nhập, số điện thoại hoặc email" onkeypress="searchKeyPress(event);">
-            <button class="input-group-text" onclick="searchUser()">
+            <button class="input-group-text" onclick="searchUserAdmin()">
                 <i class="fas fa-search"></i>
             </button>
         </div>
@@ -21,7 +21,7 @@
                 <option value="true">Kích hoạt</option>
                 <option value="false">Đã khóa</option>
             </select>
-            <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="AddUser_onClick();">Thêm mới</button>
+            <button class="btn btn-primary ms-sm-3 ms-0 mt-2 mt-sm-0" onclick="openModalCreate_onClick();">Thêm mới</button>
         </div>
     </div>
     <div class="tab-content" id="nav-tabContent">
@@ -34,7 +34,7 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Tên người dùng</th>
+                                        <th>Tên tài khoản</th>
                                         <th>Email</th>
                                         <th>Số điện thoại</th>
                                         <th>Ngày tạo</th>
@@ -58,7 +58,7 @@
     <div class="form-inline" id="dynamic-table_length">
         <div class="d-lg-flex align-items-center">
             <div style="width: 50px;">Hiển thị </div>
-            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchUser();">
+            <select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" style="width: 60px; height: 35px; line-height:25px; margin-right:10px;" onchange="searchUserAdmin();">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -84,39 +84,42 @@
             </div>
             <div class="modal-body">
                 <div style="display:flex;flex-direction:row;gap:20px;">
-                    <div class="form-group">
-                        <div class="preview" style=" width: 100px; height: 100px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url('/Content/img/pick-image.png');" onclick="ChooseImage(this);"></div>
-                        <input type="file" style="display:none;" onchange="ChooseImage_OnChange(this);" required />
-                        <input type="hidden" id="Image" />
+                    <div style="margin: 10px 10px 0 0;" class="tab-avatar">
+                        <div class="form-group">
+                            <div class="preview" style=" width: 100px; height: 100px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url('/Content/img/pick-image.png');" onclick="ChooseImage(this);"></div>
+                            <input type="file" style="display:none;" onchange="ChooseImage_OnChange(this);" required />
+                            <input type="hidden" id="Image" />
+                        </div>
                     </div>
-                    <div class="form-input">
-                        <input id="UserId" value="" type="hidden" />
+                    
+                    <div class="form-input" style="width:400px;">
+                        <input id="UserAdminId" value="" type="hidden" />
                         <div class="form-group">
                             <label class="font-weight-semibold fs-16" for="name">Tên người dùng</label>
-                            <input type="text" class="form-control" id="Name" placeholder="Nhập tên tên người" required>
+                            <input type="text" class="form-control" id="Name" placeholder="Nhập tên tên tài khoản" required>
                         </div>
                         <div class="form-group">
                             <label class="font-weight-semibold fs-16" for="name">Tên đăng nhập</label>
-                            <input type="text" class="form-control" id="Name" placeholder="Nhập tên đăng nhập" required>
+                            <input type="text" class="form-control" id="Account" placeholder="Nhập tên đăng nhập" required>
                         </div>
                         <div class="form-group">
                             <label class="font-weight-semibold fs-16" for="name">Số điện thoại</label>
-                            <input type="text" class="form-control" id="Name" placeholder="Nhập số điện thoại" required>
+                            <input type="text" class="form-control" id="Phone" placeholder="Nhập số điện thoại" required onkeyup="ValidateInputOnlyPhoneNumber(event,this)">
                         </div>
                         <div class="form-group">
                             <label class="font-weight-semibold fs-16" for="name">Email</label>
-                            <input type="text" class="form-control" id="Name" placeholder="Nhập email" required>
+                            <input type="text" class="form-control" id="Email" placeholder="Nhập email" required>
                         </div>
                         <div class="form-group">
                             <label class="font-weight-semibold fs-16" for="name">Mật khẩu</label>
-                            <input type="text" class="form-control" id="Name" placeholder="Nhập email" required>
+                            <input type="text" class="form-control" id="Password" placeholder="Nhập password" required>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger light" data-bs-dismiss="modal" onclick="CloseModal_onClick();">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="SaveRoom_onClick();">Lưu</button>
+                <button type="button" class="btn btn-primary" id="saveUserAdmin">Lưu</button>
             </div>
         </div>
     </div>
@@ -131,17 +134,32 @@
             border-radius: 50%;
         }
 
-        table > thead > tr > th{
+        table > thead > tr > th {
             text-align: center;
         }
 
         table > tbody > tr > td {
             text-align: center;
         }
+
+        .tab-avatar{
+            
+        }
     </style>
 }
 @section scripts{
     <script>
+
+        var ChooseImage = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseImage_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+
         const searchModel = {
             CurrentPage: 1,
             RowPerPage: $('[name=dynamic-table_length]').val(),
@@ -149,17 +167,17 @@
             Enable: $('[name=EnableSelect]').val()
         }
 
-        const searchUser = function () {
+        const searchUserAdmin = function () {
             searchModel.CurrentPage = 1;
             searchModel.RowPerPage = $('[name=dynamic-table_length]').val();
             searchModel.Keyword = $('#keyword').val();
             searchModel.Enable = $('[name=EnableSelect]').val();
 
-            getdataListUser(searchModel);
+            getdataListUserAdmin(searchModel);
         }
 
-        const getdataListUser = async function () {
-            let rq = await fetch('/api/ManageUser/GetListUser?keyword=' + searchModel.Keyword + '&enable=' + searchModel.Enable + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.RowPerPage, {
+        const getdataListUserAdmin = async function () {
+            let rq = await fetch('/api/ManageUserAdmin/GetListUserAdmin?keyword=' + searchModel.Keyword + '&enable=' + searchModel.Enable + '&page=' + searchModel.CurrentPage + '&pageSize=' + searchModel.RowPerPage, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
@@ -191,9 +209,8 @@
                     }
                     html += `<td><div class="dropdown dropstart"><button type="button" class="btn btn-primary light sharp" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>`;
                     html += `<div class="dropdown-menu">
-                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].UserId}" onclick="Update_onClick(this);">Sửa</button>
-                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].UserId}" onclick="Delete_onClick(this);">Xóa</button>
-                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].UserId}" onclick="ChangeEnable_onClick(this);">Đổi trạng thái</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].UserAdminId}" onclick="openModalUpdate_onClick(this);">Sửa</button>
+                            <button class="dropdown-item fs-15" data-id="${rs.data.List[i].UserAdminId}" onclick="ChangeEnable_onClick(this);">Đổi trạng thái</button>
                         </div></div></td>`;
                     html += `</tr>`;
 
@@ -201,20 +218,131 @@
                 }
 
                 $('#list-data').append(html);
-                Pagination(searchModel, rs.data.TotalPage, null, getdataListUser);
+                Pagination(searchModel, rs.data.TotalPage, null, getdataListUserAdmin);
             }
         }
 
-        const Update_onClick = function (el) {
+        const CloseModal_onClick = function () {
+            $('#exampleModalCenter').css('display', 'none');
+            ResetInput();
+        }
+
+        const ResetInput = function () {
+            $('#Account').val('');
+            $('#Name').val('');
+            $('#UserAdminId').val('');
+            $('#Email').val('');
+            $('#Phone').val('');
+            $('#Image').val();
+        }
+
+        const openModalCreate_onClick = function () {
+            $('#exampleModalCenter').css('display', 'flex');
+            $('#saveUserAdmin').attr('onclick', 'CreateUserAdmin()');
+        }
+
+        
+        const openModalUpdate_onClick = async function (el) {   
             let id = $(el).data('id');
-            window.location.href = ('/admin/ManageUser/UpdateManageUser?id=' + id);
+            $('#exampleModalCenter').css('display', 'flex');
+
+            let rq = await fetch('/api/ManageUserAdmin/GetUserAdminById?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            console.log(rs);
+            if (AdminCheckErrorResponse(rs) == false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.tab-avatar').html('');
+                let html = `<div class="form-group">
+                        <div class="preview" style=" width: 100px; height: 100px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url(' ${rs.data.Avatar}');" onclick="ChooseImage(this);"></div>
+                        <input type="file" style="display:none;" onchange="ChooseImage_OnChange(this);" required />
+                        <input type="hidden" id="Image" />
+                    </div>`;
+
+                $('.tab-avatar').append(html);
+
+                $('#Account').val(rs.data.Account);
+                $('#Name').val(rs.data.Name);
+                $('#UserAdminId').val(rs.data.UserAdminId);
+                $('#Email').val(rs.data.Email);
+                $('#Phone').val(rs.data.Phone);
+                $('#saveUserAdmin').attr('onclick', 'UpdateUserAdmin()');
+            }
+        }
+
+        const CreateUserAdmin = async function () {
+            let model = {
+                Account: $('#Account').val(),
+                Name: $('#Name').val(),
+                Password: $('#Password').val(),
+                Email: $('#Email').val(),
+                Phone: $('#Phone').val(),
+                Avatar: $('#Image').val(),
+            }
+
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên người dùng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Account') === '') { alert('Tên đăng nhập không được để trống.'); return; }
+
+            if (!validateEmail(model.Email)) { alert('Email không đúng định dạng.'); return; }
+
+            let rq = await fetch(Enum.ApiUrl + '/api/ManageUserAdmin/CreateUserAdmin', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Thêm tài khoản quản trị thành công');
+                window.location.reload();
+            }
+        }
+
+        const UpdateUserAdmin = async function () {
+            let model = {
+                Account: $('#Account').val(),
+                Name: $('#Name').val(),
+                Password: $('#Password').val(),
+                Email: $('#Email').val(),
+                Phone: $('#Phone').val(),
+                Avatar: $('#Image').val(),
+                UserAdminId: $('#UserAdminId').val(),
+            }
+
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên người dùng không được để trống.'); return; }
+            if (GetObjectProperty(model, 'Account') === '') { alert('Tên đăng nhập không được để trống.'); return; }
+
+            if (!validateEmail(model.Email)) { alert('Email không đúng định dạng.'); return; }
+
+            let rq = await fetch(Enum.ApiUrl + '/api/ManageUserAdmin/UpdateUserAdmin', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Sửa tài khoản quản trị thành công');
+                window.location.reload();
+            }
+        }
+
+        function validateEmail($email) {
+            var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+            return emailReg.test($email);
         }
 
         const Delete_onClick = async function (el) {
             if (confirm('Bạn có chắc muốn xóa người dùng này không?') === false) return;
             const id = $(el).data('id');
 
-            let rq = await fetch('/api/ManageUser/DeleteUser?id=' + id, {
+            let rq = await fetch('/api/ManageUserAdmin/DeleteUserAdmin?id=' + id, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault,
             });
@@ -231,7 +359,7 @@
             if (confirm('Bạn có chắc muốn thay đổi trạng thái người dùng này không?') === false) return;
             const id = $(el).data('id');
 
-            let rq = await fetch('/api/ManageUser/ChangeUserEnable?id=' + id, {
+            let rq = await fetch('/api/ManageUserAdmin/ChangeUserAdminEnable?id=' + id, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault,
             });
@@ -240,23 +368,23 @@
             if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 alert('Thay đổi trạng thái người dùng thành công.')
-                getdataListUser();
+                getdataListUserAdmin();
             }
         }
 
         const Enable_onChange = function () {
             searchModel.Enable = $('[name=EnableSelect]').val();
-            searchUser();
+            searchUserAdmin();
         }
 
         const searchKeyPress = function (event) {
             if (event.keyCode == 13) {
-                searchUser();
+                searchUserAdmin();
             }
         }
 
         const initPage = async function () {
-            await getdataListUser();
+            await getdataListUserAdmin();
         }
         initPage();
     </script>

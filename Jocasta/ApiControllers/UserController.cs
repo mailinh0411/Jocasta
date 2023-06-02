@@ -101,10 +101,10 @@ namespace Jocasta.ApiControllers
                         UserService userService = new UserService(connect);
 
                         if (string.IsNullOrEmpty(model.Name)) throw new Exception("Họ và tên người dùng không được để trống.");
-                        if (string.IsNullOrEmpty(model.Account) || userService.CheckDuplicateUser(model.Account, transaction) != null) throw new Exception("Tên đăng nhập không được để trống.");
-                        if (string.IsNullOrEmpty(model.Email) || userService.CheckDuplicateUser(model.Email, transaction) != null) throw new Exception("Email không được để trống.");
+                        if (string.IsNullOrEmpty(model.Account) || userService.CheckDuplicateUser(model.Account, transaction) != null) throw new Exception("Tên đăng nhập đang trống hoặc đã tồn tại.");
+                        if (string.IsNullOrEmpty(model.Email) || userService.CheckDuplicateUser(model.Email, transaction) != null) throw new Exception("Email đang trống hoặc đã tồn tại.");
                         if (string.IsNullOrEmpty(model.Password)) throw new Exception("Password không được để trống.");
-                        if (string.IsNullOrEmpty(model.Phone)) throw new Exception("Số điện thoại không được để trống.");
+                        if (string.IsNullOrEmpty(model.Phone) || userService.CheckDuplicateUser(model.Phone, transaction) != null) throw new Exception("Số điện thoại đang trống hoặc đã tồn tại.");
 
                         User user = new User();
                         user.UserId = Guid.NewGuid().ToString();
