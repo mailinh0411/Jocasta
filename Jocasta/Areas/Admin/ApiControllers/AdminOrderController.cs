@@ -65,6 +65,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                         ManageUserService manageUserService = new ManageUserService(connect);
                         AdminOrderTransactionService adminOrderTransactionService = new AdminOrderTransactionService(connect);
                         AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
+                        AdminDayRoomService adminDayRoomService = new AdminDayRoomService(connect);
 
                         Order order = adminOrderService.GetOrderById(model.OrderId, transaction);
                         if (order == null) throw new Exception("Hóa đơn này không tồn tại.");
@@ -76,6 +77,15 @@ namespace Jocasta.Areas.Admin.ApiControllers
 
                         order.Status = Order.EnumStatus.SYSTEM_CANCEL;
                         adminOrderService.UpdateStatusOrder(order.OrderId, order.Status, transaction);
+
+                        //Xóa danh sách phòng ngày đã giữ chỗ cho khách
+                        // 1. Lấy ra danh sách chi tiết đơn đặt của đơn đặt
+                        List<OrderDetail> listOrderDetail = adminOrderService.GetOrderDetailsByOrder(order.OrderId, transaction);
+                        // 2. Xóa cột orderDetailId trong phòng ngày
+                        foreach (OrderDetail index in listOrderDetail)
+                        {
+                            adminDayRoomService.UpdateDayRoomByOrderDetail(index.OrderDetailId, DayRoom.EnumStatus.AVAILABLE, transaction);
+                        }
 
                         DateTime now = DateTime.Now;
 
