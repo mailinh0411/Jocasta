@@ -120,17 +120,14 @@
             if (GetObjectProperty(model, 'Name') === '') { alert('Tên người dùng không được để trống.'); return; }
             if (GetObjectProperty(model, 'Account') === '') { alert('Tên đăng nhập không được để trống.'); return; }
 
-            if (!validateEmail(model.Email)) { alert('Email không đúng định dạng.'); return; }
+            if (!validateEmail(model.Email)) { alert('Email không đúng định dạng.'); return; }           
 
-            let url = '/api/ManageUser/UpdateUserInfo';
-
-            let rp = await fetch(url, {
+            let rp = await fetch('/api/ManageUser/UpdateUserInfo', {
                 method: 'post',
                 headers: Enum.OptionHeaderDefault,
                 body: JSON.stringify(model)
             });
             let rs = await rp.json();
-
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 alert('Cập nhật người dùng thành công.')
