@@ -113,5 +113,11 @@ namespace Jocasta.Areas.Admin.Services
             string query = "select * from [room] where Name = @keyword";
             return this._connection.Query<string>(query, new { keyword }, transaction).FirstOrDefault();
         }
+
+        public int GetCountRoom(IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [room] where Enable=1";
+            return this._connection.Query<int>(query, transaction).FirstOrDefault();
+        }
     }
 }
