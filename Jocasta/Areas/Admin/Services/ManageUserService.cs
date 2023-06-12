@@ -80,5 +80,11 @@ namespace Jocasta.Areas.Admin.Services
             int status = this._connection.Execute(query, new { id }, transaction);
             return status > 0;
         }
+
+        public int GetCountUser(IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [user]";
+            return this._connection.Query<int>(query, transaction).FirstOrDefault();
+        }
     }
 }

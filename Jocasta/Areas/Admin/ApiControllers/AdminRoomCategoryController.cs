@@ -237,5 +237,18 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult GetCountRoomCategory()
+        {
+            try
+            {
+                AdminRoomCategoryService adminRoomCategoryService = new AdminRoomCategoryService();
+                return Success(adminRoomCategoryService.GetCountRoomCategory());
+            }catch(Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

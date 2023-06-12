@@ -162,5 +162,18 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult GetCountUser()
+        {
+            try
+            {
+                ManageUserService manageUserService = new ManageUserService();
+                return Success(manageUserService.GetCountUser());
+            }catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

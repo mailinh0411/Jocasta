@@ -85,6 +85,12 @@ namespace Jocasta.Areas.Admin.Services
             int status = this._connection.Execute(query, new { id }, transaction);
             return status > 0;
         }
+
+        public int GetCountRoomCategory(IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [room_category] where Enable = 1";
+            return this._connection.Query<int>(query, transaction).FirstOrDefault();
+        }
         #endregion
 
         #region ImageRoom
