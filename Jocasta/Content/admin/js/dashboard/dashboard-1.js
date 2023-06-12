@@ -383,7 +383,7 @@ var reservationChart2 = function(){
    chart.render();
    
 }
-	var pieChart1 = function(){
+	/*var pieChart1 = function(){
 		 var options = {
           series: [45, 80],
           chart: {
@@ -422,7 +422,7 @@ var reservationChart2 = function(){
         var chart = new ApexCharts(document.querySelector("#pieChart1"), options);
         chart.render();
     
-	}
+	}*/
 	
 	var lineChart1 = function(){
 	 var options = {
