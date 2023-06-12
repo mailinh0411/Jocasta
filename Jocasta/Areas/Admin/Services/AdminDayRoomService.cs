@@ -150,5 +150,15 @@ namespace Jocasta.Areas.Admin.Services
             int count = this._connection.Execute(query, new { day }, transaction);
             if (count <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public int GetCountRoomBook(long day, IDbTransaction transaction = null)
+        {
+            string query = $"select count(*) from [day_room] dr left join [room] r on dr.RoomId = r.RoomId where r.Enable = 1 and dr.Status = '{DayRoom.EnumStatus.BOOKED}'";
+            if(day != null && day != 0)
+            {
+                query += " and dr.DayTime = @day";
+            }
+            return this._connection.Query<int>(query, new {day}, transaction).FirstOrDefault();
+        }
     }
 }

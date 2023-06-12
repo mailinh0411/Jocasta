@@ -234,6 +234,21 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+        [HttpGet]
+        public JsonResult GetCountRoomBook()
+        {
+            try
+            {
+                AdminDayRoomService adminDayRoomService = new AdminDayRoomService();
+                DateTime dateNow = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                long now = HelperProvider.GetSeconds(dateNow);
+                return Success(adminDayRoomService.GetCountRoomBook(now));
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
 
         [HttpGet]
         public JsonResult DeleteAllDayRoom(long day)
@@ -258,5 +273,7 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        
     }
 }
