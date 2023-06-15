@@ -11,13 +11,13 @@
             <div class="row">
                 <div class="col-md-12 caption mt-90">
                     <h5>The Jocasta Mai Linh Hotel</h5>
-                    <h1>Book Now</h1>
+                    <h1>Đặt phòng</h1>
                 </div>
             </div>
             <div class="row sub-banner">
                 <ul>
                     <li>
-                        <a href="/">Home</a>
+                        <a href="/Home/Index">Trang chủ</a>
                     </li>
                     <li>
                         <a class="select" href="">Đặt phòng</a>
@@ -91,7 +91,8 @@
 <section class="book-now">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8" style="position: relative;">
+                <div class="loader"></div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -100,6 +101,7 @@
                             <th style="width: 15%;">Giá Phòng</th>
                             <th style="width: 20%;">Số lượng phòng trống</th>
                             <th>Số Phòng</th>
+                            <th>Extra bed</th>
                         </tr>
                     </thead>
                     <tbody id="list-count-roomcategory">
@@ -153,6 +155,30 @@
             background-repeat: no-repeat;
             background-size: cover;
         }
+
+        .loader {
+            position: absolute;
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #aa8453;
+            width: 50px;
+            height: 50px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+            display: none;
+            margin: 120px auto;
+        }
+
+        /* Safari */
+        @@-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @@keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
     </style>
 }
 
@@ -200,6 +226,7 @@
         }
 
         const CheckNow_onclick = async function () {
+            $('.loader').css('display', 'block');
             let model = {
                 CheckIn: $('#check-in').val(),
                 CheckOut: $('#check-out').val(),
@@ -233,16 +260,18 @@
                     html += `<tr><td><div class="room-name">${rs.data[i].RoomAvaiable.Category.Name}</div>`;
                     html += `<div class="img-room"><img style="width: 140px; height: 100px;" src="${rs.data[i].RoomAvaiable.Category.Image}" alt=""></div></td>`;
                     html += `<td><i class="ti-user"></i> x ${rs.data[i].RoomAvaiable.Category.NumberOfPeople}</td>`;
-                    html += `<td><div class="price-room"><span>${rs.data[i].RoomAvaiable.Category.Price}</span><br> VNĐ/đêm</div></td>`;
+                    html += `<td><div class="price-room"><span>${NumberFormat(rs.data[i].RoomAvaiable.Category.Price)}</span><br> VNĐ/đêm</div></td>`;
                     html += `<td><div class="price-room"><span>${rs.data[i].RoomAvaiable.ListRoom.length}</span></div></td>`;
                     html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
                     html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].RoomAvaiable.Category.RoomCategoryId}" data-name="${rs.data[i].RoomAvaiable.Category.Name}" data-image="${rs.data[i].RoomAvaiable.Category.Image}" value="${rs.data[i].CountSelect}" min="0" max="${rs.data[i].RoomAvaiable.ListRoom.length}" onchange="countRoom_onChange(event,this);">`;
                     html += `</span></div></td>`;
-                    // html += `<button type="button" class="btn btn-minus btn-number" data-type="minus" disabled="disabled"><i class="ti-minus"></i></button></span>`;
-                    // html += `<span class="input-group-btn"><button type="button" class="btn btn-plus btn-number" data-type="plus" onclick="PlusCountRoom_onClick();"><i class="ti-plus"></i></button></span></div></td>`; onkeyup="ValidateInputOnlyNumber(event,this);"
+                    html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
+                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].RoomAvaiable.Category.RoomCategoryId}" value="${rs.data[i].CountSelect}" min="0" max="" onchange="countExtraBed_onChange(event,this);">`;
+                    html += `</span></div></td>`;
                     html += `</tr>`;
                 }
                 $('#list-count-roomcategory').append(html);
+                $('.loader').css('display', 'none');
             }
         }
 
@@ -308,7 +337,6 @@
                     getListRoomBooked();
                 }
             }, 1000)
-
         }
 
         const bookNow_onClick = async function () {
@@ -334,7 +362,9 @@
             //$('#select2-select-room-category-container').text(nameRoom)
             /*console.log(id);
             console.log(nameRoom);*/
-            //await CheckNow_onclick();
+            if ($('#check-in').val() !== null && $('#check-out').val() !== null) {
+                await CheckNow_onclick();
+            }
         }
         initPage();
 

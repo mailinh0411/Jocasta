@@ -52,8 +52,8 @@ namespace Jocasta.Services
         #region OrderDetail
         public void InsertOrderDetail(OrderDetail orderDetail, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[order_detail] ([OrderDetailId],[OrderId],[RoomCategoryId],[NumberOfRoom],[Price]) " +
-                "VALUES (@OrderDetailId,@OrderId,@RoomCategoryId,@NumberOfRoom,@Price)";
+            string query = "INSERT INTO [dbo].[order_detail] ([OrderDetailId],[OrderId],[RoomCategoryId],[NumberOfRoom],[Price],[ExtraBed]) " +
+                "VALUES (@OrderDetailId,@OrderId,@RoomCategoryId,@NumberOfRoom,@Price,@ExtraBed)";
             int status = this._connection.Execute(query, orderDetail, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }

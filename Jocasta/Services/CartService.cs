@@ -71,15 +71,15 @@ namespace Jocasta.Services
 
         public void InsertCartDetail (CartDetail cartDetail, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[cart_detail] ([CartDetailId],[CartId],[RoomCategoryId],[Quantity])" +
-                " VALUES (@CartDetailId,@CartId,@RoomCategoryId,@Quantity)";
+            string query = "INSERT INTO [dbo].[cart_detail] ([CartDetailId],[CartId],[RoomCategoryId],[Quantity],[ExtraBed])" +
+                " VALUES (@CartDetailId,@CartId,@RoomCategoryId,@Quantity,@ExtraBed)";
             int status = this._connection.Execute(query, cartDetail, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
         public void UpdateQuantityCartDetail (CartDetail cartDetail, IDbTransaction transaction = null)
         {
-            string query = "update [cart_detail] set [Quantity] = @Quantity where [CartDetailId] = @CartDetailId";
+            string query = "update [cart_detail] set [Quantity] = @Quantity, [ExtraBed] = @ExtraBed where [CartDetailId] = @CartDetailId";
             int status = this._connection.Execute(query, cartDetail, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
