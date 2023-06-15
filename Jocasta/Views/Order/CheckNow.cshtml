@@ -256,8 +256,8 @@
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 console.log(rs);
                 for (let i = 0; i < rs.data.length; i++) {
-                    html += `<tr>`;
-                    html += `<tr><td><div class="room-name">${rs.data[i].RoomAvaiable.Category.Name}</div>`;
+                    html += `<tr class="choose-room">`;
+                    html += `<td><div class="room-name">${rs.data[i].RoomAvaiable.Category.Name}</div>`;
                     html += `<div class="img-room"><img style="width: 140px; height: 100px;" src="${rs.data[i].RoomAvaiable.Category.Image}" alt=""></div></td>`;
                     html += `<td><i class="ti-user"></i> x ${rs.data[i].RoomAvaiable.Category.NumberOfPeople}</td>`;
                     html += `<td><div class="price-room"><span>${NumberFormat(rs.data[i].RoomAvaiable.Category.Price)}</span><br> VNĐ/đêm</div></td>`;
@@ -293,6 +293,7 @@
                     html += `<div class="image-room-book" style="background-image: url(${GetObjectProperty(rs.data[i], 'Image')})"></div></td>`;
                     html += `<td>${GetObjectProperty(rs.data[i], 'Name')}</td>`;
                     html += `<td>x${GetObjectProperty(rs.data[i], 'Quantity')}</td>`;
+                    html += `<td>x${GetObjectProperty(rs.data[i], 'Quantity')}</td>`;
                 }
                 $('#list-room-book').append(html);
 
@@ -319,7 +320,10 @@
             }
 
             // Gán max cho số lượng extra bed
-            $('#count-extrabed').attr("max", count);
+            $(el).closest('.choose-room').find('#count-extrabed').attr("max", count);
+            //$('#count-extrabed').attr("max", count);
+            console.log($('#count-extrabed').attr("max"));
+            console.log(maxCount);
             
             let model = {
                 RoomCategoryId: id,
