@@ -12,6 +12,7 @@ namespace Jocasta.Models
         public string RoomCategoryId { get; set; }
         public int NumberOfRoom { get; set; }
         public decimal Price { get; set; }
+        public int ExtraBed { get; set; }
     }
 
     public class OrderDetailBooking

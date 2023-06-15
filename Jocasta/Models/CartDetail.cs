@@ -11,6 +11,8 @@ namespace Jocasta.Models
         public string CartId { get; set; }
         public string RoomCategoryId { get; set; }
         public int Quantity { get; set; }
+        public int ExtraBed { get; set; }
+        public decimal Price { get; set; }
     }
 
     public class CartDetailModel

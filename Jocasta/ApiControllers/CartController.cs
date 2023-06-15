@@ -93,7 +93,7 @@ namespace Jocasta.ApiControllers
                         Cart cart = cartService.GetCartByUserId(user.UserId, transaction);
                         if (cart == null) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
 
-                        //TimeSpan difference = HelperProvider.GetDateTime(cart.CheckOut) - HelperProvider.GetDateTime(cart.CheckIn);
+                        //Số ngày ở
                         TimeSpan difference = HelperProvider.GetDateTime(cart.CheckOut).Subtract(HelperProvider.GetDateTime(cart.CheckIn));
                         int totalDay = (int)difference.TotalDays;
 
@@ -107,7 +107,7 @@ namespace Jocasta.ApiControllers
                             if(cartDetail != null)
                             {
                                 // Cập nhật lại tổng tiền và tổng số lượng trong cart
-                                decimal price = cartDetail.Quantity * roomCategory.Price * totalDay;
+                                decimal price = cartDetail.Price * totalDay;
                                 int quantity = cartDetail.Quantity;
                                 cartService.UpdateCart(-price, -quantity, cart.CartId, transaction);
                                 // Xóa cart detail của loại phòng đó

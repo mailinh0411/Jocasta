@@ -106,10 +106,12 @@ namespace Jocasta.ApiControllers
                             if(cartDetail == null)
                             {
                                 roomInCart.CountSelect = 0;
+                                roomInCart.CountExtraBed = 0;
                             }
                             else
                             {
                                 roomInCart.CountSelect = cartDetail.Quantity;
+                                roomInCart.CountExtraBed = cartDetail.ExtraBed;
                             }
 
                             listRoomInCart.Add(roomInCart);                            
