@@ -126,11 +126,13 @@ namespace Jocasta.ApiControllers
                                 cartDetailInsert.CartId = cart.CartId;
                                 cartDetailInsert.Quantity = model.Quantity;
                                 cartDetailInsert.RoomCategoryId = model.RoomCategoryId;
+                                cartDetailInsert.ExtraBed = 0;
+                                cartDetailInsert.Price = model.Quantity * roomCategory.Price + cartDetailInsert.ExtraBed * Constant.EXTRA_BED * roomCategory.Price;
                                 cartService.InsertCartDetail(cartDetailInsert, transaction);
                                 // Cập nhật tổng tiền và số lượng của cart
-                                // tổng tiền = số lượng mới * tiền
+                                // tổng tiền = số ngày ở * tiền
                                 // số lượng = số lượng mới
-                                decimal price = cartDetailInsert.Quantity * roomCategory.Price * totalDay;
+                                decimal price = cartDetailInsert.Price * totalDay;
                                 int quantity = cartDetailInsert.Quantity;
                                 cartService.UpdateCart(price, quantity, cart.CartId, transaction);
                             }
@@ -139,11 +141,12 @@ namespace Jocasta.ApiControllers
                                 // Cập nhật tổng tiền và số lượng của cart
                                 // tổng tiền = số lượng mới * tiền * số ngày - số lượng cũ * tiền * số ngày
                                 // số lượng = số lượng mới - số lượng cũ
-                                decimal price = model.Quantity * roomCategory.Price * totalDay - cartDetail.Quantity * roomCategory.Price * totalDay;
+                                decimal price = (model.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay - (cartDetail.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay;
                                 int quantity = model.Quantity - cartDetail.Quantity;
                                 cartService.UpdateCart(price, quantity, cart.CartId, transaction);
-                                // Cập nhật lại số lượng phòng ở cart detail
+                                // Cập nhật lại số lượng phòng, tiền ở cart detail
                                 cartDetail.Quantity = model.Quantity;
+                                cartDetail.Price = model.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price;
                                 cartService.UpdateQuantityCartDetail(cartDetail, transaction);
                             }
                         }                        
@@ -153,6 +156,63 @@ namespace Jocasta.ApiControllers
                     }
                 }
             }catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        // thêm phòng vào cart
+        [HttpPost]
+        public JsonResult UpdateCartDetail(UpdateCartDetail model)
+        {
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        string token = Request.Headers.Authorization.ToString();
+                        UserService userService = new UserService(connect);
+                        CartService cartService = new CartService(connect);
+                        RoomCategoryService roomCategoryService = new RoomCategoryService(connect);
+
+                        User user = userService.GetUserByToken(token, transaction);
+                        if (user == null) return Unauthorized();
+
+                        if (string.IsNullOrEmpty(model.RoomCategoryId)) throw new Exception("Bạn phải chọn phòng đặt.");
+                        RoomCategory roomCategory = roomCategoryService.GetRoomCategoryById(model.RoomCategoryId, transaction);
+                        if (roomCategory == null) throw new Exception("Phòng này không tồn tại.");
+
+                        if (model.ExtraBed < 0) throw new Exception("Số lượng phòng đặt phải lớn hơn 0.");
+
+                        Cart cart = cartService.GetCartByUserId(user.UserId, transaction);
+                        if (cart == null) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+
+                        //Số ngày ở
+                        TimeSpan difference = HelperProvider.GetDateTime(cart.CheckOut).Subtract(HelperProvider.GetDateTime(cart.CheckIn));
+                        int totalDay = (int)difference.TotalDays;
+
+                        // Kiểm tra xem đã cho loại phòng đó vào cart chưa
+                        CartDetail cartDetail = cartService.GetRoomBookedByCartRoom(cart.CartId, model.RoomCategoryId, transaction);
+                        if(cartDetail == null) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+
+
+                        // Cập nhật lại tổng tiền
+                        decimal price = (cartDetail.Quantity * roomCategory.Price + model.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay - cartDetail.Price * totalDay;
+                        int quantity = 0;
+                        cartService.UpdateCart(-price, -quantity, cart.CartId, transaction);
+                        // Cập nhật tổng tiền vào extrabed trong cartDetail
+                        cartDetail.ExtraBed = model.ExtraBed;
+                        cartDetail.Price = cartDetail.Quantity * roomCategory.Price + model.ExtraBed * Constant.EXTRA_BED * roomCategory.Price;
+                        cartService.UpdateQuantityCartDetail(cartDetail, transaction);
+
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+            }
+            catch (Exception ex)
             {
                 return Error(ex.Message);
             }
