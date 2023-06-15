@@ -263,10 +263,10 @@
                     html += `<td><div class="price-room"><span>${NumberFormat(rs.data[i].RoomAvaiable.Category.Price)}</span><br> VNĐ/đêm</div></td>`;
                     html += `<td><div class="price-room"><span>${rs.data[i].RoomAvaiable.ListRoom.length}</span></div></td>`;
                     html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
-                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].RoomAvaiable.Category.RoomCategoryId}" data-name="${rs.data[i].RoomAvaiable.Category.Name}" data-image="${rs.data[i].RoomAvaiable.Category.Image}" value="${rs.data[i].CountSelect}" min="0" max="${rs.data[i].RoomAvaiable.ListRoom.length}" onchange="countRoom_onChange(event,this);">`;
+                    html += `<input type="number" class="form-control input-number" id="count-room" data-id="${rs.data[i].RoomAvaiable.Category.RoomCategoryId}" data-name="${rs.data[i].RoomAvaiable.Category.Name}" data-image="${rs.data[i].RoomAvaiable.Category.Image}" value="${rs.data[i].CountSelect}" min="0" max="${rs.data[i].RoomAvaiable.ListRoom.length}" onchange="countRoom_onChange(event,this);">`;
                     html += `</span></div></td>`;
                     html += `<td><div class="input-group input-group-number"><span class="input-group-btn">`;
-                    html += `<input type="number" class="form-control input-number" data-id="${rs.data[i].RoomAvaiable.Category.RoomCategoryId}" value="${rs.data[i].CountSelect}" min="0" max="" onchange="countExtraBed_onChange(event,this);">`;
+                    html += `<input type="number" class="form-control input-number" id="count-extrabed" data-id="${rs.data[i].RoomAvaiable.Category.RoomCategoryId}" value="${rs.data[i].CountExtraBed}" min="0" max="${rs.data[i].CountSelect}" onchange="countExtraBed_onChange(this);">`;
                     html += `</span></div></td>`;
                     html += `</tr>`;
                 }
@@ -317,6 +317,10 @@
                 $(el).val(0);
                 return;
             }
+
+            // Gán max cho số lượng extra bed
+            $('#count-extrabed').attr("max", count);
+            
             let model = {
                 RoomCategoryId: id,
                 Quantity: count
@@ -337,6 +341,35 @@
                     getListRoomBooked();
                 }
             }, 1000)
+        }
+
+        const countExtraBed_onChange = async function (el) {
+            var maxCount = $(el).attr('max');
+            var count = $(el).val();
+
+            if (parseInt(count) > parseInt(maxCount)) {
+                alert('Số extra bed không được lớn hơn số phòng ở.');
+                $(el).val(0);
+                return;
+            }
+
+            let model = {
+                RoomCategoryId: id,
+                ExtraBed: count
+            }
+
+            const rp = await fetch('/api/cart/UpdateCartDetail', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                getListRoomBooked();
+            }
         }
 
         const bookNow_onClick = async function () {
@@ -362,7 +395,11 @@
             //$('#select2-select-room-category-container').text(nameRoom)
             /*console.log(id);
             console.log(nameRoom);*/
-            if ($('#check-in').val() !== null && $('#check-out').val() !== null) {
+            console.log($('#check-in').val());
+            /*if (($('#check-in').val() !== null || $('#check-in').val() !== '') && ($('#check-out').val() !== null || $('#check-out').val() !== '')) {
+                await CheckNow_onclick();
+            }*/
+            if ($('#check-in').val() !== '' || $('#check-out').val() !== '') {
                 await CheckNow_onclick();
             }
         }

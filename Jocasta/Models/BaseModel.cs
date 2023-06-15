@@ -63,5 +63,7 @@ namespace Jocasta.Models
         public const string USER_IMAGE_PATH = "~/files/user/image/";
 
         public const int PAGE_SIZE = 5;
+
+        public const decimal EXTRA_BED = (decimal)0.3;
     }
 }
