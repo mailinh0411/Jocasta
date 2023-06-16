@@ -154,7 +154,7 @@
                     html += `<div class="room-price"><span class="current">${(NumberFormat(rs.data[i].PriceRC))}</span> VNĐ/Đêm</div>`;
                     if (rs.data[i].ExtraBed !== 0) {
                         var priceEB = (0.3 * rs.data[i].PriceRC);
-                        html += `<div class="d-flex justify-content-between mt-4"><div>Extra bed</div><div>Số lượng: ${GetObjectProperty(rs.data[i], 'ExtraBed')}</div></div>`;
+                        html += `<div class="d-flex justify-content-between mt-4"><div>Giường phụ(Extra bed)</div><div>Số lượng: ${GetObjectProperty(rs.data[i], 'ExtraBed')}</div></div>`;
                         html += `<div><span>30% * ${(NumberFormat(rs.data[i].PriceRC))}</span> = ${NumberFormat(priceEB)} VNĐ/Đêm</div>`;
                     }
                     html += `</div></li>`;

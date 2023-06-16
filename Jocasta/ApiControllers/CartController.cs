@@ -141,11 +141,21 @@ namespace Jocasta.ApiControllers
                                 // Cập nhật tổng tiền và số lượng của cart
                                 // tổng tiền = số lượng mới * tiền * số ngày - số lượng cũ * tiền * số ngày
                                 // số lượng = số lượng mới - số lượng cũ
-                                decimal price = (model.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay - (cartDetail.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay;
+                                decimal price = 0;
+                                if (model.ExtraBed != cartDetail.ExtraBed)
+                                {
+                                    price = (model.Quantity * roomCategory.Price + model.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay - (cartDetail.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay;
+                                }
+                                else
+                                {
+                                    price = (model.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay - (cartDetail.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay;
+                                }
+
                                 int quantity = model.Quantity - cartDetail.Quantity;
                                 cartService.UpdateCart(price, quantity, cart.CartId, transaction);
                                 // Cập nhật lại số lượng phòng, tiền ở cart detail
                                 cartDetail.Quantity = model.Quantity;
+                                cartDetail.ExtraBed = model.ExtraBed;
                                 cartDetail.Price = model.Quantity * roomCategory.Price + cartDetail.ExtraBed * Constant.EXTRA_BED * roomCategory.Price;
                                 cartService.UpdateQuantityCartDetail(cartDetail, transaction);
                             }
