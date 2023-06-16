@@ -200,7 +200,7 @@ namespace Jocasta.ApiControllers
                             orderDetail.OrderId = order.OrderId;
                             orderDetail.RoomCategoryId = item.RoomCategoryId;
                             orderDetail.NumberOfRoom = item.Quantity;
-                            orderDetail.Price = item.Price;
+                            orderDetail.Price = item.PriceRC;
                             orderService.InsertOrderDetail(orderDetail, transaction);
 
                             InvoiceDetail invoiceDetail = new InvoiceDetail();
@@ -208,7 +208,7 @@ namespace Jocasta.ApiControllers
                             invoiceDetail.InvoiceId = invoice.InvoiceId;
                             invoiceDetail.RoomCategoryId = item.RoomCategoryId;
                             invoiceDetail.Quantity = item.Quantity;
-                            invoiceDetail.Price = item.Price;
+                            invoiceDetail.Price = item.PriceRC;
                             invoiceService.InsertInvoiceDetail(invoiceDetail, transaction);
 
                             // Giữ chỗ cho khách hàng thêm vào bảng day_room

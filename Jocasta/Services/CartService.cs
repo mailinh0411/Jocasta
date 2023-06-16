@@ -59,7 +59,7 @@ namespace Jocasta.Services
 
         public List<CartDetailModel> GetListRoomBookedByCart(string cartId, IDbTransaction transaction = null)
         {
-            string query = "select cd.*, rc.Name, rc.Image, rc.Price from [cart_detail] cd left join [room_category] rc on cd.RoomCategoryId = rc.RoomCategoryId where CartId = @cartId";
+            string query = "select cd.*, rc.Name, rc.Image, rc.Price as PriceRC from [cart_detail] cd left join [room_category] rc on cd.RoomCategoryId = rc.RoomCategoryId where CartId = @cartId";
             return this._connection.Query<CartDetailModel>(query, new {cartId}, transaction).ToList();
         }
 

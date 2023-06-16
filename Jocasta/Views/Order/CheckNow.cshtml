@@ -112,10 +112,28 @@
                 <div class="booking-box">
                     <div class="title-list-room"><span>DANH SÁCH PHÒNG ĐẶT</span></div>
                     <div class="list-room">
-                        <table>
-                            <tbody id="list-room-book">
-                            </tbody>
-                        </table>
+                        @*<table>
+            <tbody id="list-room-book">
+            </tbody>
+        </table>*@ 
+                        <div id="list-room-book">                            
+                            <div class="d-flex mb-2 room-book align-items-center">
+                                <div class="d-flex justify-content-between" style="flex:1;">
+                                    <input id="roomCategoryBookId" value="1" hidden />
+                                    <div class="image-room-book" src="/Content/img/slider/1.jpg"></div>                                    
+                                </div>
+                                <div class="d-flex flex-column" style="flex:2;">
+                                    <div class="d-flex justify-content-between">
+                                        <div>Phòng Executive Suite Sea View</div>
+                                        <div style="width: 25px;"> x 1</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div>Extra Bed</div>
+                                        <div> x 1</div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <button class="btn btn-form1-submit " onclick="bookNow_onClick();">Đặt phòng</button>
                 </div>
@@ -147,8 +165,8 @@
             padding: 40px 0;
         }
 
-        .image-room-book {
-            width: 50px;
+        .room-book .image-room-book {
+            min-width: 50px;
             height: 30px;
             margin-right: 20px;
             background-position: center;
@@ -288,17 +306,43 @@
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 let html = '';
                 for (let i = 0; i < rs.data.length; i++) {
-                    html += `<tr><td>`;
-                    html += `<input id="roomCategoryBookId" value="${GetObjectProperty(rs.data[i], 'RoomCategoryId')}" hidden />`;
-                    html += `<div class="image-room-book" style="background-image: url(${GetObjectProperty(rs.data[i], 'Image')})"></div></td>`;
-                    html += `<td>${GetObjectProperty(rs.data[i], 'Name')}</td>`;
-                    html += `<td>x${GetObjectProperty(rs.data[i], 'Quantity')}</td>`;
-                    html += `<td>x${GetObjectProperty(rs.data[i], 'Quantity')}</td>`;
+                    /*html += `<div class="mb-2 room-book">`;
+                    html += `<div class="d-flex justify-content-between">
+                                    <input id="roomCategoryBookId" value="${GetObjectProperty(rs.data[i], 'RoomCategoryId')}" hidden />
+                                    <div class="image-room-book" style="background-image: url(${GetObjectProperty(rs.data[i], 'Image')})"></div>
+                                    <div>${GetObjectProperty(rs.data[i], 'Name')}</div>
+                                    <div style="width: 25px;"> x ${GetObjectProperty(rs.data[i], 'Quantity')}</div>
+                                </div>`;                    
+                    if (rs.data[i].ExtraBed !== 0) {
+                        html += `<div class="d-flex justify-content-between">
+                                    <div>Extra Bed</div>
+                                    <div style="width: 25px;"> x ${GetObjectProperty(rs.data[i], 'ExtraBed')}</div>
+                                </div>`;
+                    }
+                    html += `</div>`;*/
+                    html += `<div class="d-flex mb-2 room-book align-items-center">`;
+                    html += `<div class="d-flex justify-content-between" style="flex:1;">
+                                    <input id="roomCategoryBookId" value="${GetObjectProperty(rs.data[i], 'RoomCategoryId')}" hidden />
+                                    <div class="image-room-book" style="background-image: url(${GetObjectProperty(rs.data[i], 'Image')})"></div>                                    
+                                </div>`;
+                    html += `<div class="d-flex flex-column" style="flex:2;">`;
+                    html += `<div class="d-flex justify-content-between">
+                                        <div>${GetObjectProperty(rs.data[i], 'Name')}</div>
+                                        <div style="width: 25px;"> x ${GetObjectProperty(rs.data[i], 'Quantity')}</div>
+                                    </div>`;
+                    if (rs.data[i].ExtraBed !== 0) {
+                        html += `<div class="d-flex justify-content-between">
+                                        <div>Extra Bed</div>
+                                        <div> x ${GetObjectProperty(rs.data[i], 'ExtraBed')}</div>
+                                    </div>`;
+                    }
+                    html += `</div></div>`;
+                   
                 }
                 $('#list-room-book').append(html);
 
                 ListRoomBook = [];
-                const tableRow = $('#list-room-book tr');
+                const tableRow = $('#list-room-book .room-book');
                 for (let i = 0; i < tableRow.length; i++) {
                     const row = $(tableRow[i]);
                     const id = $(row).find('input#roomCategoryBookId').val();
@@ -350,6 +394,7 @@
         const countExtraBed_onChange = async function (el) {
             var maxCount = $(el).attr('max');
             var count = $(el).val();
+            var id = $(el).data('id');
 
             if (parseInt(count) > parseInt(maxCount)) {
                 alert('Số extra bed không được lớn hơn số phòng ở.');
@@ -361,19 +406,22 @@
                 RoomCategoryId: id,
                 ExtraBed: count
             }
+            clearTimeout(_delaySearch);
+            _delaySearch = setTimeout(async function () {
+                const rp = await fetch('/api/cart/UpdateCartDetail', {
+                    method: 'post',
+                    headers: Enum.OptionHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rp.json();
 
-            const rp = await fetch('/api/cart/UpdateCartDetail', {
-                method: 'post',
-                headers: Enum.OptionHeaderDefault,
-                body: JSON.stringify(model)
-            });
-            let rs = await rp.json();
-
-            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
-            if (rs.status === 'success') {
-                if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                getListRoomBooked();
-            }
+                if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    getListRoomBooked();
+                }
+            }, 700)
+            
         }
 
         const bookNow_onClick = async function () {
