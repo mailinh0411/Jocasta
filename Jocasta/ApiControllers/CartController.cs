@@ -201,7 +201,7 @@ namespace Jocasta.ApiControllers
                         // Cập nhật lại tổng tiền
                         decimal price = (cartDetail.Quantity * roomCategory.Price + model.ExtraBed * Constant.EXTRA_BED * roomCategory.Price) * totalDay - cartDetail.Price * totalDay;
                         int quantity = 0;
-                        cartService.UpdateCart(-price, -quantity, cart.CartId, transaction);
+                        cartService.UpdateCart(price, quantity, cart.CartId, transaction);
                         // Cập nhật tổng tiền vào extrabed trong cartDetail
                         cartDetail.ExtraBed = model.ExtraBed;
                         cartDetail.Price = cartDetail.Quantity * roomCategory.Price + model.ExtraBed * Constant.EXTRA_BED * roomCategory.Price;

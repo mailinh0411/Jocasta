@@ -19,10 +19,10 @@
             <div class="row sub-banner">
                 <ul>
                     <li>
-                        <a href="/">Home</a>
+                        <a href="/">Trang chủ</a>
                     </li>
                     <li>
-                        <a class="select" href="">Selected Room</a>
+                        <a class="select" href="">Đặt phòng</a>
                     </li>
                 </ul>
             </div>
@@ -149,9 +149,14 @@
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 for (let i = 0; i < rs.data.length; i++) {
 
-                    html += `<li><img src="${rs.data[i].Image}" alt="">`;
-                    html += `<div><h6>${GetObjectProperty(rs.data[i], 'Name')}</h6><p>Số lượng: ${GetObjectProperty(rs.data[i], 'Quantity')}</p>`;
-                    html += `<div class="room-price"><span class="current">${(NumberFormat(rs.data[i].Price))}</span> VNĐ/Đêm</div>`;
+                    html += `<li><img src="${rs.data[i].Image}" alt="" style="flex:1;">`;
+                    html += `<div style="flex:2;"><div class="d-flex justify-content-between"><h6>${GetObjectProperty(rs.data[i], 'Name')}</h6><p>Số lượng: ${GetObjectProperty(rs.data[i], 'Quantity')}</p></div>`;
+                    html += `<div class="room-price"><span class="current">${(NumberFormat(rs.data[i].PriceRC))}</span> VNĐ/Đêm</div>`;
+                    if (rs.data[i].ExtraBed !== 0) {
+                        var priceEB = (0.3 * rs.data[i].PriceRC);
+                        html += `<div class="d-flex justify-content-between mt-4"><div>Extra bed</div><div>Số lượng: ${GetObjectProperty(rs.data[i], 'ExtraBed')}</div></div>`;
+                        html += `<div><span>30% * ${(NumberFormat(rs.data[i].PriceRC))}</span> = ${NumberFormat(priceEB)} VNĐ/Đêm</div>`;
+                    }
                     html += `</div></li>`;
                 }
                 $('#list-room-booked').append(html);
