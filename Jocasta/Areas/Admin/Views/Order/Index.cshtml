@@ -206,8 +206,14 @@
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CheckIn), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CheckOut), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
+                    var note = "";
+                    if (rs.data.List[i].RequestContent === null || rs.data.List[i].RequestContent === '') {
+                        note = "Không có yêu cầu."
+                    } else {
+                        note = rs.data.List[i].RequestContent;
+                    }
                     html += `<td><div class="popover_wrapper"><a href="#" class="popover_title"> Nội dung </a>
-                    <div class="popover_content"><div class="note">${rs.data.List[i].RequestContent}</div></div></div></td>`;
+                    <div class="popover_content"><div class="note">${note}</div></div></div></td>`;
                     switch (rs.data.List[i].Status) {
                         case "BOOKED":
                             html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i>Đã đặt</div></td>`;
@@ -223,7 +229,7 @@
                             html += `</td>`;
                             break;
                         case "CHECKED_OUT":
-                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-danger me-1"></i> Đã check out</div></td>`;
+                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-secondary me-1"></i> Đã check out</div></td>`;
                             html += `<td>`;
                             html += `</td>`;
 
@@ -234,7 +240,7 @@
                             html += `</td>`;
                             break;
                         case "SYSTEM_CANCEL":
-                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-secondary me-1"></i> Hệ thống hủy</div></td>`;
+                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-danger me-1"></i> Hệ thống hủy</div></td>`;
                             html += `<td>`;
                             html += `</td>`;
                             break;

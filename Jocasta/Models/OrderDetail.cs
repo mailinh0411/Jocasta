@@ -24,5 +24,6 @@ namespace Jocasta.Models
         public decimal Price { get; set; }
         public string Name { get; set; }
         public string ListRoom { get; set; }
+        public int ExtraBed { get; set; }
     }
 }
