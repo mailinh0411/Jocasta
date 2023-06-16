@@ -38,6 +38,7 @@
                                         <th>Ngày vào</th>
                                         <th>Ngày ra</th>
                                         <th>Ngày tạo</th>
+                                        <th>Yêu cầu</th>
                                         <th>Trạng thái</th>
                                         <th>Thao tác</th>
                                         <th>Xem chi tiết</th>
@@ -102,6 +103,59 @@
 
 @section styles{
     <style>
+        .popover_wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+
+            .popover_wrapper .popover_content {
+                opacity: 0;
+                visibility: hidden;
+                position: absolute;
+                left: -10px;
+                top: 40px;
+                transform: translate(0, 10px);
+                padding: 10px;
+                box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+                width: 250px;
+                font-size: 13px;
+                border-radius: 5px;
+                background-color: #f9eddd;
+            }
+
+                .popover_wrapper .popover_content:before {
+                    position: absolute;
+                    z-index: -1;
+                    content: "";
+                    right: calc(50%-10px);
+                    top: -8px;
+                    border-style: solid;
+                    border-width: 0 10px 10px 10px;
+                    border-color: transparent transparent #f9eddd transparent;
+                    transition-duration: 0.3s;
+                    transition-property: transform;
+                }
+
+        .popover_wrapper:hover .popover_content {
+            z-index: 10;
+            opacity: 1;
+            visibility: visible;
+            transform: translate(0, -20px);
+            transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+        }
+
+
+
+        .note::-webkit-scrollbar {
+            display: none;
+        }
+
+        .note {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 }
 @section scripts{
@@ -152,33 +206,35 @@
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CheckIn), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CheckOut), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
                     html += `<td><div><span class="fs-15 font-w500 text-nowrap">${DateStringFormat({ stringDate: new Date(rs.data.List[i].CreateTime), newFormat: 'dd/mm/yyyy' })}</span></div></td>`;
+                    html += `<td><div class="popover_wrapper"><a href="#" class="popover_title"> Nội dung </a>
+                    <div class="popover_content"><div class="note">${rs.data.List[i].RequestContent}</div></div></div></td>`;
                     switch (rs.data.List[i].Status) {
                         case "BOOKED":
-                            html += `<td><span class="badge badge-lg light badge-success">Đã đặt</span></td>`;
+                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-success me-1"></i>Đã đặt</div></td>`;
                             html += `<td>`;
                             html += `<button class="btn btn-sm btn-success" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckIn_onClick(this);">Check in</button>`;
                             html += `<button class="btn btn-sm btn-danger" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick="SystemCancel_onClick(this);">Hủy</button>`;
                             html += `</td>`;
                             break;
                         case "CHECKED_IN":
-                            html += `<td><span class="badge badge-lg light badge-info">Đã check in</span></td>`;
+                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-warning me-1"></i>Đã check in</div></td>`;
                             html += `<td>`;
                             html += `<button class="btn btn-sm btn-secondary" style="margin-right:5px;" data-id="${rs.data.List[i].OrderId}" onclick = "CheckOut_onClick(this);">Check out</button>`;
                             html += `</td>`;
                             break;
                         case "CHECKED_OUT":
-                            html += `<td><span class="badge badge-lg light badge-primary">Đã check out</span></td>`;
+                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-danger me-1"></i> Đã check out</div></td>`;
                             html += `<td>`;
                             html += `</td>`;
 
                             break;
                         case "USER_CANCEL":
-                            html += `<td><span class="badge badge-lg light badge-danger" id="">Người dùng hủy</span></td>`;
+                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-danger me-1"></i>Người dùng hủy</div></td>`;
                             html += `<td>`;
                             html += `</td>`;
                             break;
                         case "SYSTEM_CANCEL":
-                            html += `<td><span class="badge badge-lg light badge-secondary">Hệ thống hủy</span></td>`;
+                            html += `<td><div class="d-flex align-items-center"><i class="fa fa-circle text-secondary me-1"></i> Hệ thống hủy</div></td>`;
                             html += `<td>`;
                             html += `</td>`;
                             break;
@@ -283,6 +339,7 @@
 
 
         initPage();
+
     </script>
 
 
