@@ -17,7 +17,7 @@
             <div class="row sub-banner">
                 <ul>
                     <li>
-                        <a href="/">Home</a>
+                        <a href="/">Trang chủ</a>
                     </li>
                     <li>
                         <a class="select" href="">Đặt phòng</a>
@@ -27,6 +27,7 @@
         </div>
     </div>
 }
+
 
 <!-- Reservation -->
 <section class="section-padding">
@@ -175,7 +176,7 @@
 
         const orderBookRoom_onClick = async function () {
             //window.location.href = '/information-user-book';
-
+            
             let model = {
                 Name: $('#name').val(),
                 Phone: $('#phone').val(),
@@ -193,6 +194,7 @@
 
             console.log(rs);
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+
                 window.location.href = '/success-order';
             }
         }

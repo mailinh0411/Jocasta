@@ -175,5 +175,19 @@ namespace Jocasta.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult GetListUserByKeyword(string keyword)
+        {
+            try
+            {
+                ManageUserService manageUserService = new ManageUserService();
+                return Success(manageUserService.GetListUserByKeyword(keyword));
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

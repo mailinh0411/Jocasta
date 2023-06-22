@@ -765,7 +765,7 @@
             let rs = await rq.json();
             if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                console.log(rs.data);
+                
                 $('.logo-user-name p').text(rs.data.Name);
                 $('.logo-user-name span').text(rs.data.Account);
                 $('.img-logo-user img').attr('src', GetObjectProperty(rs.data, 'Avatar'));

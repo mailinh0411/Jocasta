@@ -2843,6 +2843,7 @@
     <Content Include="Areas\Admin\Views\Shared\_LayoutAuth.cshtml" />
     <Content Include="Areas\Admin\Views\System\Login.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUserAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\AddOrder.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

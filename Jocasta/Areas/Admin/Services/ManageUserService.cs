@@ -86,5 +86,17 @@ namespace Jocasta.Areas.Admin.Services
             string query = "select count(*) from [user]";
             return this._connection.Query<int>(query, transaction).FirstOrDefault();
         }
+
+        public List<User> GetListUserByKeyword(string keyword, IDbTransaction transaction = null)
+        {
+            string query = "select * from [user] where Enable = 1";
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                keyword = "%" + keyword.Replace(" ", "%") + "%";
+                query += " and (Phone like @keyword or Email like @keyword)";
+            }
+            query += " order by CreateTime desc";
+            return this._connection.Query<User>(query, new { keyword }, transaction).ToList();
+        }
     }
 }
