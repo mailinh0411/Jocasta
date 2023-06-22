@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "AddOrder";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid" style="display: flex; flex-direction: column; margin: auto; padding: 20px; max-width: 800px; background-color: #ffffff;">
+    <div class="row">
+        <h2 class="text-center">Thêm mới đơn đặt</h2>
+    </div>
+
+    <div class="body">
+        <div>
+            <div class="form-group row" id="">
+                <div class="col-md-6 search-input">
+                    <label class="font-weight-semibold fs-16">Tên khách hàng</label>
+                    <input type="text" class="form-control" id="keywordUser" placeholder="Nhập số điện thoại hoặc email" onkeyup="ListUser_KeyUp(event,this)" onfocus="ListUser_OnFocus(this)" />
+                    <ul class="autocomplete" id="autocomplete-user" style="display: flex;">
+                    </ul>
+                    <input type="text" class="form-control" id="UserId" placeholder="" hidden />
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-success" style="margin-top: 27px;">Thêm mới KH</button>
+                </div>
+            </div>
+
+            <div class="form-group row" id="">
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="">Số điện thoại</label>
+                    <input type="text" class="form-control" id="Phone" placeholder="Số điện thoại" disabled />
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="">Email</label>
+                    <input type="text" class="form-control" id="Email" placeholder="Email" disabled />
+                </div>
+            </div>
+
+            <div class="form-group row" id="">
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="">Ngày vào</label>
+                    <input class="form-control" id="start-date" />
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="">Ngày ra</label>
+                    <input class="form-control" id="end-date" />
+                </div>
+            </div>
+
+            <div class="form-group row" id="">
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="">Chọn loại phòng</label>
+                    <select class="form-control" id="RoomCategoryId" name="RoomCategoryId" onchange="RoomCategory_onChange();">
+                        <option value="">Chọn loại phòng</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-semibold fs-16" for="">Chọn phòng</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control" id="RoomId" name="RoomId">
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-success">Thêm</button>
+                        </div>                        
+                    </div> 
+                </div>
+            </div>
+
+            <button type="button" onclick="InsertRoomCategory();" class="create-button btn btn-primary">Thêm loại phòng</button>
+        </div>
+
+    </div>
+
+</div>
+
+
+@section styles{
+    <style>
+        .search-input {
+            position: relative;
+        }
+        .autocomplete {
+            border: solid 0.5px #C2C2C2;
+            max-height: 200px;
+            overflow: auto;
+            position: absolute;
+            width: 92%;
+            background-color: #ffffff;
+            z-index: 1000;
+            border-top: none;
+            border-radius: 0.5rem;
+        }
+
+            .autocomplete li {
+                padding: 5px 10px;
+            }
+
+                .autocomplete li:hover {
+                    background-color: #aa8453;
+                    color: #ffffff;
+                    cursor: pointer;
+                }
+    </style>
+}
+@section scripts{    
+    <script>
+        $('#start-date').datepicker({
+            autoclose: true,
+            //format: 'dd-mm-yyyy'
+        });
+
+        $('#end-date').datepicker({
+            autoclose: true,
+            //format: 'dd-mm-yyyy'
+        });
+
+        const ListUser_OnFocus = function (el) {
+            $(el).closest('.search-input').find('.autocomplete').css('display', 'block');
+        }
+
+        const ListUser_KeyUp = async function (event, el) {
+            if (event.keyCode === 27) { $(el).closest('.search-input').find('.autocomplete').css('display', 'none'); return; }
+            let keyword = $(el).val();
+            keyword = keyword.trim();
+            keyword = RemoveVietnameseTones(keyword);
+            let rq = await fetch('/api/ManageUser/GetListUserByKeyword?keyword=' + keyword, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                if (rs.data.length <= 0) { $(el).closest('.search-input').find('.autocomplete').html('<li>Không tìm thấy khách hàng nào</li>'); return; }
+                $(el).closest('.search-input').find('.autocomplete').html('');
+
+                for (let i = 0; i < rs.data.length; i++) {
+                    $(el).closest('.search-input').find('.autocomplete').append(`<li onclick="ChooseUser_Select(this);" data-id="${rs.data[i].UserId} " data-name="${rs.data[i].Name}" data-email="${rs.data[i].Email}" data-phone="${rs.data[i].Phone}">${GetObjectProperty(rs.data[i], 'Name')} - ${GetObjectProperty(rs.data[i], 'Phone') }</li>`);
+
+                }
+            }
+
+        }
+
+        const ChooseUser_Select = function (el) {
+            var id = $(el).data('id');
+            var name = $(el).data('name');
+            var email = $(el).data('email');
+            var phone = $(el).data('phone');
+            $('.search-input #keywordUser').val(name);
+            $('#UserId').val(id);
+            $('#Email').val(email);
+            $('#Phone').val(phone);
+            $(el).closest('.search-input').find('.autocomplete').css('display', 'none');
+        }
+
+        const ListRoomCategory = async function () {
+            let rq = await fetch('/api/AdminRoomCategory/GetRoomCategories?keyword=', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            $('select[name=RoomCategoryId]').html('');
+            let html = '<option value="">Chọn loại phòng</option>';
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let i = 0; i < rs.data.length; i++) {
+                    html += `<option value="${rs.data[i].RoomCategoryId}">${rs.data[i].Name}</option>`;
+                }
+            }
+
+            $('select[name=RoomCategoryId]').append(html);
+            
+        }
+
+        const RoomCategory_onChange = async function () {
+            $('select[name=RoomId]').html('');
+            var idRC = $('#RoomCategoryId').val();
+            console.log(idRC);
+            let model = {
+
+            }
+        }
+        const initPage = function () {
+            ListRoomCategory();
+        }
+        initPage();
+    </script>
+}
+
+
+

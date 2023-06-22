@@ -64,11 +64,11 @@
         </div>   
         
         <div style="display:flex; justify-content: flex-end; margin-top: 20px;">
+            
             <button class="btn btn-info" onclick="ExportPdfOrder();">In hóa đơn</button>
         </div>
     </div>
 </div>
-
 
 
 @section styles{
@@ -112,6 +112,16 @@
             text-align: center;
             padding: 10px 0;
         }
+
+        .btn-update-order{
+            display: none;
+            margin-right: 30px;
+        }
+
+        .btn-service-order {
+            display: none;
+            margin-right: 30px;
+        }
     </style>
 }
 @section scripts{
@@ -153,6 +163,13 @@
                 orderinfo.CheckIn = rs.data.CheckIn;
                 orderinfo.CheckOut = rs.data.CheckOut;
                 orderinfo.TotalPrice = rs.data.TotalPrice;
+
+                /*if (rs.data.Status === 'BOOKED') {
+                    $('.btn-update-order').css('display', 'block');
+                } else if (rs.data.Status === 'CHECKED_IN') {
+                    $('.btn-service-order').css('display', 'block');
+                }*/
+                    
             }
         }
 

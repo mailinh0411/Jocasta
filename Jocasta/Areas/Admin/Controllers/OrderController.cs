@@ -19,5 +19,10 @@ namespace Jocasta.Areas.Admin.Controllers
             ViewBag.OrderId = id;   
             return View();
         }
+
+        public ActionResult AddOrder()
+        {
+            return View();
+        }
     }
 }
